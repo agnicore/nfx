@@ -1,17 +1,13 @@
 # Contributing to NFX Project
 
 ## IMPORTANT MUST READ!!!
-This is **NOT a typical bloated .NET system**.
+This is **NOT a typical bloated legacy .NET Framework system**.
 Actually, the **NFX framework has very little to do with a typical Microsoft software stack**, and the purpose of this project is to provide an alternative unified stack of software that uses core CLR functions only and the very base classes (such as list, array, dictionary). 
 
-**.NET Core:**
- as of 06/2017 we are working on a 100% native support of .NET Core 2.x+.
- We are NOT going to support Core <2.x as it lacks proper serialization semantic. We expect to fully support .NET Core in Nov 2017.
+**.NET Standard**
+NFX is built on .NET Stadard 2 and purposed for server-side applications
 
- We are planning to support classic .NET Framework 4.5+ in future.
-
-
-**NFX does not use any 3rd party components** but for some DB-access (MySQL and PostgreSQL are primary targets).
+**NFX does not use any 3rd party components** but for some DB-access (i.e. MySQL and MongoDb).
 
 NFX uses the very base classes:
 * Basic/primitive types: string, ints, doubles, decimal, dates, +Math
@@ -22,7 +18,7 @@ NFX uses the very base classes:
 * Various: Stopwatch, Console, WinForms is used for SOME interactive tests(not needed for operation)
 * Some ADO references (Reader/SQLStatement) in segregated data-access components
 * Reflection API
-* Drawing 2D (Graphics) (subject to change on .Net Core)
+* Drawing 2D (Graphics) (Using PAL since NFXv5)
 
 **Avoid all non-BCL classes.**
 
@@ -83,11 +79,3 @@ In most cases (98%) return string properties like `'get{ return m_Name ?? string
 * DO NOT Rely on the proprietary Microsoft technologies from within NFX: 
    WCF, IIS, PowerShell, ASP.NET, MVC, Razor, MS.SQL, Entity, LINQto*, ActiveDirectory, etc.
    
-
-
-
-   
-
-
-
-
