@@ -1,7 +1,10 @@
-# NFX - .NET Standard Unified Software Stack + Big Memory
+#  NFX - .NET Standard Unified Software Stack + Big Memory
+
+## WARNING: REPOSITORY UNDER CONSTRUCTION 
+Use [legacy NFX v3 repository](https://github.com/aumcode/nfx) until this goes away
 
 ### NFXv5 ANNOUNCEMENT
-The current development of NFX has moved [to this new repo here](https://github.com/agnicore/nfx) from [legacy repo](https://github.com/aumcode/nfx).
+The current development of NFX **IS MOVING** ~~has moved~~ [to this new repo here](https://github.com/agnicore/nfx) from [legacy repo](https://github.com/aumcode/nfx).
 
 **NFX**(v5 and beyond) **is based on .Net Standard 2**,
 having all cli tools targeting both .NET FX 4.7.1+ and .NET Core 2+.
@@ -18,9 +21,9 @@ License: **Apache 2.0**
 Runs/Builds:  **.NET 4.7.1+**, **Core 2+** 
 
 
-[<img src="https://ci.appveyor.com/api/projects/status/github/aumcode/nfx?svg=true" alt="Project Badge" width="200">](https://ci.appveyor.com/project/itadapter/nfx/history)
+[<img src="https://ci.appveyor.com/api/projects/status/github/agnicore/nfx?svg=true" alt="Project Badge" width="200">](https://ci.appveyor.com/project/agnicore/nfx/history)
 
-Documentation: [http://nfxlib.com](http://nfxlib.com)
+Documentation: [http://nfxlib.com TO BE UPDATED  ](http://nfxlib.com)
 
 ## Framework/Platform Support
 NFX is now based on .NET Standard which works on different runtimes. Officially we support .NET Core and .NET Framework:
@@ -50,7 +53,7 @@ The majority of the achievements are possible because of the following key featu
 
 * Unification of design - all components are written in the same way
 * Sophisticated serialization mechanism - moves objects between distributed processes/nodes (aka "teleportation")
-* Object Pile - a [**100%-managed "Big Memory" approach for utilization of hundreds of gigabytes of RAM**](./Source/NFX/ApplicationModel/Pile) without GC stalls
+* Object Pile - a [**100%-managed "Big Memory" approach for utilization of hundreds of gigabytes of RAM**](./src/NFX/ApplicationModel/Pile) without GC stalls
 
 promoting:
 
@@ -84,7 +87,7 @@ NEW 20170617,
  
 ## NUGET
 
-[NFX Packages](https://www.nuget.org/profiles/itadapter)
+[NFX Packages TO BE RELEASED for NFXv5 ](https://www.nuget.org/profiles/itadapter)
  
 cmd | Description
  -------|------
@@ -103,7 +106,7 @@ cmd | Description
 
 ### Big Memory Object Pile + Cache
 
-[NFX/ApplicationModel/Pile](./Source/NFX/ApplicationModel/Pile)
+[NFX/ApplicationModel/Pile](./src/NFX/ApplicationModel/Pile)
 
 ### Various Demo Projects
 
