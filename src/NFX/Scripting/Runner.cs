@@ -304,6 +304,7 @@ namespace NFX.Scripting
       //setup Console redirect
       var wasOut = Console.Out;
       var wasError = Console.Error;
+      var alreadyHandled = false;
       try
       {
         Console.SetOut( Host.ConsoleOut );
@@ -312,11 +313,13 @@ namespace NFX.Scripting
         var args = MakeMethodParameters(method);
         try
         {
-          if (hook!=null) hook.Prologue(this, fid, method.mi, method.attr, ref args);
+          if (hook!=null) alreadyHandled = hook.Prologue(this, fid, method.mi, method.attr, ref args);
 
-          method.mi.Invoke(runnable, args); //<------------------ MAKE  A CALL !!!!!
-
-          if (hook!=null) hook.Epilogue(this, fid, method.mi, method.attr, null);
+          if (!alreadyHandled)
+          {
+            method.mi.Invoke(runnable, args); //<------------------ MAKE  A CALL !!!!!
+            if (hook!=null) hook.Epilogue(this, fid, method.mi, method.attr, null);
+          }
         }
         finally
         {

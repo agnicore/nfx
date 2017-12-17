@@ -50,11 +50,12 @@ namespace NFX.UTest
           return false;
         }
 
-        void IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
+        bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
         {
           Aver.AreEqual(1, m_RunnableState);
           m_RunPrologueCount++;
           Console.WriteLine("Method prologue: "+method.Name);
+          return false;
         }
 
         bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
@@ -105,9 +106,10 @@ namespace NFX.UTest
         [Run("!crash-run-prologue", "")]
         public void BadMethod(){ }
 
-        void IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
+        bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
         {
           Aver.Fail("I crashed in Run prologue");
+          return false;
         }
 
         bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
@@ -122,8 +124,9 @@ namespace NFX.UTest
         [Run("!crash-run-epilogue", "")]
         public void BadMethod(){ }
 
-        void IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
+        bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
         {
+          return false;
         }
 
         bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)

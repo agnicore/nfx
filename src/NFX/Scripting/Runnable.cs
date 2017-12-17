@@ -125,6 +125,9 @@ namespace NFX.Scripting
   /// </summary>
   public interface IRunnableHook
   {
+    /// <summary>
+    /// Invoked before the first method in runnable instance. Unit testing may use this as fixture setup
+    /// </summary>
     void Prologue(Runner runner, FID id);
 
     /// <summary>
@@ -138,10 +141,14 @@ namespace NFX.Scripting
   /// </summary>
   public interface IRunHook
   {
-    void Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args);
+    /// <summary>
+    /// Invoked before every method invocation in runnable instance. May mutate method call arguments.
+    /// Returns true when Prologue handles the method call and runner should NOT continue method execution and Epilogue calls
+    /// </summary>
+    bool Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args);
 
     /// <summary>
-    /// Handles the post factum call, return true if exception was handled by this method and should NOT be thrown
+    /// Handles the post factum call, return true if exception was handled by this method and should NOT be handled/thrown by runner
     /// </summary>
     bool Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error);
   }
