@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>5.0.0</Version>
+    <Authors>Agnicore Inc., DKh aka ITADAPTER</Authors>
+    <Company>Agnicore Inc.</Company>
+    <Description>NFX - .NET Unistack Erlang Assembly</Description>
+    <Copyright>2003-2017 Agnicore Inc; ITAdapter Corp. Inc.</Copyright>
+    <PackageProjectUrl>http://nfxlib.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aumcode/nfx</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>UNISTACK CORE BIGMEMORY NFX PILE SLIM WAVE</PackageTags>
+    <PackageLicenseUrl>https://github.com/aumcode/nfx</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/aumcode/nfx/master/Elements/NFXLogo/New.NFX.Logo.50.png</PackageIconUrl>
+    <PackageReleaseNotes>This NFX release supports both .NET Framework 4.6+ and .NET Core 2.0+</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\out\Debug\</OutputPath>
+    <DocumentationFile>..\..\out\Debug\NFX.Erlang.xml</DocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\out\Release\NFX.Erlang.xml</DocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(ProjectDir)pre-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="$(ProjectDir)post-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NFX\NFX.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>5.0.0</Version>
+    <Authors>Agnicore Inc., DKh aka ITADAPTER</Authors>
+    <Company>Agnicore Inc.</Company>
+    <Description>NFX - .NET Unistack Wave Assembly</Description>
+    <Copyright>2003-2017 Agnicore Inc; ITAdapter Corp. Inc.</Copyright>
+    <PackageProjectUrl>http://nfxlib.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aumcode/nfx</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>UNISTACK CORE BIGMEMORY NFX PILE SLIM WAVE</PackageTags>
+    <PackageLicenseUrl>https://github.com/aumcode/nfx</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/aumcode/nfx/master/Elements/NFXLogo/New.NFX.Logo.50.png</PackageIconUrl>
+    <PackageReleaseNotes>This NFX release supports both .NET Framework 4.6+ and .NET Core 2.0+</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\out\Debug\</OutputPath>
+    <DocumentationFile>..\..\out\Debug\NFX.Wave.xml</DocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\out\Release\</OutputPath>
+    <DocumentationFile>..\..\out\Release\NFX.Wave.xml</DocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NFX.Web\NFX.Web.csproj" />
+    <ProjectReference Include="..\NFX\NFX.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Templatization/StockContent/*.htm.auto.cs">
+      <DependentUpon>Templatization/StockContent/*.htm</DependentUpon>
+    </Compile>
+    <Compile Remove="Templatization/StockContent/Embedded/script/mtest/**" />
+    <Compile Remove="Templatization/StockContent/Embedded/script/utest/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\flags\**" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\stl\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BUILD_INFO.txt" />
+    <None Remove="Templatization\StockContent\Embedded\script\jquery-2.1.4.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\jquery-2.1.4.min.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.all.min.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.braintree.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.chart.svg.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.gui.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.js" />
+    <None Remove="Templatization\StockContent\Embedded\script\wv.stripe.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="BUILD_INFO.txt" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\jquery-2.1.4.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\jquery-2.1.4.min.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.all.min.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.braintree.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.chart.svg.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.gui.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.js" />
+    <EmbeddedResource Include="Templatization\StockContent\Embedded\script\wv.stripe.js" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(ProjectDir)pre-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="$(ProjectDir)post-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
+
+</Project>

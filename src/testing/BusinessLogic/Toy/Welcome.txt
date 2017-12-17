@@ -1,0 +1,6 @@
+﻿<push><b color=black><f color=white>
+[T]est [o]f [Y]our Stuff<f color=gray>
+Copyright (c) 2017 Agnicore Inc.
+Version 1.0 / NFX as of Nov 5th 2017 D.Khmaladze
+
+<pop>

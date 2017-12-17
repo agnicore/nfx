@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\..\out\Debug\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\..\out\Release\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ClientValidation\Patient.AdmDate.nfx.js" />
+    <None Remove="ClientValidation\Patient.AdmDate.profiler.js" />
+    <None Remove="ClientValidation\Patient.nfx.js" />
+    <None Remove="ClientValidation\Patient.profiler.js" />
+    <None Remove="Toy\Help.txt" />
+    <None Remove="Toy\Welcome.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClientValidation\Patient.AdmDate.nfx.js" />
+    <EmbeddedResource Include="ClientValidation\Patient.AdmDate.profiler.js" />
+    <EmbeddedResource Include="ClientValidation\Patient.nfx.js" />
+    <EmbeddedResource Include="ClientValidation\Patient.profiler.js" />
+    <EmbeddedResource Include="Toy\Help.txt" />
+    <EmbeddedResource Include="Toy\Welcome.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NFX.Wave\NFX.Wave.csproj" />
+    <ProjectReference Include="..\..\NFX.Web\NFX.Web.csproj" />
+    <ProjectReference Include="..\..\NFX\NFX.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="toy-server.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="toy.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="toy-wave.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WaveTestSite\" />
+    <Folder Include="SlimTest\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,6 @@
+﻿<push><b color=black><f color=white>
+NFX UNISTACK Test Runner<f color=gray>
+Copyright (c) 2017,2018 Agnicore Inc.
+Version 5.0 / NFX as of Nov 2017
+
+<pop>

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{56EAC2CE-0D24-4852-A633-F5B16AEF42FF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>toy</RootNamespace>
+    <AssemblyName>toy</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <_HasReferenceToSystemRuntime>true</_HasReferenceToSystemRuntime>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\out\Debug\run-netf\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\out\Release\run-netf\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NFX.Erlang\NFX.Erlang.csproj">
+      <Project>{84bdc957-a2b0-40b9-ad3c-62e7d86fa16c}</Project>
+      <Name>NFX.Erlang</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NFX.Wave\NFX.Wave.csproj">
+      <Project>{f0814b91-afc5-42b3-bdb7-d3c34a8a5b3d}</Project>
+      <Name>NFX.Wave</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NFX.Web\NFX.Web.csproj">
+      <Project>{946cca22-725b-4302-bf51-92450e47ebaf}</Project>
+      <Name>NFX.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NFX\NFX.csproj">
+      <Project>{e91a2381-8272-4b6b-98be-2668034897d9}</Project>
+      <Name>NFX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\testing\BusinessLogic\BusinessLogic.csproj">
+      <Project>{2c2bbf32-ae3e-4166-9dce-a7814b9c4d61}</Project>
+      <Name>BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\testing\NFX.UTest\NFX.UTest.csproj">
+      <Project>{d419b483-5141-49b2-97bf-f020438bcb67}</Project>
+      <Name>NFX.UTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NFX.PAL.NetFramework\NFX.PAL.NetFramework.csproj">
+      <Project>{d11297ce-36f6-4b34-8d43-1c7e77813f01}</Project>
+      <Name>NFX.PAL.NetFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
