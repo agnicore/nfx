@@ -9,7 +9,7 @@ Future NFX will not officially support targets below .NET 4.7.1 (though possible
 
 The legacy [NFXv3* repo](https://github.com/aumcode/nfx) will continue to target .NET 4.5/Mono and will be supported for major bug fixes however **all new feature development is going to happen here in NFXv5+**.
 
-<img src="https://github.com/agnicore/nfx/blob/master/Elements/NFXLogo/New.NFX.Logo.50.png" alt="Logo">
+<img src="https://github.com/agnicore/nfx/blob/master/elm/logo/New.NFX.Logo.50.png" alt="Logo">
 
 Server UNISTACK *(unified full software stack avoiding 3rd paty libs)* framework. 
 
