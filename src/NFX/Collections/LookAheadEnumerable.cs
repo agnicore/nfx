@@ -1,6 +1,6 @@
 /*<FILE_LICENSE>
 * NFX (.NET Framework Extension) Unistack Library
-* Copyright 2003-2017 ITAdapter Corp. Inc.
+* Copyright 2003-2018 Agnicore Inc. portions ITAdapter Corp. Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,17 +21,26 @@ using System.Linq;
 
 namespace NFX.Collections
 {
+    /// <summary>
+    /// Defines an enumerator with look-ahead capability
+    /// </summary>
     public interface ILookAheadEnumerator<T> : IEnumerator<T>
     {
       bool HasNext { get; }
       T Next { get; }
     }
 
+    /// <summary>
+    /// Defines an enumerable with look-ahead capability
+    /// </summary>
     public interface ILookAheadEnumerable<T> : IEnumerable<T>
     {
       ILookAheadEnumerator<T> GetLookAheadEnumerator();
     }
 
+    /// <summary>
+    /// Implements a look-ahead enumerator wrapped around a regular enumerator
+    /// </summary>
     public sealed class LookAheadEnumerator<T> : ILookAheadEnumerator<T>
     {
       private static readonly IEnumerator<T> s_Empty = Enumerable.Empty<T>().GetEnumerator();
@@ -71,7 +80,8 @@ namespace NFX.Collections
         get
         {
           if (HasNext) return m_Enumerator.Current;
-          else throw new NFXException(StringConsts.OPERATION_NOT_SUPPORTED_ERROR + "{0}.Next(!HasNext)".Args(GetType().FullName));
+
+          throw new NFXException(StringConsts.INVALID_OPERATION_ERROR + "{0}.Next(!HasNext)".Args(GetType().FullName));
         }
       }
 
@@ -88,7 +98,9 @@ namespace NFX.Collections
         m_Current = default(T);
         m_Enumerator.Dispose();
       }
+
       object IEnumerator.Current { get { return Current; } }
+
       public bool MoveNext()
       {
         if (!m_Fetch) return m_Enumerator.MoveNext();
@@ -99,6 +111,7 @@ namespace NFX.Collections
           return m_HasNext;
         }
       }
+
       public void Reset()
       {
         m_Fetch = false;
@@ -109,18 +122,27 @@ namespace NFX.Collections
       }
     }
 
+
+    /// <summary>
+    /// Implements a look-ahead enumerator wrapped around a regular enumerator
+    /// </summary>
     public sealed class LookAheadEnumerable<T> : ILookAheadEnumerable<T>
     {
-      private readonly IEnumerable<T> m_Enumerable;
-      public LookAheadEnumerable(IEnumerable<T> enumerable) { m_Enumerable = enumerable; }
-      public ILookAheadEnumerator<T> GetLookAheadEnumerator() { return new LookAheadEnumerator<T>(m_Enumerable.GetEnumerator()); }
-      public IEnumerator<T> GetEnumerator() { return GetLookAheadEnumerator(); }
-      IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+      /// <summary> References source enumerable which this one is wrapped around </summary>
+      public readonly IEnumerable<T> Source;
+
+      public LookAheadEnumerable(IEnumerable<T> enumerable)   => Source = enumerable;
+
+      public ILookAheadEnumerator<T> GetLookAheadEnumerator() => new LookAheadEnumerator<T>(Source.GetEnumerator());
+      public IEnumerator<T> GetEnumerator()                   => GetLookAheadEnumerator();
+      IEnumerator IEnumerable.GetEnumerator()                 => GetEnumerator();
     }
 
+    /// <summary>
+    /// Extensions methods for LookAheadEnumerable
+    /// </summary>
     public static class LookAheadExtensions
     {
-      public static ILookAheadEnumerable<T> AsLookAheadEnumerable<T>(this IEnumerable<T> enumerable)
-      { return new LookAheadEnumerable<T>(enumerable); }
+      public static ILookAheadEnumerable<T> AsLookAheadEnumerable<T>(this IEnumerable<T> enumerable) => new LookAheadEnumerable<T>(enumerable);
     }
 }

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
     <Version>5.0.0</Version>
     <Authors>Agnicore Inc., DKh aka ITADAPTER</Authors>
     <Company>Agnicore Inc.</Company>

@@ -8,7 +8,7 @@
     <Description>NFX - .NET Unistack Mongo DB Assembly</Description>
     <Copyright>2003-2017 Agnicore Inc; ITAdapter Corp. Inc.</Copyright>
     <PackageProjectUrl>http://nfxlib.com/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/aumcode/nfx</RepositoryUrl>
+    <RepositoryUrl>https://github.com/agnicore/nfx</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>UNISTACK CORE BIGMEMORY NFX PILE SLIM WAVE MONGO</PackageTags>
     <PackageLicenseUrl>https://github.com/aumcode/nfx</PackageLicenseUrl>
