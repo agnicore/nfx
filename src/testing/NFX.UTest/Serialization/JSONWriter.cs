@@ -213,18 +213,18 @@ namespace NFX.UTest.Serialization
             var expected=
 @"
 {
-  ""Important"": true,
-  ""Patient"":
+  ""Important"": true, 
+  ""Patient"": 
     {
-      ""LastName"": ""Kozloff"",
-      ""FirstName"": ""Alexander"",
+      ""LastName"": ""Kozloff"", 
+      ""FirstName"": ""Alexander"", 
       ""Occupation"": ""Idiot""
-    },
-  ""Salaries"": [30000, 78000, 125000, 4000000],
-  ""Cars"": [""Buick"", ""Ferrari"", ""Lada"",
+    }, 
+  ""Salaries"": [30000, 78000, 125000, 4000000], 
+  ""Cars"": [""Buick"", ""Ferrari"", ""Lada"", 
       {
-        ""Make"": ""Zaporozhets"",
-        ""Model"": ""Gorbatiy"",
+        ""Make"": ""Zaporozhets"", 
+        ""Model"": ""Gorbatiy"", 
         ""Year"": 1971
       }]
 }";
@@ -232,9 +232,7 @@ namespace NFX.UTest.Serialization
             Console.WriteLine("-----------------------------------");
             Console.WriteLine(expected);
 
-
             Aver.AreEqual(expected, json);
-
         }
 
 

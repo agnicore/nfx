@@ -84,9 +84,9 @@ namespace WinFormsTest
     private void button1_Click(object sender, EventArgs e)
     {
       var cnt = tbCount.Text.AsInt();
-      
+
       var bag = new ConcurrentBag<FID>();
-      
+
       if (chkParallel.Checked)
        Parallel.For(0,cnt,(i)=>
        {
@@ -95,8 +95,8 @@ namespace WinFormsTest
       else
        for(var i=0; i<cnt;i++)
           bag.Add( FID.Generate() );
-      
-      
+
+
       var sb = new StringBuilder();
       var c=0;
       foreach(var id in bag)
@@ -116,9 +116,9 @@ namespace WinFormsTest
       //bag.Add(v);//duplicate
 
 
-      if (bag.Count==bag.Distinct().Count()) 
+      if (bag.Count==bag.Distinct().Count())
         sb.Insert(0, "No Duplicates in the set of {0:n2}\r\n".Args(bag.Count));
-      else  
+      else
         sb.Insert(0, "DUPLICATES!!!!!!!!!!!!! in the set of {0:n2}\r\n\r\n\r\n".Args(bag.Count));
 
       tbDump.Text = sb.ToString();

@@ -15,6 +15,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CRUD\FullGDID.Load.mys.sql" />
+    <None Remove="CRUD\Patient.List.mys.sql" />
+    <None Remove="CRUD\Tuple.LoadAll.mys.sql" />
+    <None Remove="CRUD\Types.Load.mys.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CRUD\FullGDID.Load.mys.sql" />
+    <EmbeddedResource Include="CRUD\Patient.List.mys.sql" />
+    <EmbeddedResource Include="CRUD\Tuple.LoadAll.mys.sql" />
+    <EmbeddedResource Include="CRUD\Types.Load.mys.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\NFX.Erlang\NFX.Erlang.csproj" />
     <ProjectReference Include="..\..\NFX.Wave\NFX.Wave.csproj" />
     <ProjectReference Include="..\..\NFX.Web\NFX.Web.csproj" />

@@ -243,6 +243,9 @@ namespace NFX
     public const string UNKNOWN_STRING = "unknown";
 
 
+    public const string APP_MODULE_DUPLICATE_CHILD_ERROR =
+        "Application module duplicate name: '{0}' module already contains a child module named '{1}'";
+
     public const string INVALID_RECORD_TYPE_ERROR =
         "Invalid record type: ";
 
@@ -266,84 +269,6 @@ namespace NFX
     public const string FIELD_LOOKUP_NOT_ALLOWED_ERROR =
         "Can not call Lookup() on a field when prior lookup call is pending. Field: ";
 
-
-    public const string RECURSIVE_FORMULA_FIELD_ERROR =
-        "Recursive formula field: ";
-
-    public const string FORMULA_CALCULATED_ANOTHER_FIELD_ERROR =
-        "Formula can not reference another calculated field: ";
-
-
-    public const string FORM_CREATION_ERROR =
-        "Form could not be created: ";
-
-    public const string FORM_FACTORY_NULL_ERROR =
-        "Form factory was not initialized";
-
-
-    public const string SURROGATE_LOAD_ERROR =
-        "Surrogate record type load error";
-
-    public const string INVALID_FIELD_ACCESSOR_ERROR =
-        "Invalid field accessor. Field: <{0}>.{1}";
-
-
-    public const string READONLY_FIELD_ERROR =
-        "Can not modify readonly field value: <{0}>";
-
-
-    public const string APP_IS_NOT_EXPECTED_TYPE_ERROR =
-        "Application is not of expected type";
-
-
-    public const string APPLY_RECORD_CHANGES_ERROR =
-        "Can not apply record changes:";
-
-    public const string METHOD_INVOCATION_CHANGE_ERROR =
-        "Method invocation change error:";
-
-    public const string UNINITIALIZED_STATE_ERROR =
-        "Model was not initialized and is in unknown state. No data manipulations possible";
-
-    public const string VIEW_MODIFY_ERROR =
-        "Can not modify field value while in view state. Field <{0}>";
-
-    public const string REFERENCE_TYPE_VALUE_SET_ERROR =
-        "Can not set reference type value for field. Field <{0}>";
-
-    public const string SAVE_MODIFY_ERROR =
-        "Can not modify field value while in saving operation. Field <{0}>";
-
-    public const string DELETE_MODIFY_ERROR =
-        "Can not modify field value while in deleting operation. Field <{0}>";
-
-    public const string CALC_FIELD_CHANGE_ERROR =
-        "Can not modify calculated field when AllowCalculationOverride is not true. Field: <{0}>";
-
-
-    public const string REQUIRED_FIELD_ERROR =
-        "Field '{0}' value is required";
-
-    public const string SIZE_FIELD_ERROR =
-        "Field '{0}' size is exceeded {1} chars";
-
-    public const string REGEXP_FIELD_ERROR =
-        "Field '{0}' does not conform to set format: {1}";
-
-    public const string MINMAX_FIELD_ERROR =
-        "Field min/max check failed. Field: '{0}' value must be between {1} and {2}";
-
-    public const string LOOKUP_DICTIONARY_FIELD_ERROR =
-        "Field '{0}' value is not permitted by lookup dictionary";
-
-    public const string OWNER_BINDING_ERROR =
-        "ReleaseOwner() has to be called before re-binding with different owner object";
-
-    public const string ITEM_ALREADY_EXISTS_ERROR =
-        "An item is already owned by this context";
-
-    public const string VALUE_ASSIGNMENT_ERROR =
-        "Invalid value assignment for this field type";
 
     public const string INVALID_ARGUMENT_ERROR =
         "Invalid argument supplied";
@@ -474,6 +399,9 @@ namespace NFX
 
         public const string APP_LOG_INIT_ERROR =
               "App log initApplication error: ";
+
+        public const string APP_MODULE_INIT_ERROR =
+              "App root module initApplication error: ";
 
         public const string APP_TIMESOURCE_INIT_ERROR =
               "App time source initApplication error: ";

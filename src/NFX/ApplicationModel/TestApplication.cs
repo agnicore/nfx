@@ -52,10 +52,10 @@ namespace NFX.ApplicationModel
             StartTime = DateTime.Now;
             Log = NOPLog.Instance;
             Instrumentation = NOPInstrumentation.Instance;
-            Throttling = NOPThrottling.Instance;
             DataStore = NOPDataStore.Instance;
             ObjectStore = NOPObjectStore.Instance;
             Glue = NOPGlue.Instance;
+            ModuleRoot = NOPModule.Instance;
             SecurityManager = NOPSecurityManager.Instance;
             TimeSource = NFX.Time.DefaultTimeSource.Instance;
             TimeLocation = new Time.TimeLocation();
@@ -88,8 +88,6 @@ namespace NFX.ApplicationModel
         public virtual Log.ILog Log { get; set; }
 
         public virtual Instrumentation.IInstrumentation Instrumentation { get; set; }
-
-        public virtual Throttling.IThrottling Throttling { get; set; }
 
         public virtual Environment.IConfigSectionNode ConfigRoot
         {
@@ -128,6 +126,8 @@ namespace NFX.ApplicationModel
         public virtual Volatile.IObjectStore ObjectStore { get; set; }
 
         public virtual Glue.IGlue Glue { get; set; }
+
+        public virtual IModule ModuleRoot { get; set; }
 
         public virtual Security.ISecurityManager SecurityManager { get; set; }
 

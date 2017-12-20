@@ -184,6 +184,12 @@ namespace NFX
      /// </summary>
      public static Time.IEventTimer EventTimer { get { return Instance.EventTimer;} }
 
+     /// <summary>
+     /// References the root module (such as business domain logic root) for this application. This is a dependency injection root
+     /// provided for any application type
+     /// </summary>
+     public static IModule ModuleRoot { get{ return Instance.ModuleRoot;} }
+
 
      /// <summary>
      /// Returns application name

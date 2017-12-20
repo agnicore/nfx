@@ -70,6 +70,7 @@ namespace NFX
       public const string CHANGE_EVENTS_CATEGORY = "Change";
 
       public const string LOG_TOPIC = "Log";
+      public const string APP_MODULE_TOPIC = "Mod";
 
       public const string LOG_NET_TOPIC = "NET";
 

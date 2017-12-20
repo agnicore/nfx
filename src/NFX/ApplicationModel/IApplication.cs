@@ -146,9 +146,14 @@ namespace NFX.ApplicationModel
      /// </summary>
      Time.IEventTimer EventTimer { get; }
 
+     /// <summary>
+     /// References the root module (such as business domain logic) for this application. This is a dependency injection root
+     /// provided for any application type
+     /// </summary>
+     IModule ModuleRoot{ get; }
 
      /// <summary>
-     /// Factory method that creates new session object suitable for partcular application type
+     /// Factory method that creates new session object suitable for particular application type
      /// </summary>
      /// <param name="sessionID">Session identifier</param>
      /// <param name="user">Optional user object that the session is for</param>

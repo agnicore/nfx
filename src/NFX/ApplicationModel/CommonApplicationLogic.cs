@@ -42,7 +42,7 @@ namespace NFX.ApplicationModel
   /// Provides base implementation of IApplication for various application kinds
   /// </summary>
   [ConfigMacroContext]
-  public abstract class CommonApplicationLogic : DisposableObject,  IApplication
+  public abstract class CommonApplicationLogic : DisposableObject, IApplication
   {
     #region CONSTS
       public const string CONFIG_SWITCH = "config";
@@ -53,8 +53,12 @@ namespace NFX.ApplicationModel
 
       public const string CONFIG_MEMORY_MANAGEMENT_SECTION = "memory-management";
 
+      public const string CONFIG_MODULES_SECTION = "modules";
+      public const string CONFIG_MODULE_SECTION = "module";
+
       public const string CONFIG_STARTERS_SECTION = "starters";
       public const string CONFIG_STARTER_SECTION = "starter";
+
       public const string CONFIG_TIMESOURCE_SECTION = "time-source";
       public const string CONFIG_EVENT_TIMER_SECTION = "event-timer";
       public const string CONFIG_LOG_SECTION = "log";
@@ -112,6 +116,8 @@ namespace NFX.ApplicationModel
       protected ConfigSectionNode m_CommandArgs;
 
       protected ConfigSectionNode m_ConfigRoot;
+
+      protected IModuleImplementation m_Module;
 
       protected ILogImplementation m_Log;
 
@@ -309,6 +315,15 @@ namespace NFX.ApplicationModel
           get { return m_EventTimer ?? NOPEventTimer.Instance; }
         }
 
+
+        /// <summary>
+        /// References the root module (such as business domain logic root) for this application. This is a dependency injection root
+        /// provided for any application type
+        /// </summary>
+        public IModule ModuleRoot
+        {
+          get { return m_Module ?? NOPModule.Instance; }
+        }
 
         /// <summary>
         /// Returns time location of this LocalizedTimeProvider implementation
@@ -708,6 +723,14 @@ namespace NFX.ApplicationModel
       }
 
       /// <summary>
+      /// Override to prep module implementation i.e. inject modules programmaticaly
+      /// </summary>
+      protected virtual void BeforeModuleStart(IModuleImplementation logImplementation)
+      {
+
+      }
+
+      /// <summary>
       /// Override to prep instr implementation i.e. inject something programmaticaly
       /// </summary>
       protected virtual void BeforeInstrumentationStart(IInstrumentationImplementation instrumentationImplementation)
@@ -805,6 +828,31 @@ namespace NFX.ApplicationModel
             throw new NFXException(StringConsts.APP_LOG_INIT_ERROR + error.ToMessageWithType(), error);
           }
 
+        node = m_ConfigRoot[CONFIG_MODULES_SECTION];
+        if (node.Exists)
+          try
+          {
+            m_Module = FactoryUtils.MakeAndConfigure(node, null) as IModuleImplementation;
+
+            if (m_Module==null) throw new NFXException(StringConsts.APP_INJECTION_TYPE_MISMATCH_ERROR  +
+                                                    node
+                                                   .AttrByName(FactoryUtils.CONFIG_TYPE_ATTR)
+                                                   .ValueAsString(CoreConsts.UNKNOWN));
+
+            WriteLog(MessageType.Info, FROM, "Module root made");
+
+            BeforeModuleStart(m_Module);
+
+            if (m_Module is Service)
+            {
+              if (((Service)m_Module).StartByApplication())
+                WriteLog(MessageType.Info, FROM, "Module root started");
+            }
+          }
+          catch(Exception error)
+          {
+            throw new NFXException(StringConsts.APP_MODULE_INIT_ERROR + error.ToMessageWithType(), error);
+          }
 
         node = m_ConfigRoot[CONFIG_TIMESOURCE_SECTION];
         if (node.Exists)
@@ -1204,6 +1252,27 @@ namespace NFX.ApplicationModel
            catch(Exception error)
            {
              WriteLog(MessageType.Error, FROM, "Error finalizing TimeSource: " + error.ToMessageWithType(), error);
+           }
+         }
+
+         if (m_Module != null)
+         {
+           WriteLog(MessageType.Info, FROM, "Finalizing Module root");
+           try
+           {
+             if (m_Module is Service)
+             {
+                 ((Service)m_Module).SignalStop();
+                 ((Service)m_Module).WaitForCompleteStop();
+                 WriteLog(MessageType.Info, FROM, "Module root stopped");
+             }
+
+             m_Module.Dispose();
+             WriteLog(MessageType.Info, FROM, "Module root disposed");
+           }
+           catch(Exception error)
+           {
+             WriteLog(MessageType.Error, FROM, "Error finalizing Module root: " + error.ToMessageWithType(), error);
            }
          }
 

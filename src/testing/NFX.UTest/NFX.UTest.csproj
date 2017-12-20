@@ -15,6 +15,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Web\MultiPart\Resources\bmp.dat" />
+    <None Remove="Web\MultiPart\Resources\test.dat" />
+    <None Remove="Web\MultiPart\Resources\txt.dat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Web\MultiPart\Resources\bmp.dat" />
+    <EmbeddedResource Include="Web\MultiPart\Resources\test.dat" />
+    <EmbeddedResource Include="Web\MultiPart\Resources\txt.dat" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\NFX.Erlang\NFX.Erlang.csproj" />
     <ProjectReference Include="..\..\NFX.Wave\NFX.Wave.csproj" />
     <ProjectReference Include="..\..\NFX.Web\NFX.Web.csproj" />

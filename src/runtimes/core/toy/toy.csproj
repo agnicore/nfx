@@ -24,7 +24,10 @@
     <ProjectReference Include="..\..\..\NFX.Wave\NFX.Wave.csproj" />
     <ProjectReference Include="..\..\..\NFX.Web\NFX.Web.csproj" />
     <ProjectReference Include="..\..\..\NFX\NFX.csproj" />
+    <ProjectReference Include="..\..\..\providers\NFX.MongoDB\NFX.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\providers\NFX.MySQL\NFX.MySQL.csproj" />
     <ProjectReference Include="..\..\..\testing\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\..\..\testing\NFX.ITest\NFX.ITest.csproj" />
     <ProjectReference Include="..\..\..\testing\NFX.UTest\NFX.UTest.csproj" />
     <ProjectReference Include="..\NFX.PAL.NetCore20\NFX.PAL.NetCore20.csproj" />
   </ItemGroup>

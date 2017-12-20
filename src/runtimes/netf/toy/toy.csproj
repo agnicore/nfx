@@ -52,6 +52,10 @@
       <Project>{84bdc957-a2b0-40b9-ad3c-62e7d86fa16c}</Project>
       <Name>NFX.Erlang</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\NFX.Tools\NFX.Tools.csproj">
+      <Project>{5cfce310-8f5c-4348-a77a-386adcfae9a9}</Project>
+      <Name>NFX.Tools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\NFX.Wave\NFX.Wave.csproj">
       <Project>{f0814b91-afc5-42b3-bdb7-d3c34a8a5b3d}</Project>
       <Name>NFX.Wave</Name>
@@ -64,9 +68,21 @@
       <Project>{e91a2381-8272-4b6b-98be-2668034897d9}</Project>
       <Name>NFX</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\providers\NFX.MongoDB\NFX.MongoDB.csproj">
+      <Project>{f186f18c-bada-47df-9bff-b6f497637718}</Project>
+      <Name>NFX.MongoDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\providers\NFX.MySQL\NFX.MySQL.csproj">
+      <Project>{201b15ca-3f6d-45a0-a737-bf2b42db8d12}</Project>
+      <Name>NFX.MySQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\testing\BusinessLogic\BusinessLogic.csproj">
       <Project>{2c2bbf32-ae3e-4166-9dce-a7814b9c4d61}</Project>
       <Name>BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\testing\NFX.ITest\NFX.ITest.csproj">
+      <Project>{4fa8c994-098b-4c0a-a045-3ad94d732fc4}</Project>
+      <Name>NFX.ITest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\testing\NFX.UTest\NFX.UTest.csproj">
       <Project>{d419b483-5141-49b2-97bf-f020438bcb67}</Project>

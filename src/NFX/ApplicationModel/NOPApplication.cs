@@ -57,7 +57,7 @@ namespace NFX.ApplicationModel
 
 
      /// <summary>
-     /// Returns a singlelton instance of the NOPApplication
+     /// Returns a singleton instance of the NOPApplication
      /// </summary>
      public static NOPApplication Instance
      {
@@ -124,11 +124,6 @@ namespace NFX.ApplicationModel
           get { return NOPInstrumentation.Instance; }
         }
 
-        public IThrottling Throttling
-        {
-            get { return NOPThrottling.Instance; }
-        }
-
         public IConfigSectionNode ConfigRoot
         {
           get { return m_Configuration.Root; }
@@ -159,6 +154,10 @@ namespace NFX.ApplicationModel
           get { return NOPSecurityManager.Instance; }
         }
 
+        public IModule ModuleRoot
+        {
+          get { return NOPModule.Instance; }
+        }
 
         public ITimeSource TimeSource
         {
