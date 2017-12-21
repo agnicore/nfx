@@ -104,7 +104,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFX.MongoDB", "providers\NF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFX.MySQL", "providers\NFX.MySQL\NFX.MySQL.csproj", "{201B15CA-3F6D-45A0-A737-BF2B42DB8D12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFX.ITest", "testing\NFX.ITest\NFX.ITest.csproj", "{4FA8C994-098B-4C0A-A045-3AD94D732FC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFX.ITest", "testing\NFX.ITest\NFX.ITest.csproj", "{4FA8C994-098B-4C0A-A045-3AD94D732FC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
