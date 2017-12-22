@@ -83,6 +83,7 @@ namespace NFX.Scripting
       if (!m_HadRunnableMethods) return;
       Console.WriteLine("... done {0}".Args(runnable.GetType().DisplayNameWithExpandedGenericArgs()));
       Console.WriteLine();
+      writeCurrentStats();
       Console.WriteLine();
     }
 
@@ -179,7 +180,7 @@ namespace NFX.Scripting
         if (runner.Emulate)
         {
           Console.ForegroundColor = ConsoleColor.Yellow;
-          Console.Write("[Emu OK]");
+          Console.Write("[Emulated]");
         }
         else
         {
@@ -195,6 +196,8 @@ namespace NFX.Scripting
 
       Console.ForegroundColor = wasF;
       Console.WriteLine();
+
+
     }
 
 
@@ -242,48 +245,43 @@ namespace NFX.Scripting
 
     public void Summarize(Runner runner)
     {
+      Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Gray;
-      Console.WriteLine("---------------------------------------------------------------------------");
+      Console.WriteLine("+------------------------------------------------");
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.Write("Platform runtime: ");
+      Console.Write("|  Platform runtime: ");
       Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine(NFX.PAL.PlatformAbstractionLayer.PlatformName);
 
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.Write("Total runnables: ");
+      Console.Write("|  Total runnables: ");
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine("{0}".Args(m_TotalRunnables));
 
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.Write("Total methods: ");
+      Console.Write("|  Total methods: ");
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine("{0}".Args(m_TotalMethods));
 
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.Write("Finished: ");
+      Console.Write("|  Finished: ");
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine("{0}".Args(App.TimeSource.Now));
 
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.Write("Runtime: ");
+      Console.Write("|  Running time: ");
       Console.ForegroundColor = ConsoleColor.White;
       Console.WriteLine("{0}".Args(m_Stopwatch.Elapsed));
 
-      Console.WriteLine();
+      Console.WriteLine("+------------------------------------------------");
 
-      Console.ForegroundColor = m_TotalOKs >0 ? ConsoleColor.Green : ConsoleColor.DarkGreen;
-      Console.Write("   OK: {0}   ".Args(m_TotalOKs));
-      Console.ForegroundColor = m_TotalErrors>0? ConsoleColor.Red : ConsoleColor.DarkGray;
-      Console.Write("ERROR: {0}   ".Args(m_TotalErrors));
-
-      Console.ForegroundColor = ConsoleColor.White;
-      Console.WriteLine(" TOTAL: {0} ".Args(m_TotalOKs +  m_TotalErrors));
+      writeCurrentStats();
 
       if (runner.Emulate)
       {
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine();
-        Console.WriteLine("    *** EMULATED RESULTS ***");
+        Console.WriteLine("    *** TEST RESULTS ARE EMULATED ***");
       }
 
       if (OutFileName.IsNotNullOrWhiteSpace())
@@ -298,6 +296,19 @@ namespace NFX.Scripting
       }
 
       Console.ForegroundColor = ConsoleColor.Gray;
+    }
+
+    private void writeCurrentStats()
+    {
+      Console.WriteLine();
+
+      Console.ForegroundColor = m_TotalOKs >0 ? ConsoleColor.Green : ConsoleColor.DarkGreen;
+      Console.Write("   OK: {0}   ".Args(m_TotalOKs));
+      Console.ForegroundColor = m_TotalErrors>0? ConsoleColor.Red : ConsoleColor.DarkGray;
+      Console.Write("ERROR: {0}   ".Args(m_TotalErrors));
+
+      Console.ForegroundColor = ConsoleColor.White;
+      Console.WriteLine(" TOTAL: {0} ".Args(m_TotalOKs +  m_TotalErrors));
     }
 
 
