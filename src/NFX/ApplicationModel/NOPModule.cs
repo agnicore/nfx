@@ -25,6 +25,8 @@ namespace NFX.ApplicationModel
       get { return s_Instance; }
     }
 
+    public override bool IsHardcodedModule => true;
+
     protected override void DoConfigureChildModules(IConfigSectionNode node)
     {
     }

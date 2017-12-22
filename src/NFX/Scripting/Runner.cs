@@ -137,12 +137,18 @@ namespace NFX.Scripting
 
 
     /// <summary>
+    /// If set, does not call method bodies, only preps for run but does not run methods
+    /// </summary>
+    [Config]
+    public bool Emulate{ get; set; }
+
+    /// <summary>
     /// Runs the methods. This default implementation is single-threaded sequential
     /// </summary>
     public virtual void Run()
     {
       var allRuns = GetRunnables().OrderBy( r => r.attr.Order );
-      Host.Start();
+      Host.Start(this);
       foreach(var run in allRuns)
       {
           if (!App.Active) break;
@@ -151,7 +157,7 @@ namespace NFX.Scripting
           var runnable = Activator.CreateInstance(run.t);
           try
           {
-              Host.BeginRunnable(fid, runnable);
+              Host.BeginRunnable(this, fid, runnable);
               try
               {
                 var torun = GetRunMethods(run.t).OrderBy( r => r.attr.Order );
@@ -164,12 +170,12 @@ namespace NFX.Scripting
           }
           finally
           {
-              Host.EndRunnable(fid, runnable, error);
+              Host.EndRunnable(this, fid, runnable, error);
               var drun = runnable as IDisposable;
               drun?.Dispose();
           }
       }
-      Host.Summarize();
+      Host.Summarize(this);
     }
 
     /// <summary>
@@ -297,7 +303,7 @@ namespace NFX.Scripting
     protected virtual void SafeRunMethod(object runnable, (MethodInfo mi, RunAttribute attr) method)
     {
       var fid = FID.Generate();
-      Host.BeforeMethodRun(fid, method.mi, method.attr);
+      Host.BeforeMethodRun(this, fid, method.mi, method.attr);
 
       var hook = runnable as IRunHook;
       Exception error = null;
@@ -317,7 +323,9 @@ namespace NFX.Scripting
 
           if (!alreadyHandled)
           {
-            method.mi.Invoke(runnable, args); //<------------------ MAKE  A CALL !!!!!
+            if (!this.Emulate)
+              method.mi.Invoke(runnable, args); //<------------------ MAKE  A CALL !!!!!
+
             if (hook!=null) hook.Epilogue(this, fid, method.mi, method.attr, null);
           }
         }
@@ -350,7 +358,7 @@ namespace NFX.Scripting
         Console.SetOut(wasError);
       }
 
-      Host.AfterMethodRun(fid, method.mi, method.attr, error);
+      Host.AfterMethodRun(this, fid, method.mi, method.attr, error);
     }
 
     /// <summary>

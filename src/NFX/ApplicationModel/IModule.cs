@@ -19,6 +19,11 @@ namespace NFX.ApplicationModel
     IModule ParentModule { get; }
 
     /// <summary>
+    /// Returns true when the module is injected in the parent context by the code, not configuration
+    /// </summary>
+    bool IsHardcodedModule { get; }
+
+    /// <summary>
     /// Enumerates an ordered collection of child modules and provides access by name
     /// </summary>
     IOrderedRegistry<IModule> ChildModules { get; }

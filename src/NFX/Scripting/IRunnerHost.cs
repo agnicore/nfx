@@ -22,17 +22,17 @@ namespace NFX.Scripting
     int TotalOKs       { get; }
     int TotalErrors    { get; }
 
-    void Start();
+    void Start(Runner runner);
 
-    void BeginRunnable(FID id, object runnable);
-    void EndRunnable(FID id, object runnable, Exception error);
+    void BeginRunnable(Runner runner, FID id, object runnable);
+    void EndRunnable(Runner runner, FID id, object runnable, Exception error);
 
-    void BeforeMethodRun(FID id, MethodInfo method, RunAttribute attr);
-    void AfterMethodRun(FID id, MethodInfo method, RunAttribute attr, Exception error);
+    void BeforeMethodRun(Runner runner, FID id, MethodInfo method, RunAttribute attr);
+    void AfterMethodRun(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error);
 
     TextWriter ConsoleOut{ get; }
     TextWriter ConsoleError{ get; }
 
-    void Summarize();
+    void Summarize(Runner runner);
   }
 }

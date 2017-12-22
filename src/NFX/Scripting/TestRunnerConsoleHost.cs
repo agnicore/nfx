@@ -45,7 +45,7 @@ namespace NFX.Scripting
 
     private ConfigSectionNode m_RunnableNode;
 
-    public void BeginRunnable(FID id, object runnable)
+    public void BeginRunnable(Runner runner, FID id, object runnable)
     {
       m_TotalRunnables++;
       var t = runnable.GetType();
@@ -65,7 +65,7 @@ namespace NFX.Scripting
       }
     }
 
-    public void EndRunnable(FID id, object runnable, Exception error)
+    public void EndRunnable(Runner runner, FID id, object runnable, Exception error)
     {
       if (m_RunnableNode!=null)
       {
@@ -87,7 +87,7 @@ namespace NFX.Scripting
     }
 
 
-    public void BeforeMethodRun(FID id, MethodInfo method, RunAttribute attr)
+    public void BeforeMethodRun(Runner runner, FID id, MethodInfo method, RunAttribute attr)
     {
       if (m_RunnableHeader!=null)
       {
@@ -138,20 +138,21 @@ namespace NFX.Scripting
       Console.ForegroundColor = ConsoleColor.DarkGray;
     }
 
-    public void AfterMethodRun(FID id, MethodInfo method, RunAttribute attr, Exception error)
+    public void AfterMethodRun(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
     {
       Console.ForegroundColor = ConsoleColor.Gray;
 
       //check for Aver.Throws()
-      try
-      {
-        var aversThrows = Aver.ThrowsAttribute.CheckMethodError(method, error);
-        if (aversThrows) error =null;
-      }
-      catch(Exception err)
-      {
-        error = err;
-      }
+      if (!runner.Emulate)
+        try
+        {
+          var aversThrows = Aver.ThrowsAttribute.CheckMethodError(method, error);
+          if (aversThrows) error =null;
+        }
+        catch(Exception err)
+        {
+          error = err;
+        }
 
       var o = m_RunnableNode;
       if (o != null)
@@ -161,6 +162,8 @@ namespace NFX.Scripting
         nrun.AddAttributeNode("now-loc", App.LocalizedTime);
         nrun.AddAttributeNode("now-utc", App.TimeSource.UTCNow);
         nrun.AddAttributeNode("OK", error==null);
+        if (runner.Emulate)
+          nrun.AddAttributeNode("emulated", true);
         nrun.AddAttributeNode("run-name", attr.Name);
         nrun.AddAttributeNode("run-explicit", attr.ExplicitName);
         nrun.AddAttributeNode("run-config", attr.ConfigContent);
@@ -173,8 +176,16 @@ namespace NFX.Scripting
       if (error==null)
       {
         m_TotalOKs++;
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("[OK]");
+        if (runner.Emulate)
+        {
+          Console.ForegroundColor = ConsoleColor.Yellow;
+          Console.Write("[Emu OK]");
+        }
+        else
+        {
+          Console.ForegroundColor = ConsoleColor.Green;
+          Console.Write("[OK]");
+        }
       }
       else
       {
@@ -188,7 +199,7 @@ namespace NFX.Scripting
 
 
 
-    public void Start()
+    public void Start(Runner runner)
     {
       m_Stopwatch = Stopwatch.StartNew();
       m_TotalRunnables = 0;
@@ -229,7 +240,7 @@ namespace NFX.Scripting
       Console.WriteLine("{0}".Args(App.TimeSource.Now));
     }
 
-    public void Summarize()
+    public void Summarize(Runner runner)
     {
       Console.ForegroundColor = ConsoleColor.Gray;
       Console.WriteLine("---------------------------------------------------------------------------");
@@ -263,7 +274,17 @@ namespace NFX.Scripting
       Console.ForegroundColor = m_TotalOKs >0 ? ConsoleColor.Green : ConsoleColor.DarkGreen;
       Console.Write("   OK: {0}   ".Args(m_TotalOKs));
       Console.ForegroundColor = m_TotalErrors>0? ConsoleColor.Red : ConsoleColor.DarkGray;
-      Console.WriteLine("ERROR: {0} ".Args(m_TotalErrors));
+      Console.Write("ERROR: {0}   ".Args(m_TotalErrors));
+
+      Console.ForegroundColor = ConsoleColor.White;
+      Console.WriteLine(" TOTAL: {0} ".Args(m_TotalOKs +  m_TotalErrors));
+
+      if (runner.Emulate)
+      {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine();
+        Console.WriteLine("    *** EMULATED RESULTS ***");
+      }
 
       if (OutFileName.IsNotNullOrWhiteSpace())
       {

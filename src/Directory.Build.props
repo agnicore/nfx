@@ -1,0 +1,24 @@
+<Project>
+
+  <PropertyGroup>
+    <Version>5.0.0</Version>
+
+    <PreserveCompilationContext>false</PreserveCompilationContext>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>1701;1702;1705;1591</NoWarn>
+
+
+    <Authors>Agnicore Inc., dkh, spol, opan, vlap, mkol, saleyn, ita</Authors>
+    <Company>Agnicore Inc.</Company>
+    <Description>NFX - .NET Unistack</Description>
+    <Copyright>2003-2018 Agnicore Inc; portions ITAdapter Corp. Inc.</Copyright>
+    <PackageProjectUrl>http://nfxlib.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/agnicore/nfx</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>unistack;net-core;nfx;big-memory;pile;slim;glue;wave;agni;cluster;agnicore</PackageTags>
+    <PackageLicenseUrl>https://github.com/agnicore/nfx</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/agnicore/nfx/master/Elements/NFXLogo/New.NFX.Logo.50.png</PackageIconUrl>
+    <PackageReleaseNotes>This NFX release supports both .NET Framework 4.7.1+ and .NET Core 2.0+</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>

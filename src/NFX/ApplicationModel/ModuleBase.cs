@@ -22,13 +22,13 @@ namespace NFX.ApplicationModel
 
     protected override void Destructor()
     {
-      cleanupChildren();
+      cleanupChildren(true);
       base.Destructor();
     }
 
-    private void cleanupChildren()
+    private void cleanupChildren(bool all)
     {
-      var toClean = m_Children.Where(c => c.ParentModule==this).ToList();
+      var toClean = m_Children.Where(c => c.ParentModule==this && (all || !c.IsHardcodedModule)).ToList();
       toClean.ForEach( c =>
                        {
                          c.Dispose();
@@ -61,6 +61,8 @@ namespace NFX.ApplicationModel
 
     public virtual bool InstrumentationEnabled { get; set; }
 
+    public abstract bool IsHardcodedModule{ get; }
+
 
     void IConfigurable.Configure(IConfigSectionNode node)
     {
@@ -74,7 +76,6 @@ namespace NFX.ApplicationModel
     {
       get { return DoGetExternalParameters(); }
     }
-
 
     bool IExternallyParameterized.ExternalGetParameter(string name, out object value, params string[] groups)
     {
@@ -130,7 +131,7 @@ namespace NFX.ApplicationModel
     /// </summary>
     protected virtual void DoConfigureChildModules(IConfigSectionNode node)
     {
-      cleanupChildren();
+      cleanupChildren(false);
       if (node==null || !node.Exists) return;
 
       var allModules = DoGetAllChildModuleConfigNodes(node);

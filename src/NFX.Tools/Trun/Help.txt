@@ -5,9 +5,10 @@
    trun <f color=green>assembly1;assemblyN <f color=darkCyan>[/h | /? | /help]
               [/r | /runner
                   [<f color=darkRed>type<f color=darkCyan>=type_name]
-                  [<f color=darkRed>categories<f color=darkCyan>= cat1[;catN]]
-                  [<f color=darkRed>methods<f color=darkCyan>= m1[;mN]]
-                  [<f color=darkRed>names<f color=darkCyan>= case1[;caseN]]
+                  [<f color=darkRed>categories<f color=darkCyan>=cat1[;catN]]
+                  [<f color=darkRed>methods<f color=darkCyan>=m1[;mN]]
+                  [<f color=darkRed>names<f color=darkCyan>=case1[;caseN]]
+                  [<f color=darkRed>emulate<f color=darkCyan>=bool]
                   [... runner type-specific attributes]
               ]
               [/host
@@ -19,6 +20,8 @@
 <f color=gray>
 Executes tests in classes marked with [Runnable] attribute, methods marked with [Run].
 The execution is performed under the global application container which allows override.
+
+Pass <f color=darkCyan>-r <f color=darkRed>emulate<f color=darkCyan>=true<f color=gray> to skip run method bodies. This is used to check for method setup problems.
 
 <f color=magenta>
  Specifiers:
@@ -60,6 +63,9 @@ Runs just the two named test cases; start case names with '!' to run the cases o
 Passes named args to test case 'cli-args':<f color=darkgray>
   [Run("!cli-args", "cliArg1=$(~@a1) cliArg2=$(~@a2)")]
   public void RunnerArgs(string cliArg1, int cliArg2){...}
+
+<f color=yellow> trun mytests.dll -r emulate=true<f color=gray>
+Only emulates running all test cases
 
 
 <f color=darkcyan>For more detailed test run case examples see <f color=cyan>"src/testing/NFX.UTest/RunnerTests.cs"
