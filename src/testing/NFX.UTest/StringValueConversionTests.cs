@@ -102,6 +102,43 @@ namespace NFX.UTest
         {
            Aver.IsTrue( new byte[]{0x2f, 0x3d, 0xea, 0x22}.SequenceEqual("2f,3d,ea,22".AsByteArray()));
            Aver.IsTrue( new byte[]{1,2,3,4,5,6,7,8,9,0}.SequenceEqual("1,2,3,4, 5,    6,7,8,9, 0".AsByteArray()));
+           Aver.IsTrue( new byte[]{0xFA, 0x12, 0b1010}.SequenceEqual("0xfa,0x12,0b1010".AsByteArray() ) );
+           Aver.IsTrue( new byte[]{0xFA, 0x12, 0b1010}.SequenceEqual((byte[])"0xfa,0x12,0b1010".AsType(typeof(byte[])) ));
+        }
+
+        [Run]
+        public void IntArray()
+        {
+          Aver.IsTrue(new int[]{1,2,3,0b10,0xFAcaca,0xbb, -1_666_123_000}.SequenceEqual(  "1,2, 3,0b10,0xFACACA,0xBB,-1666123000".AsIntArray() ) );
+          Aver.IsTrue(new int[]{1,2,3,0b10,0xFAcaca,0xbb, -1_666_123_000}.SequenceEqual(  (int[])"1,2, 3,0b10,0xFACACA,0xBB,-1666123000".AsType(typeof(int[])) ) );
+        }
+
+        [Run]
+        public void LongArray()
+        {
+          Aver.IsTrue(new long[]{1,2,3,0b10,0xFAcaca,0xbb, -9_666_123_000}.SequenceEqual( "1,2, 3,0b10,0xFACACA,0xBB,-9666123000".AsLongArray() ) );
+          Aver.IsTrue(new long[]{1,2,3,0b10,0xFAcaca,0xbb, -9_666_123_000}.SequenceEqual( (long[])"1,2, 3,0b10,0xFACACA,0xBB,-9666123000".AsType(typeof(long[])) ) );
+        }
+
+        [Run]
+        public void FloatArray()
+        {
+          Aver.IsTrue(new float[]{1,2,3,-5.6f, 7e2f}.SequenceEqual( "1,2, 3, -5.6,7e2".AsFloatArray() ) );
+          Aver.IsTrue(new float[]{1,2,3,-5.6f, 7e2f}.SequenceEqual( (float[])"1,2, 3, -5.6,7e2".AsType(typeof(float[])) ) );
+        }
+
+        [Run]
+        public void DoubleArray()
+        {
+          Aver.IsTrue(new double[]{1,2,3,-5.6d, 7e2d}.SequenceEqual(  "1,2, 3, -5.6,7e2".AsDoubleArray() ) );
+          Aver.IsTrue(new double[]{1,2,3,-5.6d, 7e2d}.SequenceEqual(  (double[])"1,2, 3, -5.6,7e2".AsType(typeof(double[])) ) );
+        }
+
+        [Run]
+        public void DecimalArray()
+        {
+         Aver.IsTrue(new decimal[]{1,2,3,180780.23M, -99.71M}.SequenceEqual( "1,2, 3, 180780.23, -99.71".AsDecimalArray() ) );
+         Aver.IsTrue(new decimal[]{1,2,3,180780.23M, -99.71M}.SequenceEqual( (decimal[])"1,2, 3, 180780.23, -99.71".AsType(typeof(decimal[])) ) );
         }
 
 

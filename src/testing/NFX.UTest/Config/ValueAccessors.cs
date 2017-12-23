@@ -48,7 +48,15 @@ namespace NFX.UTest.Config
    vGuid1='{3A7C4641-B24E-453D-9D28-93D96071B575}'
    vGuid2='3A7C4641-B24E-453D-9D28-93D96071B575'
    vGuid3='3A7C4641B24E453D9D2893D96071B575'
-   vBuffer=fa,CA,dA,Ba
+
+   vBuffer1=fa,CA,dA,Ba
+   vBuffer2=0xfa,0x12,0b1010
+
+   vIntArray ='1,2, 3,0b10,0xFACACA,0xBB,-1666123000'
+   vLongArray ='1,2, 3,0b10,0xFACACA,0xBB,-9666123000'
+   vFloatArray ='1,2, 3, -5.6,7e2'
+   vDoubleArray ='1,2, 3, -5.6,7e2'
+   vDecimalArray ='1,2, 3, 180780.23, -99.71'
  }
 ";
 
@@ -137,11 +145,60 @@ namespace NFX.UTest.Config
         }
 
         [Run]
-        public void ByteArray()
+        public void ByteArray1()
         {
             var root = conf.AsLaconicConfig();
 
-            Aver.IsTrue(new byte[]{0xFA, 0xCA, 0xDA, 0xBA}.SequenceEqual(  root.AttrByName("vBuffer").ValueAsByteArray() ) );
+            Aver.IsTrue(new byte[]{0xFA, 0xCA, 0xDA, 0xBA}.SequenceEqual(  root.AttrByName("vBuffer1").ValueAsByteArray() ) );
+        }
+
+
+        [Run]
+        public void ByteArray2()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new byte[]{0xFA, 0x12, 0b1010}.SequenceEqual(  root.AttrByName("vBuffer2").ValueAsByteArray() ) );
+        }
+
+        [Run]
+        public void IntArray()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new int[]{1,2,3,0b10,0xFAcaca,0xbb, -1_666_123_000}.SequenceEqual(  root.AttrByName("vIntArray").ValueAsIntArray() ) );
+        }
+
+        [Run]
+        public void LongArray()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new long[]{1,2,3,0b10,0xFAcaca,0xbb, -9_666_123_000}.SequenceEqual(  root.AttrByName("vLongArray").ValueAsLongArray() ) );
+        }
+
+        [Run]
+        public void FloatArray()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new float[]{1,2,3,-5.6f, 7e2f}.SequenceEqual(  root.AttrByName("vFloatArray").ValueAsFloatArray() ) );
+        }
+
+        [Run]
+        public void DoubleArray()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new double[]{1,2,3,-5.6d, 7e2d}.SequenceEqual(  root.AttrByName("vDoubleArray").ValueAsDoubleArray() ) );
+        }
+
+        [Run]
+        public void DecimalArray()
+        {
+            var root = conf.AsLaconicConfig();
+
+            Aver.IsTrue(new decimal[]{1,2,3,180780.23M, -99.71M}.SequenceEqual(  root.AttrByName("vDecimalArray").ValueAsDecimalArray() ) );
         }
 
    }//class

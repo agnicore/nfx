@@ -271,6 +271,36 @@ namespace NFX.Environment
               return val.AsByteArray(dflt);
             }
 
+            public int[] ValueAsIntArray(int[] dflt = null, bool verbatim = false)
+            {
+              var val = verbatim ? VerbatimValue : Value;
+              return val.AsIntArray(dflt);
+            }
+
+            public long[] ValueAsLongArray(long[] dflt = null, bool verbatim = false)
+            {
+              var val = verbatim ? VerbatimValue : Value;
+              return val.AsLongArray(dflt);
+            }
+
+            public float[] ValueAsFloatArray(float[] dflt = null, bool verbatim = false)
+            {
+              var val = verbatim ? VerbatimValue : Value;
+              return val.AsFloatArray(dflt);
+            }
+
+            public double[] ValueAsDoubleArray(double[] dflt = null, bool verbatim = false)
+            {
+              var val = verbatim ? VerbatimValue : Value;
+              return val.AsDoubleArray(dflt);
+            }
+
+            public decimal[] ValueAsDecimalArray(decimal[] dflt = null, bool verbatim = false)
+            {
+              var val = verbatim ? VerbatimValue : Value;
+              return val.AsDecimalArray(dflt);
+            }
+
 
             public short ValueAsShort(short dflt = 0, bool verbatim = false)
             {

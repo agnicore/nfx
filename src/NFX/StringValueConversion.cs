@@ -50,7 +50,7 @@ namespace NFX
          }
 
 
-         public static readonly char[] BYTE_ARRAY_SPLIT_CHARS = new char[]{',',';'};
+         public static readonly char[] ARRAY_SPLIT_CHARS = new []{',', ';'};
 
          public static byte[] AsByteArray(this string val, byte[] dflt = null)
          {
@@ -58,9 +58,110 @@ namespace NFX
               try
               {
                 var result = new List<byte>();
-                var segs = val.Split(BYTE_ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
                 foreach(var seg in segs)
-                 result.Add( byte.Parse(seg, NumberStyles.HexNumber));
+                {
+                  //byte arrays defaults to prefix-less hex
+                  byte b;
+                  if (byte.TryParse(seg, NumberStyles.HexNumber, null, out b))
+                  {
+                    result.Add(b);
+                    continue;
+                  }
+                  result.Add( seg.AsByte(handling: ConvertErrorHandling.Throw)) ;
+                }
+
+                return result.ToArray();
+              }
+              catch
+              {
+                return dflt;
+              }
+         }
+
+         public static int[] AsIntArray(this string val, int[] dflt = null)
+         {
+              if (val==null) return dflt;
+              try
+              {
+                var result = new List<int>();
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var seg in segs)
+                 result.Add( seg.AsInt(handling: ConvertErrorHandling.Throw));
+
+                return result.ToArray();
+              }
+              catch
+              {
+                return dflt;
+              }
+         }
+
+         public static long[] AsLongArray(this string val, long[] dflt = null)
+         {
+              if (val==null) return dflt;
+              try
+              {
+                var result = new List<long>();
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var seg in segs)
+                 result.Add( seg.AsLong(handling: ConvertErrorHandling.Throw));
+
+                return result.ToArray();
+              }
+              catch
+              {
+                return dflt;
+              }
+         }
+
+
+         public static float[] AsFloatArray(this string val, float[] dflt = null)
+         {
+              if (val==null) return dflt;
+              try
+              {
+                var result = new List<float>();
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var seg in segs)
+                 result.Add( seg.AsFloat(handling: ConvertErrorHandling.Throw));
+
+                return result.ToArray();
+              }
+              catch
+              {
+                return dflt;
+              }
+         }
+
+
+         public static double[] AsDoubleArray(this string val, double[] dflt = null)
+         {
+              if (val==null) return dflt;
+              try
+              {
+                var result = new List<double>();
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var seg in segs)
+                 result.Add( seg.AsDouble(handling: ConvertErrorHandling.Throw));
+
+                return result.ToArray();
+              }
+              catch
+              {
+                return dflt;
+              }
+         }
+
+         public static decimal[] AsDecimalArray(this string val, decimal[] dflt = null)
+         {
+              if (val==null) return dflt;
+              try
+              {
+                var result = new List<decimal>();
+                var segs = val.Split(ARRAY_SPLIT_CHARS, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var seg in segs)
+                 result.Add( seg.AsDecimal(handling: ConvertErrorHandling.Throw));
 
                 return result.ToArray();
               }
@@ -320,8 +421,14 @@ namespace NFX
                                            }
                                            return  AsGDIDSymbol(val);
                                          }},
-                   {typeof(Guid)     , (val, strict) => strict ? Guid.Parse(val) : AsGUID(val, Guid.Empty) },
-                   {typeof(byte[])   , (val, strict) => AsByteArray(val)},
+                   {typeof(Guid)      , (val, strict)  => strict ? Guid.Parse(val) : AsGUID(val, Guid.Empty) },
+
+                   {typeof(byte[])    , (val, strict)  => AsByteArray(val)},
+                   {typeof(int[])     , (val, strict)  => AsIntArray(val)},
+                   {typeof(long[])    , (val, strict)  => AsLongArray(val)},
+                   {typeof(float[])   , (val, strict)  => AsFloatArray(val)},
+                   {typeof(double[])  , (val, strict)  => AsDoubleArray(val)},
+                   {typeof(decimal[]) , (val, strict)  => AsDecimalArray(val)},
 
                    {typeof(int?),      (val, strict) => string.IsNullOrWhiteSpace(val) ? (int?)null      : (strict ? int.Parse(val)   : AsInt(val)) },
                    {typeof(uint?),     (val, strict) => string.IsNullOrWhiteSpace(val) ? (uint?)null     : (strict ? uint.Parse(val)  : AsUInt(val)) },

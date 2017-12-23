@@ -80,7 +80,7 @@ namespace NFX.Environment
             bool Exists { get; }
 
             /// <summary>
-            /// Returns varbatim (without variable evaluation) node value or null
+            /// Returns verbatim (without variable evaluation) node value or null
             /// </summary>
             string VerbatimValue { get; }
 
@@ -109,6 +109,11 @@ namespace NFX.Environment
 
             string     ValueAsString(string dflt = null, bool verbatim = false);
             byte[]     ValueAsByteArray(byte[] dflt = null, bool verbatim = false);
+            int[]      ValueAsIntArray(int[] dflt = null, bool verbatim = false);
+            long[]     ValueAsLongArray(long[] dflt = null, bool verbatim = false);
+            float[]    ValueAsFloatArray(float[] dflt = null, bool verbatim = false);
+            double[]   ValueAsDoubleArray(double[] dflt = null, bool verbatim = false);
+            decimal[]  ValueAsDecimalArray(decimal[] dflt = null, bool verbatim = false);
             short      ValueAsShort(short dflt = 0, bool verbatim = false);
             short?     ValueAsNullableShort(short? dflt = 0, bool verbatim = false);
             ushort     ValueAsUShort(ushort dflt = 0, bool verbatim = false);
