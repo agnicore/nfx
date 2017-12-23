@@ -32,6 +32,15 @@ namespace NFX.DataAccess.CRUD
     {
         #region .ctor
             /// <summary>
+            /// Table factory for a typed row T
+            /// </summary>
+            public static Table Create<T>()
+              where T : TypedRow
+            {
+              return new Table(Schema.GetForTypedRow(typeof(T)));
+            }
+
+            /// <summary>
             /// Creates an empty table
             /// </summary>
             public Table(Schema schema) : base(schema)

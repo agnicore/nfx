@@ -21,6 +21,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,18 +29,18 @@ using NFX;
 using NFX.ApplicationModel.Pile;
 using NFX.Scripting;
 
-
 namespace NFX.UTest.AppModel.Pile
 {
   [Runnable]
-  public class PileMutableTests : IRunnableHook
+  public class PileMutableTests : IRunHook
   {
-      void IRunnableHook.Prologue(Runner runner, FID id)
+      bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
       {
         GC.Collect();
+        return false;
       }
 
-      bool IRunnableHook.Epilogue(Runner runner, FID id, Exception error)
+      bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
       {
         GC.Collect();
         return false;

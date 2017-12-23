@@ -423,6 +423,49 @@ namespace NFX.DataAccess.CRUD
                return FindByKey(KeyRowFromValues(keys), extraWhere);
             }
 
+            /// <summary>
+            /// Tries to find a row index by specified keyset and returns it or null if not found
+            /// </summary>
+            public int FindIndexByKey(Row keyRow)
+            {
+               return FindIndexByKey(keyRow, null);
+            }
+
+            /// <summary>
+            /// Tries to find a row index by specified keyset and returns it or null if not found.
+            /// This method does not perform well on Rowsets instances as a rowset is unordered list which does linear search.
+            /// In contrast, Tables are always ordered and perform binary search instead
+            /// </summary>
+            public int FindIndexByKey(params object[] keys)
+            {
+               return FindIndexByKey(KeyRowFromValues(keys), null);
+            }
+
+
+            /// <summary>
+            /// Tries to find a row index by specified keyset and extra WHERE clause and returns it or null if not found.
+            /// This method does not perform well on Rowsets instances as a rowset is unordered list which does linear search.
+            /// In contrast, Tables are always ordered and perform binary search instead
+            /// </summary>
+            public int FindIndexByKey(Row row, Func<Row, bool> extraWhere)
+            {
+               Check(row);
+
+               int insertIndex;
+               int idx = SearchForRow(row, out insertIndex);
+               if (idx<0)
+                  return idx;
+
+               return extraWhere != null && !extraWhere(m_List[idx]) ? -1 : idx;
+            }
+
+            /// <summary>
+            /// Tries to find a row index by specified keyset and extra WHERE clause and returns it or null if not found
+            /// </summary>
+            public int FindIndexByKey(Func<Row, bool> extraWhere, params object[] keys)
+            {
+               return FindIndexByKey(KeyRowFromValues(keys), extraWhere);
+            }
 
             /// <summary>
             /// Retrievs a change by index or null if index is out of bounds or changes are not logged

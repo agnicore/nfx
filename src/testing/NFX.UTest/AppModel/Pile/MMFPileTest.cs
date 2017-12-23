@@ -134,7 +134,7 @@ namespace NFX.UTest.AppModel.Pile
           var pp1 = ipile.Put(rowIn1);
           var pp2 = ipile.Put(rowIn2);
 
-          Aver.AreEqual(2, ipile.ObjectCount);
+          Aver.IsTrue(2 == ipile.ObjectCount);
           Aver.AreEqual(DefaultPile.SEG_SIZE_DFLT, ipile.AllocatedMemoryBytes);
           Aver.AreEqual(1, ipile.SegmentCount);
 
@@ -392,25 +392,25 @@ namespace NFX.UTest.AppModel.Pile
       [Run("isParallel=false  cnt=15000   minSz=0      maxSz=24000   speed=true  rnd=true")]
       [Run("isParallel=false  cnt=2100    minSz=65000  maxSz=129000  speed=true  rnd=true")]
 
-      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=false  speed=false")]
-      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=false  speed=false")]
-      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=false  speed=false")]
-      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=false  speed=false")]
+      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=false  rnd=false")]
+      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=false  rnd=false")]
+      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=false  rnd=false")]
+      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=false  rnd=false")]
 
       [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=false  rnd=true")]
       [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=false  rnd=true")]
       [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=false  rnd=true")]
       [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=false  rnd=true")]
 
-      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  speed=false")]
-      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=true  speed=false")]
-      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=true  speed=false")]
-      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=true  speed=false")]
+      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  rnd=false")]
+      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=true  rnd=false")]
+      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=true  rnd=false")]
+      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=true  rnd=false")]
 
-      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  speed=true")]
-      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=true  speed=true")]
-      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=true  speed=true")]
-      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=true  speed=true")]
+      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  rnd=true")]
+      [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=true  rnd=true")]
+      [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=true  rnd=true")]
+      [Run("isParallel=true  cnt=2100    minSz=65000  maxSz=129000  speed=true  rnd=true")]
       public void VarSizes_Increasing_Random(bool isParallel, int cnt, int minSz, int maxSz, bool speed, bool rnd)
       {
         PileCacheTestCore.VarSizes_Increasing_Random(isParallel, cnt, minSz, maxSz, speed, rnd);

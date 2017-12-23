@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,18 +30,19 @@ using NFX.Scripting;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  public class MMFPileTestBase : IRunnableHook
+  public class MMFPileTestBase : IRunHook
   {
       public const string LOCAL_ROOT = @"c:\NFX\ut-pile";
 
 
-      void IRunnableHook.Prologue(Runner runner, FID id)
+      bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
       {
         GC.Collect();
         Directory.CreateDirectory(LOCAL_ROOT);
+        return false;
       }
 
-      bool IRunnableHook.Epilogue(Runner runner, FID id, Exception error)
+      bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
       {
         GC.Collect();
         NFX.IOMiscUtils.EnsureDirectoryDeleted(LOCAL_ROOT);

@@ -2,7 +2,7 @@
 <f color=magenta>
  Usage:
 <f color=white>
-   trun <f color=green>assembly1;assemblyN <f color=darkCyan>[/h | /? | /help]
+   trun <f color=green>assembly1 assemblyN <f color=darkCyan>[/h | /? | /help]
               [/r | /runner
                   [<f color=darkRed>type<f color=darkCyan>=type_name]
                   [<f color=darkRed>categories<f color=darkCyan>=cat1[;catN]]
