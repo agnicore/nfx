@@ -136,6 +136,16 @@ namespace NFX.Scripting
 
       m_PriorMethodName = method.Name;
 
+      if (attr.Message.IsNotNullOrWhiteSpace())
+      {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("Message:");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("  ");
+        Console.WriteLine(attr.Message);
+      }
+
       Console.ForegroundColor = ConsoleColor.DarkGray;
     }
 
@@ -163,8 +173,13 @@ namespace NFX.Scripting
         nrun.AddAttributeNode("now-loc", App.LocalizedTime);
         nrun.AddAttributeNode("now-utc", App.TimeSource.UTCNow);
         nrun.AddAttributeNode("OK", error==null);
+
         if (runner.Emulate)
           nrun.AddAttributeNode("emulated", true);
+
+        if (attr.Message.IsNotNullOrWhiteSpace())
+          nrun.AddAttributeNode("message", attr.Message);
+
         nrun.AddAttributeNode("run-name", attr.Name);
         nrun.AddAttributeNode("run-explicit", attr.ExplicitName);
         nrun.AddAttributeNode("run-config", attr.ConfigContent);

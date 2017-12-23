@@ -885,7 +885,7 @@ namespace NFX.UTest.Serialization
         }
 
         [Run]
-        public void Dictionary_ISerializable_WITHComparer()
+        public void Dictionary_ISerializable_WITHComparer_InvariantCultureIgnoreCase()
         {
           using(var ms = new MemoryStream())
           {
@@ -904,6 +904,63 @@ namespace NFX.UTest.Serialization
 
             Aver.AreObjectsEqual(1, d2["A"]);
             Aver.AreObjectsEqual("dva", d2["B"]);
+          }
+        }
+
+        [Run(@"message=$'
+ 20171223 DKh This test fails on net-core <2.0.3 because OrdinalIgnoreCase
+ comparer does not have a .ctor() for deserialization.
+
+ This is a bug that Microsoft needs to fix (supposedly in 2.0.4) see:
+   https://github.com/dotnet/coreclr/issues/15626
+
+ #/> dotnet --info  
+   '")]
+        public void Dictionary_ISerializable_WITHComparer_OrdinalIgnoreCase()
+        {
+          using(var ms = new MemoryStream())
+          {
+            var s = new SlimSerializer(SlimFormat.Instance);
+
+            var d1 = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            d1["A"] = 1;
+            d1["B"] = "dva";
+
+            s.Serialize(ms, d1);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var d2 = (Dictionary<string, object>)s.Deserialize(ms);
+
+            Aver.AreObjectsEqual(1, d2["A"]);
+            Aver.AreObjectsEqual("dva", d2["B"]);
+          }
+        }
+
+        private class ZNamed : INamed {  public string Name { get; set;}  }
+
+        [Run]
+        public void Dictionary_Registry()
+        {
+          using(var ms = new MemoryStream())
+          {
+            var s = new SlimSerializer(SlimFormat.Instance);
+
+            var r1 = new Registry<ZNamed>();
+
+            r1.Register( new ZNamed{ Name = "A"});
+            r1.Register( new ZNamed{ Name = "B"});
+
+            s.Serialize(ms, r1);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var r2 = (Registry<ZNamed>)s.Deserialize(ms);
+
+            Aver.AreEqual(2, r2.Count);
+            Aver.AreEqual("A", r2["A"].Name);
+            Aver.AreEqual("B", r2["B"].Name);
           }
         }
 

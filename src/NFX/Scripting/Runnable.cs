@@ -18,6 +18,8 @@ namespace NFX.Scripting
   /// </summary>
   public abstract class CategorizedRunnableAttribute : RunnableBaseAttribute
   {
+    public const string CONFIG_MESSAGE_ATTR = "message";
+
     protected CategorizedRunnableAttribute(string category, int order, string config)
     {
       Category      = category;
@@ -60,6 +62,18 @@ namespace NFX.Scripting
         }
 
         return m_Config;
+      }
+    }
+
+    /// <summary>
+    /// Returns null or the value of existing root config "message" attribute
+    /// </summary>
+    public string Message
+    {
+      get
+      {
+        if (ConfigContent.IsNullOrWhiteSpace()) return null;
+        return Config.AttrByName(CONFIG_MESSAGE_ATTR).Value;
       }
     }
   }
