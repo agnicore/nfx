@@ -908,13 +908,10 @@ namespace NFX.UTest.Serialization
         }
 
         [Run(@"message=$'
- 20171223 DKh This test fails on net-core <2.0.3 because OrdinalIgnoreCase
- comparer does not have a .ctor() for deserialization.
-
- This is a bug that Microsoft needs to fix (supposedly in 2.0.4) see:
+ 20171223 DKh This test failed on net-core <2.0.3 because OrdinalIgnoreCase
+ comparer does not have a .ctor() for deserialization. See:
    https://github.com/dotnet/coreclr/issues/15626
-
- #/> dotnet --info  
+ #/> dotnet --info
    '")]
         public void Dictionary_ISerializable_WITHComparer_OrdinalIgnoreCase()
         {
@@ -937,6 +934,29 @@ namespace NFX.UTest.Serialization
             Aver.AreObjectsEqual("dva", d2["B"]);
           }
         }
+
+        [Run("message='This is to test MS stuff on dot-core, does not really test Slim, but tests Dictionary<> with OrdinalIgnoreCase comparer'")]
+        public void Dictionary_BinaryFormatter()
+        {
+            var dict = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            dict.Add("A", 1);
+            dict.Add("B", true);
+
+            var stream = new MemoryStream();
+
+            var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+            bf.Serialize(stream, dict);
+
+            stream.Position = 0;
+
+            var got = bf.Deserialize(stream) as Dictionary<string, object>;
+
+            Console.WriteLine($" got A =  {got["A"]}");
+            Console.WriteLine($" got B =  {got["B"]}");
+        }
+
 
         private class ZNamed : INamed {  public string Name { get; set;}  }
 

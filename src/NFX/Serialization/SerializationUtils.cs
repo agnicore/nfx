@@ -109,7 +109,7 @@ namespace NFX.Serialization
                 }
 
         /// <summary>
-        /// Gets all serializable fields for type in parent->child declaraion order, sub-ordered by case
+        /// Gets all serializable fields for type in parent->child declaration order, sub-ordered by case
         ///  within the segment
         /// </summary>
         public static IEnumerable<FieldInfo> GetSerializableFields(Type type)

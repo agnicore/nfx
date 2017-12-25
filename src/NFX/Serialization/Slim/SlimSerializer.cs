@@ -418,8 +418,15 @@ namespace NFX.Serialization.Slim
                  var fixup = fxps[i];
                  var t = fixup.Instance.GetType();
                  var ctor = SerializationUtils.GetISerializableCtorInfo(t);
-                 if (ctor==null)
-                  throw new SlimDeserializationException(StringConsts.SLIM_ISERIALIZABLE_MISSING_CTOR_ERROR + t.FullName);
+
+                 if (ctor==null) continue;//20171223 DKh ISerializable does not mandate the .ctor(info, context),
+                                          //for example, in net-core they use info.SetType() to redefine comparers
+                                          //so the actual comparer does not have a .ctor at all (which is very odd)
+
+                 //Before 20171223 DKh change
+                 //if (ctor==null)
+                 // throw new SlimDeserializationException(StringConsts.SLIM_ISERIALIZABLE_MISSING_CTOR_ERROR + t.FullName);
+
                  ctor.Invoke(fixup.Instance, new object[]{ fixup.Info, scontext} );
                }
 

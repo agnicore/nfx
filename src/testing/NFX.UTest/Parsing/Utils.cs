@@ -27,7 +27,7 @@ using NFX.Parsing;
 
 namespace NFX.UTest.Parsing
 {
-    [Runnable]   
+    [Runnable]
     public class Utils
     {
         [Run]
@@ -87,13 +87,13 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void MatchPattern6()
-        { 
+        {
           Aver.IsTrue( "same Address".MatchPattern("s?me*addre??") );
-        } 
+        }
 
         [Run]
         public void MatchPattern7()
-        { 
+        {
           Aver.IsTrue( "same AddreZZ".MatchPattern("s?me*addre??") );
           Aver.IsFalse( "same AddreZZ?".MatchPattern("s?me*addre??") );
           Aver.IsFalse( "same AddreZ"  .MatchPattern("s?me*addre??") );
@@ -101,102 +101,99 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void MatchPattern8()
-        { 
+        {
           Aver.IsTrue( "same AddreZZ".MatchPattern("*") );
         }
 
         [Run]
         public void MatchPattern9()
-        { 
+        {
           Aver.IsFalse( "same AddreZZ".MatchPattern("") );
         }
 
         [Run]
         public void MatchPattern10()
-        { 
+        {
           Aver.IsFalse( "same AddreZZ".MatchPattern("?") );
         }
 
         [Run]
         public void MatchPattern11()
-        { 
+        {
           Aver.IsTrue( "same AddreZZ".MatchPattern("????????????") );
         }
 
         [Run]
         public void MatchPattern12()
-        { 
+        {
           Aver.IsTrue( "same AddreZZ".MatchPattern("same*") );
         }
 
         [Run]
         public void MatchPattern13()
-        { 
+        {
           Aver.IsTrue( "same AddreZZ".MatchPattern("*addre??") );
         }
 
         [Run]
         public void MatchPattern14()
-        { 
+        {
           Aver.IsTrue( "same Address".MatchPattern("*address") );
         }
 
         [Run]
         public void MatchPattern15_1()
-        { 
+        {
           Aver.IsTrue( "some same crazy address address Address".MatchPattern("*address") );
         }
 
         [Run]
         public void MatchPattern15_2()
-        { 
+        {
           Aver.IsFalse( "some same crazy address address Address".MatchPattern("*address", senseCase: true) );
         }
 
-        [Aver.Throws(typeof(NFXException), Message="contains more than one", MsgMatch=Aver.ThrowsAttribute.MatchType.Contains)]
         [Run]
         public void MatchPattern16_1()
-        { 
-          "some crazy address".MatchPattern("*crazy*");
+        {
+          Aver.IsTrue("some crazy address".MatchPattern("*crazy*"));
         }
 
-        [Aver.Throws(typeof(NFXException), Message="contains more than one", MsgMatch=Aver.ThrowsAttribute.MatchType.Contains)]
         [Run]
         public void MatchPattern16_2()
-        { 
-          "some crazy address".MatchPattern("cr*azy*");
+        {
+          Aver.IsTrue("some crazy address".MatchPattern("*cr?zy*"));
         }
 
 
-        [Aver.Throws(typeof(NFXException), Message="contains more than one", MsgMatch=Aver.ThrowsAttribute.MatchType.Contains)]
         [Run]
         public void MatchPattern16_3()
-        { 
-          "some crazy address".MatchPattern("*cra*zy");
+        {
+          Aver.IsFalse("some crazy address".MatchPattern("*cr*zy"));
         }
 
 
         [Run]
         public void MatchPattern17()
-        { 
+        {
           Aver.IsTrue( "127.0.0.1".MatchPattern("127.0.*") );
         }
 
         [Run]
         public void MatchPattern18()
-        { 
+        {
           Aver.IsTrue( "https://some-site.com/?q=aaaa".MatchPattern("https://some-site.com*") );
         }
 
         [Run]
         public void MatchPattern19()
-        { 
+        {
           Aver.IsTrue( "140.70.81.139".MatchPattern("140.70.81.139") );
         }
 
         [Run]
         public void MatchPattern20()
-        { 
+        {
           Aver.IsTrue( "140.70.81.139" .MatchPattern("140.70.*.139") );
           Aver.IsTrue( "140.70.1.139"  .MatchPattern("140.70.*.139") );
           Aver.IsTrue( "140.70.17.139" .MatchPattern("140.70.*.139") );
@@ -208,9 +205,171 @@ namespace NFX.UTest.Parsing
           Aver.IsFalse( "140.70.123.137".MatchPattern("140.70.*.139") );
         }
 
+
+        [Run]
+        public void MatchPattern21()
+        {
+          Aver.IsTrue( "140.70.81.139" .MatchPattern("*.70.81.139") );
+          Aver.IsFalse( "140.70.99.139" .MatchPattern("*.70.81.139") );
+        }
+
+        [Run]
+        public void MatchPattern22()
+        {
+          Aver.IsTrue( "140.70.81.139" .MatchPattern("140.70.81.*") );
+          Aver.IsFalse( "140.70.99.139" .MatchPattern("140.70.81.*") );
+        }
+
+        [Run]
+        public void MatchPattern23()
+        {
+          Aver.IsTrue( "140.70.81.139" .MatchPattern("140.*.81.*") );
+          Aver.IsTrue( "140.80.81.139" .MatchPattern("140.*.81.*") );
+          Aver.IsTrue( "140.    80       .81.139" .MatchPattern("140.*.81.*") );
+          Aver.IsTrue( "140. 80 .81.99999" .MatchPattern("140.*.81.*") );
+
+          Aver.IsTrue( "1.70.81.1" .MatchPattern("*.70.81.*") );
+          Aver.IsFalse( "1.70.82.1" .MatchPattern("*.70.81.*") );
+        }
+
+        [Run]
+        public void MatchPattern24()
+        {
+          Aver.IsTrue( "Alex Boris" .MatchPattern("*") );
+          Aver.IsTrue( "Alex Boris" .MatchPattern("Alex*") );
+          Aver.IsTrue( "Alex Boris" .MatchPattern("*Boris") );
+          Aver.IsTrue( "Alex Boris" .MatchPattern("*lex Bo*") );
+        }
+
+        [Run]
+        public void MatchPattern25()
+        {
+          Aver.IsTrue( "Alex Boris" .MatchPattern("*") );
+          Aver.IsFalse( "Alex Boris" .MatchPattern("Axex*") );
+          Aver.IsFalse( "Alex Boris" .MatchPattern("*Bosir") );
+          Aver.IsFalse( "Alex Boris" .MatchPattern("*lxe Bo*") );
+        }
+
+        [Run]
+        public void MatchPattern26()
+        {
+          Aver.IsTrue ( "Alex Boris" .MatchPattern("*") );
+          Aver.IsFalse( "Alex Boris" .MatchPattern("alex*", senseCase: true) );
+          Aver.IsTrue ( "Alex Boris" .MatchPattern("Alex*", senseCase: true) );
+
+          Aver.IsFalse ( "Alex Boris" .MatchPattern("*boris", senseCase: true) );
+          Aver.IsTrue ( "Alex Boris" .MatchPattern("*Boris", senseCase: true) );
+        }
+
+        [Run]
+        public void MatchPattern27()
+        {
+          Aver.IsTrue ( "Honda buick honda monda donda ford buick ford ford" .MatchPattern("*ford") );
+          Aver.IsFalse ( "Honda buick honda monda donda ford buick ford ford" .MatchPattern("*honda") );
+          Aver.IsTrue  ( "Honda buick honda monda donda ford buick ford ford" .MatchPattern("*honda*") );
+        }
+
+        [Run]
+        public void MatchPattern28()
+        {
+          Aver.IsTrue ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*ford") );
+          Aver.IsFalse ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*ford", senseCase: true) );
+          Aver.IsTrue  ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*fORd", senseCase: true) );
+        }
+
+        [Run]
+        public void MatchPattern29()
+        {
+          Aver.IsTrue ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*buick*") );
+          Aver.IsFalse ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*buick handa*") );
+          Aver.IsTrue ( "Honda buick honda monda donda ford buick ford fORd" .MatchPattern("*buick h?nda*") );
+        }
+
+        [Run]
+        public void MatchPattern30()
+        {
+          Aver.IsTrue ( "kikimora zhaba fly snake toad" .MatchPattern("*?ly*") );
+          Aver.IsFalse ( "kikimora zhaba fly snake toad" .MatchPattern("*?ly") );
+          Aver.IsTrue ( "kikimora zhaba fly snake toad" .MatchPattern("*?ly*toad") );
+        }
+
+        [Run]
+        public void MatchPattern31()
+        {
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("*****************") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("?????????????????") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("?*????????**?????") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("*?????????**????*") );
+
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("***x*************") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("?A???????????????") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("?*????-???**?????") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("*?????????**???? ") );
+        }
+
+        [Run]
+        public void MatchPattern32()
+        {
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("*********overcome") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("??????????v???o??") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("?e????????**??o??") );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("We*???????**????*") );
+
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("*********ofercome") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("??????????A???o??") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("?e--??????**??o??") );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("They*?????**????*") );
+        }
+
+        [Run]
+        public void MatchPattern33()
+        {
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("*********overCOME", senseCase: false) );
+          Aver.IsFalse ( "We shall overcome" .MatchPattern("*********overCOME", senseCase: true) );
+
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("@@@@@@@@@overcome", '@') );
+          Aver.IsTrue ( "We shall overcome" .MatchPattern("@erco$$", '@', '$') );
+        }
+
+        [Run]
+        public void MatchPattern34()
+        {
+          Aver.IsTrue ( ((string)null).MatchPattern(null) );
+          Aver.IsTrue ( "".MatchPattern("") );
+
+          Aver.IsTrue ( ((string)null).MatchPattern("") );
+          Aver.IsTrue ( "".MatchPattern(null) );
+
+          Aver.IsFalse( " a ".MatchPattern(null));
+          Aver.IsFalse ( ((string)null).MatchPattern(" a ") );
+        }
+
+
+        [Run]
+        public void CapturePatternMatch_1()
+        {
+          Aver.AreEqual("aaa", "controller/aaa/user".CapturePatternMatch("controller/*/user"));
+
+          Aver.AreEqual("aaa", "aaa".CapturePatternMatch("*"));
+          Aver.AreEqual("aaa", "/aaa".CapturePatternMatch("/*"));
+
+          Aver.AreEqual("", "/aaa".CapturePatternMatch("x/*"));
+        }
+
+        [Run]
+        public void CapturePatternMatch_2()
+        {
+          Aver.AreEqual("controller/aaa", "controller/aaa/user".CapturePatternMatch("*/user"));
+
+          Aver.AreEqual("", "aaa".CapturePatternMatch("/*"));
+          Aver.AreEqual("", "aaa/".CapturePatternMatch("/*"));
+          Aver.AreEqual("", "aaa/234234".CapturePatternMatch("/*"));
+          Aver.AreEqual("aaa/9", "/aaa/9".CapturePatternMatch("/*"));
+        }
+
         [Run]
         public void CheckScreenName()
-        { 
+        {
           Aver.IsFalse( DataEntryUtils.CheckScreenName("10o") );
           Aver.IsFalse( DataEntryUtils.CheckScreenName("1.0o") );
           Aver.IsFalse( DataEntryUtils.CheckScreenName(".aa") );
@@ -232,7 +391,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone1()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("5552224415");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415", n);
@@ -240,7 +399,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone2()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("2224415");
           Console.WriteLine(n);
           Aver.AreEqual("(???) 222-4415", n);
@@ -248,7 +407,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone3()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("   +38 067 2148899   ");
           Console.WriteLine(n);
           Aver.AreEqual("+38 067 2148899", n);
@@ -256,7 +415,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone4()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415", n);
@@ -264,7 +423,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone5()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415 EXT 2014");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x2014", n);
@@ -272,7 +431,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone6()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415.2014");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x2014", n);
@@ -280,7 +439,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone7()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415EXT.2014");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x2014", n);
@@ -288,7 +447,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone8()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415 X 2014");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x2014", n);
@@ -296,7 +455,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone9()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555.222.4415");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415", n);
@@ -304,7 +463,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone10()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("555-222-4415");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415", n);
@@ -312,7 +471,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone11()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("5552224415ext123");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x123", n);
@@ -320,7 +479,7 @@ namespace NFX.UTest.Parsing
 
         [Run]
         public void NormalizePhone12()
-        { 
+        {
           var n = DataEntryUtils.NormalizeUSPhone("5552224415ext.123");
           Console.WriteLine(n);
           Aver.AreEqual("(555) 222-4415x123", n);
@@ -422,7 +581,7 @@ namespace NFX.UTest.Parsing
             Console.WriteLine(email);
             Aver.IsFalse(DataEntryUtils.CheckEMail(email));
           }
-          
+
         }
 
         [Run]

@@ -99,7 +99,7 @@ namespace NFX.UTest.Serialization
       public int Fint1 { get; set; }
     }
 
-    internal interface I1 
+    internal interface I1
     {
       int Fint1 { get; set; }
     }
@@ -122,7 +122,7 @@ namespace NFX.UTest.Serialization
 
         Aver.IsTrue( object.ReferenceEquals( dOut, dOut.FC4) );
         Aver.IsTrue( object.ReferenceEquals(dOut.FC4, dOut.FC4.FC4) );
-      }  
+      }
     }
 
     internal class C4
@@ -137,7 +137,7 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var c6 = new C6();
         var dIn = new C5() { FC6 = c6 };
         c6.FC5 = dIn;
@@ -148,7 +148,7 @@ namespace NFX.UTest.Serialization
         var dOut = (C5)s.Deserialize(ms);
 
         Aver.AreSameRef(dOut, dOut.FC6.FC5);
-      }      
+      }
     }
 
     internal class C5
@@ -193,7 +193,7 @@ namespace NFX.UTest.Serialization
       public List<C7> FC7s { get; set; }
     }
 
-    internal interface IC7 
+    internal interface IC7
     {
       IC7[] FIC7s { get; set; }
     }
@@ -205,7 +205,7 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var dIn = new C8();
         dIn.FObjs = new object[] { null, (object)dIn, (IC8)dIn, (C8_1)dIn, dIn };
 
@@ -218,7 +218,7 @@ namespace NFX.UTest.Serialization
         Aver.AreSameRef(dOut, dOut.FObjs[1]);
         Aver.AreSameRef(dOut, dOut.FObjs[2]);
         Aver.AreSameRef(dOut, dOut.FObjs[3]);
-      }      
+      }
     }
 
     internal class C8: C8_1
@@ -237,7 +237,7 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var dIn = new C10() { FIC9s = new IC9[] { new C9_1(), new C9() } };
 
         s.Serialize(ms, dIn);
@@ -268,16 +268,16 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var bytes = new byte[] { 0x07, 0x12};
         var strings = new string[] { "Veingarten", "Vecherovskiy", "Zahar Gubar'"};
         var ints = new int[] { -100, 2345, 19044, 888889};
-        var dIn = new C11() 
-        { 
-          FBytes = bytes, 
+        var dIn = new C11()
+        {
+          FBytes = bytes,
           FC11 = new C11_1() { FBytes_1 = bytes, FStrings_1 = strings, FInts_1 = ints},
           FC12 = new C11_2() { FBytes_2 = bytes, FStrings_2 = strings, FInts_2 = ints}
-        };  
+        };
 
         s.Serialize(ms, dIn);
         ms.Seek(0, SeekOrigin.Begin);
@@ -289,7 +289,7 @@ namespace NFX.UTest.Serialization
 
         Aver.AreSameRef(dOut.FC11.FStrings_1, dOut.FC12.FStrings_2);
         Aver.AreSameRef(dOut.FC11.FInts_1, dOut.FC12.FInts_2);
-      }  
+      }
     }
 
     internal class C11
@@ -321,7 +321,7 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var dIn = new C12() { FIC12s = new IC12[] { new C12_2(), new C12_1() } };
 
         s.Serialize(ms, dIn);
@@ -352,7 +352,7 @@ namespace NFX.UTest.Serialization
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
-        
+
         var dIn = new Dictionary<int, int>(new Comparer1());
         dIn[1] = 100;
         dIn[11] = 200;
@@ -432,7 +432,7 @@ namespace NFX.UTest.Serialization
 
         Aver.AreSameRef(dOut[0].FDict[1], dOut[2].FDict[2]);
         Aver.AreSameRef(dOut[0].FDict[3], dOut[2].FDict[1]);
-      } 
+      }
     }
 
     [Run]
@@ -453,7 +453,7 @@ namespace NFX.UTest.Serialization
         Console.WriteLine( NFX.Serialization.JSON.JSONWriter.Write(s2));
 
         Aver.IsTrue( s1 == s2);
-      } 
+      }
     }
 
         private struct MyStructFields
@@ -494,11 +494,11 @@ namespace NFX.UTest.Serialization
 
         var s2 = (MyStructFields)s.Deserialize(ms);
 
-       
+
         Aver.AreEqual(s1.X, s2.X);
         Aver.AreEqual(s1.Y, s2.Y);
         Aver.AreEqual(s1.F, s2.F);
-      } 
+      }
     }
 
     [Run]
@@ -510,7 +510,7 @@ namespace NFX.UTest.Serialization
       //z = (MyStructWithReadonlyField)oz;
       //Console.WriteLine(z.F);
       //return;
-                     
+
       using (var ms = new MemoryStream())
       {
         var s = new SlimSerializer();
@@ -528,7 +528,7 @@ namespace NFX.UTest.Serialization
         Aver.AreEqual(s1.X, s2.X);
         Aver.AreEqual(s1.Y, s2.Y);
         Aver.AreEqual(s1.F, s2.F);
-      } 
+      }
     }
 
        private class sw{ public MyStructWithReadonlyField s;}
@@ -553,7 +553,7 @@ namespace NFX.UTest.Serialization
         Aver.AreEqual(s1.s.X, s2.s.X);
         Aver.AreEqual(s1.s.Y, s2.s.Y);
         Aver.AreEqual(s1.s.F, s2.s.F);
-      } 
+      }
     }
 
 
@@ -575,10 +575,10 @@ namespace NFX.UTest.Serialization
 
         Aver.AreEqual(4, ((object[])o2.Data).Length);
         Aver.AreObjectsEqual("ok", ((object[])o2.Data)[3]);
-       
+
       }
     }
-      
+
 
     [Run]
     public void T2000_TypeRegistry()
@@ -605,7 +605,7 @@ namespace NFX.UTest.Serialization
         Aver.AreObjectsEqual(typeof(Tuple<string, S3>), tr2["$6"]);
         Aver.AreObjectsEqual(typeof(S3[]),              tr2["$5"]);
         Aver.AreObjectsEqual(typeof(List<S3>),          tr2["$4"]);
-       
+
       }
     }
 
@@ -635,7 +635,7 @@ namespace NFX.UTest.Serialization
         Aver.AreEqual(1,  d2[typeof(List<S3>)]);
         Aver.AreEqual(20, d2[typeof(S3[])]);
         Aver.AreEqual(90, d2[typeof(Tuple<string, S3>)]);
-       
+
       }
     }
 
@@ -652,7 +652,7 @@ namespace NFX.UTest.Serialization
       {
         var s = new SlimSerializer();
         var d1 = new dictTypeClass{
-                  Data  =  new Dictionary<Type, int>(0xff), 
+                  Data  =  new Dictionary<Type, int>(0xff),
                   ADummy = new List<Type>(0xff)};
 
        d1.Data.Add(typeof(List<S3>) ,1 ) ;
@@ -683,7 +683,7 @@ namespace NFX.UTest.Serialization
         Aver.AreObjectsEqual(typeof(List<S3>),  d2.ADummy[0]);
         Aver.AreObjectsEqual(typeof(S3[]),    d2.ADummy[1]);
         Aver.AreObjectsEqual(typeof(Tuple<string, S3>),    d2.ADummy[2]);
-       
+
       }
     }
 
@@ -712,9 +712,9 @@ namespace NFX.UTest.Serialization
                var buf = (byte[]) info.GetValue("d", typeof(byte[]));
                var ms = new MemoryStream(buf);
                var s = new SlimSerializer();
-               Data = s.Deserialize(ms);    
+               Data = s.Deserialize(ms);
              }
-             
+
              public void GetObjectData(SerializationInfo info, StreamingContext context)
              {
                var ms = new MemoryStream();

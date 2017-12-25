@@ -151,7 +151,8 @@ namespace NFX.Parsing
 
 
     /// <summary>
-    /// Returns true if supplied string matches pattern that can contain up to one * wildcard and multiple ? wildcards
+    /// Returns true if supplied string matches pattern that can contain multiple char span (*) wildcards and
+    /// multiple single-char (?) wildcards
     /// </summary>
     public static bool MatchPattern(this string str,     //     some address
                                          string pattern, //     some*e?s
@@ -159,42 +160,50 @@ namespace NFX.Parsing
                                          char wsc ='?',
                                          bool senseCase = false)
     {
-       var snws = str.IsNullOrWhiteSpace();
-       var pnws = pattern.IsNullOrWhiteSpace();
+      var snws = str.IsNullOrWhiteSpace();
+      var pnws = pattern.IsNullOrWhiteSpace();
 
-       if (snws && pnws) return true;
-       if (snws || pnws) return false;
+      if (snws && pnws) return true;
+      if (snws || pnws) return false;
 
-       var iwc = pattern.IndexOf(wc);
-       if (iwc>=0)
-       {
-          var iwc2 = pattern.LastIndexOf(wc);
-          if (iwc2>iwc)
-            throw new NFXException(StringConsts.TEXT_PATTERN_MULTI_WC_ERROR.Args(pattern, wc));
-       }
 
-       int istr=0, ipat=0;
-       for(; istr<str.Length && ipat<pattern.Length; istr++,ipat++)
-       {
+      int istr = 0, ipat = 0;
+
+      var pistr = str.Length;
+      var pipat = pattern.Length;
+      while(istr<str.Length)
+      {
+        for(; istr<str.Length && ipat<pattern.Length; istr++, ipat++)
+        {
           var pc = pattern[ipat];
-          if (pc==wsc)//?
-            continue;
-
-          if (pc==wc)//*
+          if (pc==wc) //*
           {
-            var leftcnt = pattern.Length-1-ipat;
-            if (leftcnt<=0) return true;//match whatever left * at the end
-            if (istr>=str.Length-1) return false;//nothing left in string but something left in pattern
-            pattern = pattern.Substring(ipat+1);
-            return MatchPattern(str.Substring(str.Length-pattern.Length), pattern, wc, wsc, senseCase);
+            if (ipat==pattern.Length-1) return true;//final char in pattern is *
+            pistr = istr;
+            pipat = ipat;
+            istr--;
+            continue;
           }
 
-          var sc = str[istr];
-          if (!charEqual(sc, pc, senseCase)) return false;
-       }
+          if (pc==wsc) continue;
+          if (charEqual(pc, str[istr], senseCase)) continue;
 
-       return str.Length==pattern.Length;
+          ipat = pipat-1; //same pattern
+          istr = pistr; //next char
+        }
+
+        //eat trailing ****
+        while(ipat<pattern.Length && pattern[ipat]==wc) ipat++;
+
+        if (istr==str.Length && ipat==pattern.Length) return true;
+        ipat = pipat;
+        pistr++;
+        istr = pistr;
+      }
+      return false;
     }
+
+
 
     private static bool charEqual(char a, char b, bool senseCase)
     {

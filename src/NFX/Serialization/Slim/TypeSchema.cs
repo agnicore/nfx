@@ -37,7 +37,7 @@ namespace NFX.Serialization.Slim
 
 
     /// <summary>
-    /// Type descriptor dynamicaly compiles serialization/deserialization expressions for a particular type
+    /// Type descriptor dynamically compiles serialization/deserialization expressions for a particular type
     /// </summary>
     internal class TypeDescriptor
     {
@@ -129,6 +129,13 @@ namespace NFX.Serialization.Slim
             else
             {
                 var info = deserializeInfo(reader, registry, refs, streamingContext);
+
+                //20171223 DKh Handle SerializationInfo.SetType() redefinition of serialized type
+                if (instance.GetType() != info.ObjectType)
+                {
+                  instance = FormatterServices.GetUninitializedObject(info.ObjectType);//ref instance is re-allocated with a different type
+                }
+
                 refs.AddISerializableFixup(instance, info);
             }
 
@@ -307,6 +314,7 @@ namespace NFX.Serialization.Slim
 
              private void serializeInfo(SlimWriter writer, TypeRegistry registry, RefPool refs, SerializationInfo info, StreamingContext streamingContext)
              {
+                 writer.Write(registry.GetTypeHandle( info.ObjectType ));//20171223 DKh
                  writer.Write(info.MemberCount);
 
                  var senum = info.GetEnumerator();
@@ -320,7 +328,13 @@ namespace NFX.Serialization.Slim
 
              private SerializationInfo deserializeInfo(SlimReader reader, TypeRegistry registry, RefPool refs, StreamingContext streamingContext)
              {
-                 var info = new SerializationInfo(Type, new FormatterConverter());
+                 //20171223 DKh
+                 var visInfo = reader.ReadVarIntStr();
+                 var tInfo = registry[ visInfo ];
+                 var info = new SerializationInfo(tInfo, new FormatterConverter());
+
+                 //20171223 DKh
+                 //var info = new SerializationInfo(Type, new FormatterConverter());
 
                  var cnt = reader.ReadInt();
 
