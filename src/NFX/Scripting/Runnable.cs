@@ -97,7 +97,7 @@ namespace NFX.Scripting
   /// Decorates methods of classes that can be run
   /// </summary>
   [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-  public sealed class RunAttribute : CategorizedRunnableAttribute
+  public class RunAttribute : CategorizedRunnableAttribute
   {
     public RunAttribute() : this(null, null, 0, null) {}
     public RunAttribute(int order) : this(null, null, order, null) {}
@@ -105,7 +105,7 @@ namespace NFX.Scripting
     public RunAttribute(string name, int order, string config) : this(null, name, order, config) {}
     public RunAttribute(string config) : this(null, null, 0, config) {}
     public RunAttribute(string name, string config) : this(null, name, 0, config) {}
-    public RunAttribute(string category, string name, int order, string config) : base(category, order, config)
+    public RunAttribute(string category, string name, int order, string config = null) : base(category, order, config)
     {
       if (name.IsNullOrWhiteSpace()) return;
 

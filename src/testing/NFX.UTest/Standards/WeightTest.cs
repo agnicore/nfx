@@ -22,7 +22,7 @@ using NFX.Standards;
 
 namespace NFX.UTest.Standards
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   class WeightTest
   {
     [Run]

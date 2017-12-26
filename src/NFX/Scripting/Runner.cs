@@ -222,12 +222,14 @@ namespace NFX.Scripting
     {
       var allMethods = tRunnable.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
+      var hasMethodLevelCategories = allMethods.Any( mi => mi.GetCustomAttributes<RunAttribute>().Any( a => a.Category.IsNotNullOrWhiteSpace()) );
+
       foreach(var mi in allMethods)
       {
         var attrs = mi.GetCustomAttributes<RunAttribute>();
         foreach(var attr in attrs)
         {
-          if (FilterMethod(tRunnable, mi, attr))
+          if (FilterMethod(tRunnable, mi, attr, hasMethodLevelCategories))
             yield return (mi, attr);
         }
       }
@@ -237,11 +239,14 @@ namespace NFX.Scripting
     /// Determines if the runnable should run in which case returns true.
     /// Filter is based on this instance properties (such as Categories etc.)
     /// </summary>
-    public virtual bool FilterMethod(Type tRunnable, MethodInfo mi,  RunAttribute attr)
+    public virtual bool FilterMethod(Type tRunnable, MethodInfo mi,  RunAttribute attr, bool runnableHasMethodLevelCategories)
     {
-      if (m_Categories!=null && attr.Category.IsNotNullOrWhiteSpace())
+      if (m_Categories!=null)
       {
-        if (!m_Categories.Any( c => attr.Category.MatchPattern(c, senseCase: false ))) return false;
+        if (runnableHasMethodLevelCategories || attr.Category.IsNotNullOrWhiteSpace())
+        {
+          if (!m_Categories.Any( c => attr.Category.MatchPattern(c, senseCase: false ))) return false;
+        }
       }
 
       if (m_Namespaces!=null)

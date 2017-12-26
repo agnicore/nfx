@@ -32,7 +32,7 @@ using NFX.Financial;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class BSONDirectSerialization
   {
     [BSONSerializable("25C155E8-59DC-4E5B-A9AD-6A94CB4381BD")]

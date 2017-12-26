@@ -29,7 +29,7 @@ using NFX.Serialization.Arow;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ARow : IRunnableHook
     {
       void IRunnableHook.Prologue(Runner runner, FID id)

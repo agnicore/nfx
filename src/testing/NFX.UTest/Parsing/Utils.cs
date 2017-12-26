@@ -27,7 +27,7 @@ using NFX.Parsing;
 
 namespace NFX.UTest.Parsing
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class Utils
     {
         [Run]
@@ -58,6 +58,9 @@ namespace NFX.UTest.Parsing
         {
           Aver.IsTrue( "some address".MatchPattern("s?me?addres?") );
           Aver.IsTrue( "same-addresZ".MatchPattern("s?me?addres?") );
+
+          Aver.IsFalse( "sone address".MatchPattern("s?me?addres?") );
+          Aver.IsFalse( "sane-oddresZ".MatchPattern("s?me?addres?") );
         }
 
         [Run]
@@ -65,24 +68,30 @@ namespace NFX.UTest.Parsing
         {
           Aver.IsTrue ( "some address".MatchPattern("s?me?addres?", senseCase: true) );
           Aver.IsFalse( "same-addreZs".MatchPattern("s?me?addres?", senseCase: true) );
+
+          Aver.IsFalse ( "sone address".MatchPattern("s?me?addres?", senseCase: true) );
+          Aver.IsFalse ( "saMe-addrezs".MatchPattern("s?me?addres?", senseCase: true) );
         }
 
 
         [Run]
         public void MatchPattern3()
         {
-          Aver.IsTrue( "some address".MatchPattern("some*") );
+          Aver.IsTrue ( "some address".MatchPattern("some*") );
+          Aver.IsFalse( "sone address ".MatchPattern("some*") );
         }
         [Run]
         public void MatchPattern4()
         {
           Aver.IsTrue( "some address".MatchPattern("s?me*") );
+          Aver.IsFalse( "sone address".MatchPattern("s?me*") );
         }
 
         [Run]
         public void MatchPattern5()
         {
           Aver.IsTrue( "some address".MatchPattern("s?me*addre??") );
+          Aver.IsFalse( "some adzress".MatchPattern("s?me*addre??") );
         }
 
         [Run]
@@ -121,30 +130,41 @@ namespace NFX.UTest.Parsing
         public void MatchPattern11()
         {
           Aver.IsTrue( "same AddreZZ".MatchPattern("????????????") );
+          Aver.IsFalse( "same Addre".MatchPattern("????????????") );
         }
 
         [Run]
         public void MatchPattern12()
         {
-          Aver.IsTrue( "same AddreZZ".MatchPattern("same*") );
+          Aver.IsTrue ( "same AddreZZ".MatchPattern("same*") );
+          Aver.IsFalse( "some AddreZZ".MatchPattern("same*") );
         }
 
         [Run]
         public void MatchPattern13()
         {
           Aver.IsTrue( "same AddreZZ".MatchPattern("*addre??") );
+          Aver.IsTrue( "good address".MatchPattern("*addre??") );
+          Aver.IsTrue( "new address-2".MatchPattern("*addre????") );
+
+          Aver.IsFalse( "same ApdreZZ".MatchPattern("*addre??") );
+          Aver.IsFalse( "good adress".MatchPattern("*addre??") );
+          Aver.IsFalse( "good adres".MatchPattern("*addre??") );
+          Aver.IsFalse( "new accress-2".MatchPattern("*addre????") );
         }
 
         [Run]
         public void MatchPattern14()
         {
           Aver.IsTrue( "same Address".MatchPattern("*address") );
+          Aver.IsFalse( "same Address ok".MatchPattern("*address") );
         }
 
         [Run]
         public void MatchPattern15_1()
         {
-          Aver.IsTrue( "some same crazy address address Address".MatchPattern("*address") );
+          Aver.IsTrue ( "some same crazy address address Address".MatchPattern("*address") );
+          Aver.IsFalse( "some same crazy address address!".MatchPattern("*address") );
         }
 
         [Run]
@@ -156,13 +176,18 @@ namespace NFX.UTest.Parsing
         [Run]
         public void MatchPattern16_1()
         {
-          Aver.IsTrue("some crazy address".MatchPattern("*crazy*"));
+          Aver.IsTrue ("some crazy address".MatchPattern("*crazy*"));
+          Aver.IsFalse("some crizy address".MatchPattern("*crazy*"));
+          Aver.IsFalse("some craizy address".MatchPattern("*crazy*"));
         }
 
         [Run]
         public void MatchPattern16_2()
         {
-          Aver.IsTrue("some crazy address".MatchPattern("*cr?zy*"));
+          Aver.IsTrue  ("some crazy address".MatchPattern("*cr?zy*"));
+          Aver.IsTrue  ("some crizy address".MatchPattern("*cr?zy*"));
+          Aver.IsFalse ("some criizy address".MatchPattern("*cr?zy*"));
+          Aver.IsFalse ("some krazy address".MatchPattern("*cr?zy*"));
         }
 
 
@@ -192,7 +217,7 @@ namespace NFX.UTest.Parsing
         }
 
         [Run]
-        public void MatchPattern20()
+        public void MatchPattern20()//--
         {
           Aver.IsTrue( "140.70.81.139" .MatchPattern("140.70.*.139") );
           Aver.IsTrue( "140.70.1.139"  .MatchPattern("140.70.*.139") );

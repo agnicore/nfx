@@ -27,7 +27,7 @@ using E = NFX.Parsing.Evaluator;
 
 namespace NFX.UTest.Parsing
 {
-    [Runnable]   
+    [Runnable(TRUN.BASE)]
     public class Evaluator
     {
         [Run]

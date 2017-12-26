@@ -29,7 +29,7 @@ using static NFX.Aver.ThrowsAttribute;
 namespace NFX.UTest.Config
 {
 
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class VariableEvaluation
     {
         static string xml =

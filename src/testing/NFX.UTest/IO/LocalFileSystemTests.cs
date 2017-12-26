@@ -28,7 +28,7 @@ using NFX.Security;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class LocalFileSystemTests : IRunnableHook
     {
         public const string LOCAL_ROOT = @"c:\NFX";

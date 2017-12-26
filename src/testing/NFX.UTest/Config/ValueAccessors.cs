@@ -27,7 +27,7 @@ using NFX.Log;
 
 namespace NFX.UTest.Config
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ValueAccessors
     {
 

@@ -22,7 +22,7 @@ using NFX.DataAccess.Distributed;
 
 namespace NFX.UTest
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class ELinkTest
   {
       [Run]

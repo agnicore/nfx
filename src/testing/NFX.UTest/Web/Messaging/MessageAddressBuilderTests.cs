@@ -6,7 +6,7 @@ using NFX.Web.Messaging;
 
 namespace NFX.UTest.Web.Messaging
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 6)]
   public class MessageAddressBuilderTests
   {
     [Run]

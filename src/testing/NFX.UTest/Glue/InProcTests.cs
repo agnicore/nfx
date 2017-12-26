@@ -31,7 +31,7 @@ using NFX.IO;
 
 namespace NFX.UTest.Glue
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class InProcTests
     {
    const string CONF_SRC_INPROC =@"

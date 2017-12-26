@@ -26,7 +26,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.Collections
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 2)]
   public class MatrixTest
   {
     private static int[][] TEST_INTS_2D = new int[][] {

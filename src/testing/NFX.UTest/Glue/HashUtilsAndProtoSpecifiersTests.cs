@@ -26,7 +26,7 @@ using NFX.Glue.Protocol;
 
 namespace NFX.UTest.Glue
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class HashUtilsAndProtoSpecifiersTests
     {
         [Run]

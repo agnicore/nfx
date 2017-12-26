@@ -26,7 +26,7 @@ using NFX.ApplicationModel;
 
 namespace NFX.UTest.AppModel
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 3)]
     public class FinishNotifiablesTests
     {
 

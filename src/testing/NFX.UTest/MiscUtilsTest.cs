@@ -27,7 +27,7 @@ using static NFX.Aver.ThrowsAttribute;
 namespace NFX.UTest
 {
 
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class MiscUtilsTest
     {
          private class Tezt

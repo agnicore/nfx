@@ -959,10 +959,6 @@ namespace NFX
     public const string NETGATE_VARDEF_NAME_EMPTY_CTOR_ERROR =
               "NetGate.VarDef must have a valid name in config or passed to .ctor";
 
-    public const string TEXT_PATTERN_MULTI_WC_ERROR =
-              "Error in text match pattern '{0}' as it contains more than one multi-char wildcard '{1}'";
-
-
 
     public const string FINANCIAL_AMOUNT_DIFFERENT_CURRENCIES_ERROR =
             "Financial operation '{0}' could not proceed. Amounts '{1}' and '{2}' are in different currencies";

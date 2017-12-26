@@ -33,7 +33,7 @@ using NFX.DataAccess.Distributed;
 
 namespace NFX.UTest.Serialization
 {
-  [Arow]
+  [Runnable(TRUN.BASE)]
   public class SimplePersonRow : TypedRow
   {
     [Field(backendName: "id",   isArow: true)]public GDID ID{get; set;}

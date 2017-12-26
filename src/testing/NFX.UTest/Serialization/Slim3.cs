@@ -30,7 +30,7 @@ using NFX.Serialization.JSON;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class Slim3
   {
 

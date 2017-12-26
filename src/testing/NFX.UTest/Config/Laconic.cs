@@ -25,7 +25,7 @@ using NFX.CodeAnalysis.Laconfig;
 
 namespace NFX.UTest.Config
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 2)]
     public class Laconic
     {
 

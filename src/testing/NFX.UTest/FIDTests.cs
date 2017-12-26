@@ -25,7 +25,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class FIDTests
     {
         [Run]

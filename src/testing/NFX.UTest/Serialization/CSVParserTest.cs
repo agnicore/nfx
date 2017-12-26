@@ -27,7 +27,7 @@ using NFX.Serialization.CSV;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class CSVParserTest
   {
     private bool same(IEnumerable<string> got, params string[] elm) { return got.SequenceEqual(elm); }

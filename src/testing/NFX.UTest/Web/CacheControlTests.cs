@@ -28,7 +28,7 @@ using NFX.Wave.MVC;
 
 namespace NFX.UTest.Web
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class CacheControlTests
   {
     [Run]

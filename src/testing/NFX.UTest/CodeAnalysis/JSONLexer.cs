@@ -32,7 +32,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.CodeAnalysis
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class JSONLexer
     {
 

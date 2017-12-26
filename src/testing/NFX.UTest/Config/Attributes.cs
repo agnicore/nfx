@@ -185,7 +185,7 @@ namespace NFX.UTest.Config
 
 
 
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class Attributes
     {
         static string xml =

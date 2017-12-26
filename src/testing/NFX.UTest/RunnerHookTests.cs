@@ -21,7 +21,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest
 {
-    [Runnable(category: "runner", order: -1)]
+    [Runnable(category: TRUN.BASE_RUNNER, order: -1)]
     public class RunnerHookTests : IRunnableHook, IRunHook
     {
         [Run] public void M01(){ }

@@ -26,7 +26,7 @@ using NFX.IO;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class BufferSegRStreamTests
     {
         [Run]

@@ -36,7 +36,7 @@ using JDO=NFX.Serialization.JSON.JSONDynamicObject;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class JSONWriter
     {
 

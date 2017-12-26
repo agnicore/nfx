@@ -50,7 +50,7 @@ namespace NFX.UTest.Collections
 
 
 
-  [Runnable]
+  [Runnable(TRUN.BASE, 0)]
   public class RegistryTests
   {
     [Run]

@@ -26,7 +26,7 @@ using NFX.IO;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class LEB128Tests
     {
         [Run]
@@ -77,14 +77,14 @@ namespace NFX.UTest.IO
           Aver.AreEqual(0x01, buf[1]);
           Aver.IsTrue(0xff == buf.ReadULEB128());
 
-          
+
           buf = new byte[16];
           buf.WriteULEB128(0x101, out cnt);
           Aver.AreEqual(2, cnt);
           Aver.AreEqual(0x81, buf[0]);
           Aver.AreEqual(0x02, buf[1]);
           Aver.IsTrue(0x101 == buf.ReadULEB128());
-          
+
         }
 
         [Run]

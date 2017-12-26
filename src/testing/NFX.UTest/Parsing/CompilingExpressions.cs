@@ -23,7 +23,7 @@ using NFX.Scripting;
 namespace NFX.UTest.Parsing
 {
 
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class CompilingExpressions
     {
 

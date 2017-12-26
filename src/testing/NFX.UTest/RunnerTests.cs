@@ -24,7 +24,7 @@ using NFX.Environment;
 
 namespace NFX.UTest
 {
-    [Runnable(category: "runner", order: -1)]
+    [Runnable(category: TRUN.BASE_RUNNER, order: -1)]
     public class RunnerTests
     {
         [Run(order: -1)]

@@ -28,7 +28,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.DataAccess
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 5)]
     public class Distributed
     {
         [Run]

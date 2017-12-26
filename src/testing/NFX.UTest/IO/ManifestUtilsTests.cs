@@ -29,7 +29,7 @@ using NFX.Security;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class ManifestUtilsTests
     {
       const string EXPECTED =   @"

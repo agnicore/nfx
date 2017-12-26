@@ -28,19 +28,19 @@ using NFX.ApplicationModel;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ArrayWalking
-    { 
+    {
 
         [Run]
         public void Utils_WalkArrayWrite_1D()
         {
-             
+
             var arr1 = new object[25];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayWrite(arr1, elm => cnt++);
-            
+
 
             Aver.AreEqual(arr1.Length, cnt);
         }
@@ -48,12 +48,12 @@ namespace NFX.UTest.Serialization
          [Run]
         public void Utils_WalkArrayRead_1D()
         {
-             
+
             var arr1 = new object[25];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayRead(arr1, () => cnt++);
-            
+
 
             Aver.AreEqual(arr1.Length, cnt);
         }
@@ -61,12 +61,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayWrite_2D_1()
         {
-             
+
             var arr1 = new object[2,25];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayWrite(arr1, elm => cnt++);
-            
+
             Aver.AreEqual(50, cnt);
             Aver.AreEqual(arr1.Length, cnt);
         }
@@ -74,12 +74,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayRead_2D_1()
         {
-             
+
             var arr1 = new object[2,25];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayRead(arr1, () => cnt++);
-            
+
             Aver.AreEqual(50, cnt);
             Aver.AreEqual(arr1.Length, cnt);
         }
@@ -88,12 +88,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayWrite_2D_2()
         {
-             
+
             var arr1 = new object[25, 2];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayWrite(arr1, elm => cnt++);
-            
+
 
             Aver.AreEqual(50, cnt);
             Aver.AreEqual(arr1.Length, cnt);
@@ -103,12 +103,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayRead_2D_2()
         {
-             
+
             var arr1 = new object[25, 2];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayRead(arr1, () => cnt++);
-            
+
 
             Aver.AreEqual(50, cnt);
             Aver.AreEqual(arr1.Length, cnt);
@@ -121,13 +121,13 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayWrite_3D()
         {
-             
+
             var arr1 = new object[8,2,4];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayWrite(arr1, elm => cnt++);
-            
-            
+
+
             Aver.AreEqual(arr1.Length, cnt);
             Aver.AreEqual(64, cnt);
         }
@@ -135,12 +135,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayRead_3D()
         {
-             
+
             var arr1 = new object[8,2,4];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayRead<object>(arr1, () => cnt++ );
-            
+
 
             Aver.AreEqual(arr1.Length, cnt);
             Aver.AreEqual(64, cnt);
@@ -150,13 +150,13 @@ namespace NFX.UTest.Serialization
          [Run]
         public void Utils_WalkArrayWrite_4D()
         {
-             
+
             var arr1 = new object[8,2,4,10];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayWrite(arr1, elm => cnt++);
-            
-            
+
+
             Aver.AreEqual(arr1.Length, cnt);
             Aver.AreEqual(640, cnt);
         }
@@ -164,12 +164,12 @@ namespace NFX.UTest.Serialization
         [Run]
         public void Utils_WalkArrayRead_4D()
         {
-             
+
             var arr1 = new object[8,2,4,10];
-                        
+
             var cnt = 0;
             NFX.Serialization.SerializationUtils.WalkArrayRead<object>(arr1, () => cnt++ );
-            
+
 
             Aver.AreEqual(arr1.Length, cnt);
             Aver.AreEqual(640, cnt);

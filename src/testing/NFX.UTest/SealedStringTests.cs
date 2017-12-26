@@ -21,7 +21,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 2)]
     public class SealedStringTests
     {
         [Run]

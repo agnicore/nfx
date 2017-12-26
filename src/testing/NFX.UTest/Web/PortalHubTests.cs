@@ -29,7 +29,7 @@ using NFX.Wave;
 
 namespace NFX.UTest.Web
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 6)]
   public class PortalHubTests
   {
     private const string CONF1=@"

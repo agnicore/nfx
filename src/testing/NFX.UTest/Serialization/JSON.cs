@@ -31,7 +31,7 @@ using NFX.Collections;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class JSON
     {
         [Run]

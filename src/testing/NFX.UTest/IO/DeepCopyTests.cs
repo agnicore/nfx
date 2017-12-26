@@ -29,7 +29,7 @@ using NFX.Security;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class DeepCopyTests
     {
 
@@ -46,10 +46,10 @@ namespace NFX.UTest.IO
             {
               using(var session = fs.StartSession())
               {
-                var fromDir = session[p1] as FileSystemDirectory; 
+                var fromDir = session[p1] as FileSystemDirectory;
                 var manifest1 = ManifestUtils.GeneratePackagingManifest(fromDir);
-              
-                var toDir = session[p2] as FileSystemDirectory; 
+
+                var toDir = session[p2] as FileSystemDirectory;
 
                 fromDir.DeepCopyTo(toDir, FileSystemDirectory.DirCopyFlags.Directories | FileSystemDirectory.DirCopyFlags.Files);
                 var manifest2 = ManifestUtils.GeneratePackagingManifest(toDir);
@@ -59,7 +59,7 @@ namespace NFX.UTest.IO
 
                 Aver.IsTrue( ManifestUtils.HasTheSameContent(manifest1, manifest2) );
               }
-            } 
+            }
         }
 
 

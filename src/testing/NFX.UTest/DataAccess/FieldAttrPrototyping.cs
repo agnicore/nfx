@@ -27,7 +27,7 @@ using NFX.DataAccess.CRUD;
 
 namespace NFX.UTest.DataAccess
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 5)]
     public class FieldAttrPrototyping
     {
         [Run]

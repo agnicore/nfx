@@ -27,7 +27,7 @@ using CAC = NFX.Environment.CommandArgsConfiguration;
 
 namespace NFX.UTest.Config
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class CmdArgsConfiguration
     {
         private string[] args = {

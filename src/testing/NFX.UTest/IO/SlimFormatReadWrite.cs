@@ -28,7 +28,7 @@ using NFX.Collections;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class SlimFormatReadWrite
     {
 

@@ -26,7 +26,7 @@ using NFX.Wave;
 
 namespace NFX.UTest.Wave
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class URIPatternTests
     {
         [Run]
@@ -34,8 +34,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -47,8 +47,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNull(match);
         }
 
@@ -57,8 +57,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("news/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -70,8 +70,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("/news/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -83,8 +83,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("news/{year}/{month}/{title=overview}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -96,8 +96,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/");
           var pat = new URIPattern("news/{year}/{month}/{title=overview}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -109,8 +109,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected?bonus=true");
           var pat = new URIPattern("news/{year}/{month}/{title}/presidential");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNull(match);
         }
 
@@ -119,8 +119,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected/presidential?bonus=true");
           var pat = new URIPattern("news/{year}/{month}/{title}/presidential");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -133,8 +133,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor-gets-elected/presidential?bonus=true");
           var pat = new URIPattern("news/{*path}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012/sep/mayor-gets-elected/presidential", match["path"]);
         }
@@ -154,8 +154,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor%2egets%2eelected/");
           var pat = new URIPattern("news/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -167,8 +167,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor%2egets%2eelected");
           var pat = new URIPattern("news/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -180,8 +180,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor%2egets%2eelected/");
           var pat = new URIPattern("NEWS/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri);   
+
+          var match = pat.MatchURIPath(uri);
           Aver.IsNotNull(match);
           Aver.AreObjectsEqual("2012", match["year"]);
           Aver.AreObjectsEqual("sep", match["month"]);
@@ -193,8 +193,8 @@ namespace NFX.UTest.Wave
         {
           var uri = new Uri("http://russia.ru/news/2012/sep/mayor%2egets%2eelected/");
           var pat = new URIPattern("NEWS/{year}/{month}/{title}");
-          
-          var match = pat.MatchURIPath(uri, senseCase: true);   
+
+          var match = pat.MatchURIPath(uri, senseCase: true);
           Aver.IsNull(match);
         }
 
@@ -230,7 +230,7 @@ namespace NFX.UTest.Wave
             var uri = pattern.MakeURI(map);
 
             Aver.AreObjectsEqual(new Uri("1980/values?par1%3D10%26par2%3Dval2", UriKind.RelativeOrAbsolute), uri);
-        } 
+        }
 
         [Run]
         public void MakeURI_T2_params_prefix()

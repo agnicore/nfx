@@ -31,9 +31,9 @@ using NFX.IO;
 
 namespace NFX.UTest.Glue
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 7)]
     public class MpxTests
-    {                              
+    {
    const string CONF_SRC_MPX =@"
  nfx
  {
@@ -66,8 +66,8 @@ namespace NFX.UTest.Glue
      }
   }
  }
- "; 
-       
+ ";
+
 
         const string CONF_SRC_MPX_TRANSPORTS_A =@"
  nfx
@@ -100,25 +100,25 @@ namespace NFX.UTest.Glue
      }
   }
  }
- "; 
-       
-       
-       
-       
-       
-        [Run]
+ ";
+
+
+
+
+
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_A_TwoWayCall()
         {
             TestLogic.TestContractA_TwoWayCall(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_TASK_A_TwoWayCall()
         {
             TestLogic.TASK_TestContractA_TwoWayCall(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_TASKReturning_A_TwoWayCall()
         {
             TestLogic.TASKReturning_TestContractA_TwoWayCall(CONF_SRC_MPX);
@@ -136,43 +136,43 @@ namespace NFX.UTest.Glue
             TestLogic.TASK_TestContractA_TwoWayCall_Timeout(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_A_OneWayCall()
         {
             TestLogic.TestContractA_OneWayCall(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_1()
         {
             TestLogic.TestContractB_1(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_1_Async()
         {
             TestLogic.TestContractB_1_Async(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_2()
         {
             TestLogic.TestContractB_2(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_3()
         {
             TestLogic.TestContractB_3(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_4()
         {
             TestLogic.TestContractB_4(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_4_Async()
         {
             TestLogic.TestContractB_4_Async(CONF_SRC_MPX);
@@ -260,37 +260,37 @@ namespace NFX.UTest.Glue
         }
 
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_5()
         {
             TestLogic.TestContractB_5(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_6()
         {
             TestLogic.TestContractB_6(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_7()
         {
             TestLogic.TestContractB_7(CONF_SRC_MPX);
         }
 
-         [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_8()
         {
             TestLogic.TestContractB_8(CONF_SRC_MPX);
         }
 
-        [Run]
+        [Run(TRUN.BASE, null, 7)]
         public void Mpx_B_9()
         {
             TestLogic.TestContractB_9(CONF_SRC_MPX);
         }
 
-       
+
 
 
     }

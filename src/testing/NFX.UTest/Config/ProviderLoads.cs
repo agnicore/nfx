@@ -26,7 +26,7 @@ using NFX.Environment;
 
 namespace NFX.UTest.Config
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 2)]
     public class ProviderLoads
     {
 

@@ -29,7 +29,7 @@ using NFX.ApplicationModel;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class SlimObjectGraph
     {
 

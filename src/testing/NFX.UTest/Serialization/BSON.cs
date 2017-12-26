@@ -32,7 +32,7 @@ namespace NFX.UTest.Serialization
   /// <summary>
   /// See BSON spec http://bsonspec.org/spec.html
   /// </summary>
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class BSON
   {
     #region Serialization

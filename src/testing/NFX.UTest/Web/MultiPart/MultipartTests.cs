@@ -26,7 +26,7 @@ using NFX.Web;
 
 namespace NFX.UTest.Web.MultiPart
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 2)]
   public class MultipartTests
   {
     private const string POSTFIX_CONTENT_TYPE = "_contenttype";

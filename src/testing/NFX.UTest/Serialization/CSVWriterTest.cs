@@ -29,7 +29,7 @@ using System.IO;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class CSVWriterTest : IRunnableHook
   {
    private readonly string m_Header =

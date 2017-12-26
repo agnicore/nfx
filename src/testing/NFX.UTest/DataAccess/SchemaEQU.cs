@@ -26,7 +26,7 @@ using NFX.Serialization.Slim;
 
 namespace NFX.UTest.DataAccess
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 5)]
     public class SchemaEQU
     {
 

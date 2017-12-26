@@ -34,7 +34,7 @@ using NFX.ApplicationModel.Pile;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ARowAllTypes : IRunnableHook
     {
       void IRunnableHook.Prologue(Runner runner, FID id)

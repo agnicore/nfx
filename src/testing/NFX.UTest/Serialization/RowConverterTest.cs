@@ -30,7 +30,7 @@ using NFX.Financial;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class RowConverterTest
   {
     #region Tests

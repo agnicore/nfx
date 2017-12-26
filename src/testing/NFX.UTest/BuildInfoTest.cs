@@ -22,7 +22,7 @@ using NFX.Environment;
 
 namespace NFX.UTest
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class BuildInfoTest
   {
     [Run]

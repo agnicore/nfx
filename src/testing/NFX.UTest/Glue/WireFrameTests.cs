@@ -27,7 +27,7 @@ using NFX.IO;
 
 namespace NFX.UTest.Glue
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class WireFrameTests
     {
         [Run]
@@ -38,13 +38,13 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( WireFrame.FRAME_LENGTH, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH, frm1.Serialize(ms));
 
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
-            
+
             Aver.IsTrue( frm1.Type == frm2.Type );
             Aver.AreEqual( frm1.RequestID, frm2.RequestID );
             Aver.AreEqual( frm1.OneWay, frm2.OneWay );
@@ -61,20 +61,20 @@ namespace NFX.UTest.Glue
         public void Glue_SerializeDeserialize_WithHeadersWithLatinText()
         {
             var hdr = "<a><remote name='zzz'/></a>";//Latin only chars
-            
+
             var frm1 = new WireFrame(123, false, FID.Generate(), hdr);
 
 
             var utfLen = WireFrame.HEADERS_ENCODING.GetByteCount( hdr );
-            
+
             Aver.IsTrue( utfLen == hdr.Length);
 
             Aver.AreEqual( WireFrame.FRAME_LENGTH + hdr.Length, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH + hdr.Length, frm1.Serialize(ms));
-            
+
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
@@ -88,7 +88,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
 
             Aver.IsFalse( frm2.OneWay );
-            
+
             Aver.AreEqual( "zzz", frm2.Headers["remote"].AttrByName("name").Value);
         }
 
@@ -96,12 +96,12 @@ namespace NFX.UTest.Glue
         public void Glue_SerializeDeserialize_WithHeadersWithChineseText()
         {
             var hdr = "<a><remote name='久有归天愿'/></a>";
-            
+
             var frm1 = new WireFrame(123, false, FID.Generate(), hdr);
 
-            
+
             var utfLen = WireFrame.HEADERS_ENCODING.GetByteCount( hdr );
-            
+
             Aver.IsTrue( utfLen > hdr.Length);
             Console.WriteLine("{0} has {1} byte len and {2} char len".Args(hdr, utfLen, hdr.Length) );
 
@@ -110,11 +110,11 @@ namespace NFX.UTest.Glue
             var ms = new MemoryStream();
 
             Aver.AreEqual(WireFrame.FRAME_LENGTH + utfLen, frm1.Serialize(ms));
-            
+
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
-            
+
             Aver.IsTrue( frm1.Type == frm2.Type );
             Aver.AreEqual( frm1.RequestID, frm2.RequestID );
             Aver.AreEqual( frm1.OneWay, frm2.OneWay );
@@ -124,7 +124,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
 
             Aver.IsFalse( frm2.OneWay );
-            
+
             Aver.AreEqual( "久有归天愿", frm2.Headers["remote"].AttrByName("name").Value);
         }
 
@@ -138,7 +138,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( WireFrame.FRAME_LENGTH, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH, frm1.Serialize(ms));
 
             ms.Position = 0;
@@ -152,7 +152,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.Length, frm2.Length );
             Aver.AreEqual( frm1.Format, frm2.Format );
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
-            
+
             Aver.IsFalse( frm2.OneWay );
         }
 
@@ -164,13 +164,13 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( WireFrame.FRAME_LENGTH, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH, frm1.Serialize(ms));
 
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
-            
+
             Aver.IsTrue( frm1.Type == frm2.Type );
             Aver.AreEqual( frm1.RequestID, frm2.RequestID );
             Aver.AreEqual( frm1.OneWay, frm2.OneWay );
@@ -178,7 +178,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.Length, frm2.Length );
             Aver.AreEqual( frm1.Format, frm2.Format );
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
-            
+
             Aver.IsTrue( frm2.OneWay );
         }
 
@@ -190,13 +190,13 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( WireFrame.FRAME_LENGTH, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH, frm1.Serialize(ms));
 
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
-            
+
             Aver.IsTrue( frm1.Type == frm2.Type );
             Aver.AreEqual( frm1.RequestID, frm2.RequestID );
             Aver.AreEqual( frm1.OneWay, frm2.OneWay );
@@ -204,7 +204,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.Length, frm2.Length );
             Aver.AreEqual( frm1.Format, frm2.Format );
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
-            
+
             Aver.IsTrue( frm2.OneWay );
         }
 
@@ -216,13 +216,13 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( WireFrame.FRAME_LENGTH, frm1.Length );
 
             var ms = new MemoryStream();
-            
+
             Aver.AreEqual(WireFrame.FRAME_LENGTH, frm1.Serialize(ms));
 
             ms.Position = 0;
 
             var frm2 = new WireFrame(ms);
-            
+
             Aver.IsTrue( frm1.Type == frm2.Type );
             Aver.AreEqual( frm1.RequestID, frm2.RequestID );
             Aver.AreEqual( frm1.OneWay, frm2.OneWay );
@@ -230,7 +230,7 @@ namespace NFX.UTest.Glue
             Aver.AreEqual( frm1.Length, frm2.Length );
             Aver.AreEqual( frm1.Format, frm2.Format );
             Aver.AreEqual( frm1.HeadersContent, frm2.HeadersContent );
-            
+
             Aver.IsTrue( frm2.OneWay );
         }
 

@@ -27,7 +27,7 @@ using NFX.Serialization.JSON;
 
 namespace NFX.UTest.Security
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class PasswordManagerTests : IRunnableHook
   {
     private IPasswordManagerImplementation m_Manager;

@@ -27,7 +27,7 @@ using NFX.Scripting;
 namespace NFX.UTest.Collections
 {
 
-  [Runnable]
+  [Runnable(TRUN.BASE, 2)]
   public class StringMapTests
   {
     [Run]

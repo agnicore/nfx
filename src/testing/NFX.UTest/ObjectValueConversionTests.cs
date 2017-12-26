@@ -29,7 +29,7 @@ namespace NFX.UTest
     public enum TestEnum{ A=0,B=123,C=234 }
 
 
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ObjectValueConversionTests
     {
         [Run]

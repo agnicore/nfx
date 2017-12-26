@@ -27,7 +27,7 @@ using NFX.Web.Social;
 
 namespace NFX.UTest.Web
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 6)]
   public class WebSettingsTests
   {
     [Run]

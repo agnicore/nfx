@@ -29,7 +29,7 @@ using NFX.Serialization.Slim;
 
 namespace NFX.UTest.Serialization
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class Slim2
   {
 

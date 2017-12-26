@@ -30,7 +30,7 @@ using NFX.Security;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class LocalInstallationTests
     {
 
@@ -43,8 +43,8 @@ namespace NFX.UTest.IO
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var sourceDir = session[source] as FileSystemDirectory; 
-            
+              var sourceDir = session[source] as FileSystemDirectory;
+
               var manifest = ManifestUtils.GeneratePackagingManifest(sourceDir, packageName: "Package1");
               var fn = Path.Combine(source, ManifestUtils.MANIFEST_FILE_NAME);
               try
@@ -56,7 +56,7 @@ namespace NFX.UTest.IO
                   {
                       new LocalInstallation.PackageInfo("Package1", sourceDir, null)//no relative path
                   };
-              
+
 
                   using(var install = new LocalInstallation(target))
                   {
@@ -67,8 +67,8 @@ namespace NFX.UTest.IO
               {
                 IOMiscUtils.EnsureFileEventuallyDeleted(fn);
               }
-              
-            }   
+
+            }
         }
 
 

@@ -26,7 +26,7 @@ using NFX.IO.ErrorHandling;
 
 namespace NFX.UTest.IO
 {
-    [Runnable]  
+    [Runnable(TRUN.BASE)]
     public class ChecksumsTests
     {
         [Run]

@@ -21,7 +21,7 @@ using NFX.Standards;
 
 namespace NFX.UTest.Standards
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   class Countries_ISO3166_1_Test
   {
     [Run]

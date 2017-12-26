@@ -30,7 +30,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.Web.Client
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 6)]
   public class RecordTest
   {
     [Run]

@@ -25,7 +25,7 @@ using NFX.Instrumentation.Analytics;
 
 namespace NFX.UTest
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class ExtRndTests
     {
         [Run]

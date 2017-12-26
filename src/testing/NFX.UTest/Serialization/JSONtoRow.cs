@@ -28,7 +28,7 @@ using NFX.DataAccess.Distributed;
 
 namespace NFX.UTest.Serialization
 {
-    [Runnable]
+    [Runnable(TRUN.BASE)]
     public class JSONtoRow
     {
         #region Arrays

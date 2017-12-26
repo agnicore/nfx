@@ -24,7 +24,7 @@ using NFX.Environment;
 
 namespace NFX.UTest.Config
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class ConfigNodeEqualityComparerRun
   {
     [Run]

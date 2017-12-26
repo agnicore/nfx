@@ -31,7 +31,7 @@ using NFX.ApplicationModel;
 
 namespace NFX.UTest.Logging
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 5)]
     public class VariousDestinations
     {
  private const string CONF_SRC1 =@"
@@ -42,12 +42,12 @@ namespace NFX.UTest.Logging
     destination{ name='mem1' type='NFX.Log.Destinations.MemoryBufferDestination, NFX'}
   }
  }
- ";  
-       
+ ";
+
         [Run]
         public void Configed_MemoryBufferDestination()
         {
-       
+
             var conf = LaconicConfiguration.CreateFromString(CONF_SRC1);
             using( var app = new ServiceBaseApplication(null, conf.Root))
             {
@@ -55,8 +55,8 @@ namespace NFX.UTest.Logging
 
                 System.Threading.Thread.Sleep( 3000 );
                 mbd.ClearBuffer();
-                
-                
+
+
                 app.Log.Write( new Message{ Type = Log.MessageType.Info, From = "test", Text = "Hello1"});
                 System.Threading.Thread.Sleep( 1000 );
                 app.Log.Write( new Message{ Type = Log.MessageType.Info, From = "test", Text = "Hello2"});
@@ -76,7 +76,7 @@ namespace NFX.UTest.Logging
         [Run]
         public void Configed_MemoryBufferDestinationCapacity()
         {
-       
+
             var conf = LaconicConfiguration.CreateFromString(CONF_SRC1);
             using( var app = new ServiceBaseApplication(null, conf.Root))
             {
@@ -84,7 +84,7 @@ namespace NFX.UTest.Logging
 
                 System.Threading.Thread.Sleep( 3000 );
                 mbd.BufferSize = 10;
-                
+
                 for(int i=0; i<100; i++)
                     app.Log.Write( new Message{Type = Log.MessageType.Info, From = "test", Text = "i={0}".Args(i)} );
                 System.Threading.Thread.Sleep( 3000 );
