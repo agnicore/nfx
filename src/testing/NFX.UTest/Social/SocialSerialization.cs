@@ -22,7 +22,7 @@ using NFX.Web.Social;
 
 namespace NFX.UTest.Social
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 4)]
   public class SocialSerialization : IRunnableHook
   {
     [Run]

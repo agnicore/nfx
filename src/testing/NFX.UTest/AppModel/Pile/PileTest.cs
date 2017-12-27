@@ -32,7 +32,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 7)]
   public class PileTest : IRunHook
   {
       bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
@@ -48,7 +48,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void Initial()
       {
         using (var pile = new DefaultPile())
@@ -63,7 +63,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutWOStart()
       {
         using (var pile = new DefaultPile())
@@ -84,7 +84,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void GetWOStart()
       {
         using (var pile = new DefaultPile())
@@ -95,7 +95,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutOne()
       {
         using (var pile = new DefaultPile())
@@ -114,7 +114,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutGetOne()
       {
         using (var pile = new DefaultPile())
@@ -132,7 +132,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutGetTwo()
       {
         using (var pile = new DefaultPile())
@@ -162,7 +162,7 @@ namespace NFX.UTest.AppModel.Pile
 
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutGetRawObject()
       {
         using (var pile = new DefaultPile())
@@ -183,7 +183,7 @@ namespace NFX.UTest.AppModel.Pile
 
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileAccessViolationException))]
       public void GetNoObject()
       {
@@ -195,7 +195,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileAccessViolationException))]
       public void DeleteInvalid()
       {
@@ -207,7 +207,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileAccessViolationException))]
       public void DeleteExisting()
       {
@@ -232,7 +232,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileAccessViolationException))]
       public void Purge()
       {
@@ -256,7 +256,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutCheckerboardPattern2()
       {
         using (var pile = new DefaultPile())
@@ -307,7 +307,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void PutCheckerboardPattern3()
       {
         using (var pile = new DefaultPile())
@@ -361,7 +361,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run("isParallel=false  cnt=100000  minSz=0      maxSz=40      speed=true")]
+      [Run(TRUN.BASE, null, 8, "isParallel=false  cnt=100000  minSz=0      maxSz=40      speed=true")]
       [Run("isParallel=false  cnt=10000   minSz=0      maxSz=50000   speed=true")]
       [Run("isParallel=false  cnt=1000    minSz=70000  maxSz=150000  speed=true")]
       [Run("isParallel=false  cnt=5000    minSz=0      maxSz=150000  speed=true")]
@@ -376,7 +376,7 @@ namespace NFX.UTest.AppModel.Pile
       [Run("isParallel=false  cnt=1000    minSz=70000  maxSz=150000  speed=false")]
       [Run("isParallel=false  cnt=5000    minSz=0      maxSz=150000  speed=false")]
 
-      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=40      speed=false")]
+      [Run(TRUN.BASE, null, 8, "isParallel=true  cnt=100000  minSz=0      maxSz=40      speed=false")]
       [Run("isParallel=true  cnt=10000   minSz=0      maxSz=50000   speed=false")]
       [Run("isParallel=true  cnt=1000    minSz=70000  maxSz=150000  speed=false")]
       [Run("isParallel=true  cnt=5000    minSz=0      maxSz=150000  speed=false")]
@@ -385,7 +385,7 @@ namespace NFX.UTest.AppModel.Pile
         PileCacheTestCore.VarSizes_Checkboard(isParallel, cnt, minSz, maxSz, speed);
       }
 
-      [Run("isParallel=false  cnt=100000  minSz=0      maxSz=256     speed=false  rnd=true")]
+      [Run(TRUN.BASE, null, 8,"isParallel=false  cnt=100000  minSz=0      maxSz=256     speed=false  rnd=true")]
       [Run("isParallel=false  cnt=25000   minSz=0      maxSz=8000    speed=false  rnd=true")]
       [Run("isParallel=false  cnt=15000   minSz=0      maxSz=24000   speed=false  rnd=true")]
       [Run("isParallel=false  cnt=2100    minSz=65000  maxSz=129000  speed=false  rnd=true")]
@@ -423,7 +423,7 @@ namespace NFX.UTest.AppModel.Pile
       [Run("isParallel=false  cnt=15000   minSz=0      maxSz=24000   speed=true  rnd=false")]
       [Run("isParallel=false  cnt=1200    minSz=65000  maxSz=129000  speed=true  rnd=false")]
 
-      [Run("isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  rnd=false")]
+      [Run(TRUN.BASE, null, 8,"isParallel=true  cnt=100000  minSz=0      maxSz=256     speed=true  rnd=false")]
       [Run("isParallel=true  cnt=25000   minSz=0      maxSz=8000    speed=true  rnd=false")]
       [Run("isParallel=true  cnt=15000   minSz=0      maxSz=24000   speed=true  rnd=false")]
       [Run("isParallel=true  cnt=1200    minSz=65000  maxSz=129000  speed=true  rnd=false")]
@@ -432,7 +432,7 @@ namespace NFX.UTest.AppModel.Pile
         PileCacheTestCore.VarSizes_Increasing_Random(isParallel, cnt, minSz, maxSz, speed, rnd);
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void Configuration()
       {
         var conf = @"

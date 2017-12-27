@@ -8,30 +8,29 @@ namespace NFX.PAL
   /// Internal framework class, business app developers should not use this class directly as it provides a lower-level services
   /// to the higher level code like NFX.Graphics.Canvas, Image etc.
   /// PAL provides process-global injection point for PAL.
-  /// The injection of a concrete runtime is done by process entry point which is
+  /// The injection of a concrete runtime is done at process entry point which is
   /// statically linked against a concrete runtime.
   /// </summary>
   public static class PlatformAbstractionLayer
   {
     private static object s_Lock = new object();
-    private static string s_PlatformName;
-
-    private static IPALImaging s_Imaging;
-    private static IPALMachineInfo s_MachineInfo;
-    private static IPALFileSystem s_FileSystem;
+    private static PALImplementation s_Implementation;
 
 
-    public static string PlatformName { get => s_PlatformName; }
+    /// <summary>
+    /// Returns the name of the platform implementation, for example ".NET 4.7.1"
+    /// </summary>
+    public static string PlatformName { get => s_Implementation?.Name; }
 
     /// <summary>
     /// Abstracts functions related to working with graphical images
     /// </summary>
-    public static IPALImaging Imaging
+    public static Graphics.IPALGraphics Graphics
     {
       get
       {
-        var result = s_Imaging;
-        if (result==null) throw new PALException(StringConsts.PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR.Args("Imaging"));
+        var result = s_Implementation?.Graphics;
+        if (result==null) throw new PALException(StringConsts.PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR.Args("Graphics"));
         return result;
       }
     }
@@ -43,7 +42,7 @@ namespace NFX.PAL
     {
       get
       {
-        var result = s_MachineInfo;
+        var result = s_Implementation?.MachineInfo;
         if (result==null) throw new PALException(StringConsts.PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR.Args("MachineInfo"));
         return result;
       }
@@ -56,7 +55,7 @@ namespace NFX.PAL
     {
       get
       {
-        var result = s_FileSystem;
+        var result = s_Implementation?.FileSystem;
         if (result==null) throw new PALException(StringConsts.PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR.Args("FileSystem"));
         return result;
       }
@@ -75,26 +74,26 @@ namespace NFX.PAL
 
 
     /// <summary>
-    /// System method. Developers do not call. Entry point invoked by runtime modules.
+    /// System method. Developers do not call. Entry point invoked by runtime implementation modules.
     /// </summary>
-    public static void ____SetImplementation(
-                            string platformName,
-                            IPALImaging imaging,
-                            IPALMachineInfo machine,
-                            IPALFileSystem fs)
+    public static void ____SetImplementation(PALImplementation implementation)
     {
-      if (platformName.IsNullOrWhiteSpace())
-        throw new PALException(StringConsts.ARGUMENT_ERROR+"{0}.{1}(platformName=null|empty)".Args(nameof(PlatformAbstractionLayer), nameof(____SetImplementation)));
+      if (implementation==null)
+        throw new PALException(StringConsts.ARGUMENT_ERROR+"{0}.{1}(implementation=null)".Args(nameof(PlatformAbstractionLayer), nameof(____SetImplementation)));
+
+      var caller = new System.Diagnostics.StackFrame(1, false);
+      var mi = caller.GetMethod();
+      var callerClass = mi.DeclaringType;
+      if (!callerClass.IsSubclassOf(typeof(PALImplementation)))
+        throw new PALException(StringConsts.ARGUMENT_ERROR+"{0}.{1}: {2}".Args(nameof(PlatformAbstractionLayer), nameof(____SetImplementation), StringConsts.PAL_IMPLEMENTATION_INJECTION_ERROR));
+
 
       lock(s_Lock)
       {
-        if (s_PlatformName!=null)
+        if (s_Implementation!=null)
           throw new PALException(StringConsts.PAL_ALREADY_SET_ERROR);
 
-        s_PlatformName = platformName;
-        s_Imaging = imaging;
-        s_MachineInfo = machine;
-        s_FileSystem = fs;
+        s_Implementation = implementation;
       }
     }
   }

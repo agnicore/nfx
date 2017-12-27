@@ -55,7 +55,7 @@ namespace NFX.UTest.Parsing
             Console.WriteLine( txt );
             Aver.IsTrue( txt.IsNotNullOrWhiteSpace() );
             Aver.IsTrue(txt.Length > 4);
-            
+
           }
         }
 
@@ -68,11 +68,11 @@ namespace NFX.UTest.Parsing
             Console.WriteLine( txt );
             Aver.IsTrue( txt.IsNotNullOrWhiteSpace() );
             Aver.IsTrue(txt.Length > 4);
-            
+
           }
         }
 
-        
+
         [Run("min=6 max=10")]
         [Run("min=8 max=20")]
         public void GenerateWordSizes(int min, int max)
@@ -191,7 +191,7 @@ namespace NFX.UTest.Parsing
           var dfn = fnames.Distinct().Count();
           var pfn = 100d * (dfn / (double)CNT);
           Console.WriteLine(" First names {0:n0} unique {1:n3}%", dfn, pfn);
-          
+
           var dln = lnames.Distinct().Count();
           var pln = 100d * (dln / (double)CNT);
           Console.WriteLine(" Last names {0:n0} unique {1:n3}%", dln, pln);

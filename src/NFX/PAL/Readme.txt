@@ -13,16 +13,16 @@ PAL(100% managed code) is a central interface hub containing references to platf
 
 When a particular EXE (entry point) is built, it is statically linked against some particular runtime, e.g. .NET Framework or .NET Core.
 PlatformAbstractionLayer moves the details specific to the runtime into separate module which is injected at the application entry-point.
-The idiology of NFX (and any other well-architected software) recommends to keep the entry modules (exes) as small as possible, having
+The ideology of NFX (and any other well-architected software) recommends to keep the entry modules (exes) as small as possible, having
 all of the business logic in the class libraries built against NFX in a platform-agnostic way (.NET standard).
 This way all of the code can be easily ported to the different platform/runtime
 
-Example of ConsoleApp.Exe built againt full .NET Framework:
+Example of ConsoleApp.Exe built against the full .NET Framework:
 //statically reference NFX.PAL.NetFramework.dll (which uses full .net)
 
 void Main()
 {
-  NFX.PAL.NetFramework.DotNetFrameworkRuntime.Init();//<--- call this before everything else
+  new NFX.PAL.NetFramework.DotNetFrameworkRuntime();//<--- call this before everything else
 
   //do things as you normally would
   using(var app = new ServiceBaseApplication())

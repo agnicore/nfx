@@ -4,7 +4,7 @@
   {
     static void Main(string[] args)
     {
-      NFX.PAL.NetFramework.DotNetFrameworkRuntime.Init();
+      new NFX.PAL.NetFramework.DotNetFrameworkRuntime();
       NFX.Tools.Licupd.ProgramBody.Main(args);
     }
   }

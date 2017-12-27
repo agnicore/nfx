@@ -3,14 +3,9 @@
 /*global WAVE: true,$: true */
 
 /*!
- * Wave Java Script Library Default UI v2.0.0
- *
- * Based on IT Adapter JS Library 2002-2011
- * License: Unrestricted use/modification with mandatory reference to IT Adapter Corp. as the original author
- * (c) 2002-2011, 2013-2014 IT Adapter Corp.
- * http://www.itadapter.com/
- * Authors: Dmitriy Khmaladze
- * Revision Epoch:  May 9, 2014
+ * Wave Java Script Library Core
+ * License: Apache 2.0
+ * (c) 2018 Agnicore Inc http://agnicore.com/
  */
 
 WAVE.GUI = (function(){

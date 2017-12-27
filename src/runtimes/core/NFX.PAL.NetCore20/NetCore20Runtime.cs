@@ -8,31 +8,33 @@ using NFX.PAL;
 
 namespace NFX.PAL.NetCore20
 {
+
+  //https://stackoverflow.com/questions/3769405/determining-cpu-utilization
+
   /// <summary>
-  /// Represents .NET Framework runtime
+  /// Represents NET Core 2 Runtime
   /// </summary>
-  public static class NetCore20Runtime
+  public sealed class NetCore20Runtime : PALImplementation
   {
-    /// <summary>
-    /// Binds the NET Core 2.0 implementation to Platform Abstraction Layer
-    /// This method must be called only once at the assembly entry point
-    /// </summary>
-    public static void Init()
+    public NetCore20Runtime() : this(false)
     {
-      IPALImaging imaging = null;
-
-      IPALMachineInfo machine = null;
-      IPALFileSystem fs = null;
-
-
-      NFX.PAL.PlatformAbstractionLayer.____SetImplementation(
-                   "Net Core 20",
-                   imaging,
-                   machine,
-                   fs);
+      NFX.PAL.PlatformAbstractionLayer.____SetImplementation(this);
     }
 
-    //https://stackoverflow.com/questions/3769405/determining-cpu-utilization
+    internal NetCore20Runtime(bool testMode) : base()
+    {
+      m_Machine = null;
+      m_FS = null;
+      m_Graphics = null;
+    }
 
+    private IPALMachineInfo m_Machine;
+    private IPALFileSystem m_FS;
+    private Graphics.IPALGraphics m_Graphics;
+
+    public override string Name => nameof(NetCore20Runtime);
+    public override IPALFileSystem FileSystem => m_FS;
+    public override IPALMachineInfo MachineInfo => m_Machine;
+    public override Graphics.IPALGraphics Graphics => m_Graphics;
   }
 }

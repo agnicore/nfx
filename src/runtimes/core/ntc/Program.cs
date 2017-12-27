@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-          NFX.PAL.NetCore20.NetCore20Runtime.Init();
+          new NFX.PAL.NetCore20.NetCore20Runtime();
           NFX.Tools.Ntc.ProgramBody.Main(args);
         }
     }

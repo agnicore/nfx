@@ -28,7 +28,7 @@ using NFX.Geometry;
 
 namespace NFX.UTest.Geometry
 {
-    [Runnable]
+    [Runnable(TRUN.BASE, 2)]
     public class LatLngTests
     {
        [Run]

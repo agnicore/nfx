@@ -3,15 +3,9 @@
 /*global escape: true */
 
 /*!
- * Wave Java Script Library Core v2.0.0
- *
- * Based on IT Adapter JS Library 2002-2011
- * License: Unrestricted use/modification with mandatory reference to IT Adapter Corp. as the original author
- * (c) 2002-2011, 2013-2014 IT Adapter Corp.
- * http://www.itadapter.com/
- * Authors: Dmitriy Khmaladze,
- *          Timur Shemsedinov
- * Revision Epoch: May 4, 2017; May 1, 2014; Jan 8, 2011; 2007-2009; Mar-Apr 2006; Jan 2005...
+ * Wave Java Script Library Core
+ * License: Apache 2.0
+ * (c) 2018 Agnicore Inc http://agnicore.com/
  */
 var WAVE = (function(){
 

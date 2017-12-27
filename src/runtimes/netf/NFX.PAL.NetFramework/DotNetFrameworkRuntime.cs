@@ -11,25 +11,27 @@ namespace NFX.PAL.NetFramework
   /// <summary>
   /// Represents .NET Framework runtime
   /// </summary>
-  public static class DotNetFrameworkRuntime
+  public sealed class DotNetFrameworkRuntime : PALImplementation
   {
-    /// <summary>
-    /// Binds the .NET Framework implementation to Platform Abstraction Layer
-    /// This method must be called only once at the assembly entry point
-    /// </summary>
-    public static void Init()
+    public DotNetFrameworkRuntime() : this(false)
     {
-      IPALImaging imaging = null;//not provided yet
-
-      var machine = new PALMachineInfo();
-      var fs = new PALFileSystem();
-
-
-      NFX.PAL.PlatformAbstractionLayer.____SetImplementation(
-                   ".NET Framework",
-                   imaging,
-                   machine,
-                   fs);
+      NFX.PAL.PlatformAbstractionLayer.____SetImplementation(this);
     }
+
+    internal DotNetFrameworkRuntime(bool testMode) : base()
+    {
+      m_Machine = new PALMachineInfo();
+      m_FS = new PALFileSystem();
+      m_Graphics = null;
+    }
+
+    private PALMachineInfo m_Machine;
+    private PALFileSystem m_FS;
+    private Graphics.IPALGraphics m_Graphics;
+
+    public override string Name => nameof(DotNetFrameworkRuntime);
+    public override IPALFileSystem FileSystem => m_FS;
+    public override IPALMachineInfo MachineInfo => m_Machine;
+    public override Graphics.IPALGraphics Graphics => m_Graphics;
   }
 }

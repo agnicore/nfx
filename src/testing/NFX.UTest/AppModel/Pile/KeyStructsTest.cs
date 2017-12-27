@@ -32,7 +32,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  [Runnable]
+  [Runnable(TRUN.BASE)]
   public class KeyStructTest
   {
 

@@ -26,7 +26,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.Config
 {
-    [Runnable(TRUN.BASE, 2)]
+    [Runnable(TRUN.BASE)]
     public class Scripting
     {
 

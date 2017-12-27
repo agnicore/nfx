@@ -29,7 +29,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 8)]
   public class PointerCacheTest
   {
       [Run("count=   100")]

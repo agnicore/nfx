@@ -29,7 +29,7 @@ using NFX.Serialization.JSON;
 
 namespace NFX.UTest.DataAccess
 {
-    [Runnable(TRUN.BASE, 5)]
+    [Runnable(TRUN.BASE, 3)]
     public class SchemaAndRowsetSerializationTests
     {
       [Run("readOnly=true")]

@@ -28,7 +28,7 @@ using NFX.Serialization.JSON;
 
 namespace NFX.UTest.Config
 {
-    [Runnable(TRUN.BASE, 2)]
+    [Runnable(TRUN.BASE)]
     public class JSONConfigurationTest
     {
         [Run]

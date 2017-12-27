@@ -61,9 +61,21 @@ namespace NFX
         public const string APP_CONTAINER_NESTING_ERROR =
 @"Catastrophic error trying to nest app container of type '{0}' over an existing app '{1}' which does not have AllowNesting flag set.
  Revise app container allocation logic which is usually at the app entry point.
- This error may also be caused by unit tests hosted in the container wich does not allow nesting";
+ This error may also be caused by unit tests hosted in the container which does not allow nesting";
 
         public const string PAL_ALREADY_SET_ERROR = "Platform abstraction layer is already set. It can only be set once per process at the very entry point";
+
+        public const string PAL_IMPLEMENTATION_INJECTION_ERROR =
+@"Invalid system operation injecting PAL. This method should never be called by application code. 
+  Details: 
+   Platform abstraction layer implementation should only be injected by the
+   class deriving from PALImplementation. This is a system logic and it is 
+   already provided by the runtime module. 
+   Please see the entry point (Program.cs) provided by the NFX framework to
+   see how to initialize runtime properly.
+
+   This is a safeguard message which should never show.
+ ";
 
         public const string PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR = "Platform abstraction layer for '{0}' is not provided";
 
@@ -789,6 +801,8 @@ namespace NFX
     public const string CRUD_TYPE_IS_NOT_DERIVED_FROM_TYPED_ROW_ERROR = "CRUD supplied type of '{0}' is not a TypedRow-derivative";
 
     public const string CRUD_FIND_BY_KEY_LENGTH_ERROR = "CRUD table FindByKey/KeyRowFromValues was supplied wrong number of key field values";
+
+    public const string CRUD_ROW_UPGRADE_KEY_MUTATION_ERROR = "Upgraded row key has changed";
 
     public const string CRUD_ROWSET_OPERATION_ROW_IS_NULL_OR_SCHEMA_MISMATCH_ERROR = "CRUD rowset was supplied either a null row or a row with a different schema";
 

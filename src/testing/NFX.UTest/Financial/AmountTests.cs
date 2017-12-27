@@ -28,7 +28,7 @@ using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.UTest.Financial
 {
-    [Runnable(TRUN.BASE, 5)]
+    [Runnable(TRUN.BASE, 2)]
     public class AmountTests
     {
 

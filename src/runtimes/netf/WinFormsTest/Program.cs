@@ -34,7 +34,7 @@ namespace WinFormsTest
     [STAThread]
     static void Main(string[] args)
     {
-      NFX.PAL.NetFramework.DotNetFrameworkRuntime.Init();
+      new NFX.PAL.NetFramework.DotNetFrameworkRuntime();
 
       //This line initializes  NFX Application Model dependency injection services container
       //Separate class was needed because Application  class is sealed

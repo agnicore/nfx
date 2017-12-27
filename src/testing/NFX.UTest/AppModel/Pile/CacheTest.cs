@@ -37,10 +37,10 @@ using NFX.Environment;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 7)]
   public class CacheTest
   {
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T010_MainOperations()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -99,7 +99,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T020_Comparers()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -124,7 +124,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileCacheException), Message="comparer mismatch", MsgMatch= Aver.ThrowsAttribute.MatchType.Contains)]
       public void T030_Comparers()
       {
@@ -135,7 +135,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T040_PileOwnership()
       {
         var cache = new LocalCache();
@@ -153,7 +153,7 @@ namespace NFX.UTest.AppModel.Pile
         Aver.IsTrue(NFX.ServiceModel.ControlStatus.Inactive == cache.Pile.Status);
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       [Aver.Throws(typeof(PileCacheException), Message="has not been started", MsgMatch= Aver.ThrowsAttribute.MatchType.Contains)]
       public void T050_PileNonOwnershipErrorStart()
       {
@@ -174,7 +174,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T060_PileNonOwnership()
       {
         var pile = new DefaultPile();
@@ -245,7 +245,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T080_PutGetWithoutMaxCap()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -270,7 +270,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T090_PutGetWithMaxCap()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -302,7 +302,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T100_OverwriteWithMaxCap()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -342,7 +342,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T110_PriorityCollideWithMaxCap()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -375,37 +375,36 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-
-      [Run("cnt=100")]
+      [Run(TRUN.BASE, null, 8, "cnt=100")]
       public void T130_KeyInt_ManyPutGet(int cnt)
       {
         PileCacheTestCore.KeyInt_ManyPutGet(cnt);
       }
 
 
-      [Run("cnt=100")]
+      [Run(TRUN.BASE, null, 8, "cnt=100")]
       public void T140_KeyGDID_ManyPutGet(int cnt)
       {
         PileCacheTestCore.KeyGDID_ManyPutGet(cnt);
       }
 
 
-      [Run("cnt=100")]
+      [Run(TRUN.BASE, null, 8, "cnt=100")]
       public void T150_KeyString_ManyPutGet(int cnt)
       {
         PileCacheTestCore.KeyString_ManyPutGet(cnt);
       }
 
-      [Run("cnt=25  rec=10000   payload=4096")]
-      [Run("cnt=10  rec=300000  payload=16")]
-      [Run("cnt=10  rec=100     payload=1048576")]
-      [Run("cnt=10  rec=20      payload=8388608")]
+      [Run(TRUN.BASE, null, 8, "cnt=25  rec=10000   payload=4096")]
+      [Run(TRUN.BASE, null, 8, "cnt=10  rec=300000  payload=16")]
+      [Run(TRUN.BASE, null, 8, "cnt=10  rec=100     payload=1048576")]
+      [Run(TRUN.BASE, null, 8, "cnt=10  rec=20      payload=8388608")]
       public void T160_ResizeTable(int cnt, int rec, int payload)
       {
         PileCacheTestCore.ResizeTable(cnt, rec, payload);
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T170_Config()
       {
         var conf1 =
@@ -484,7 +483,7 @@ store
 
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void T180_GetOrPut()
       {
         using (var cache = PileCacheTestCore.MakeCache())
@@ -539,7 +538,7 @@ store
         }
       }
 
-      [Run("cnt=100000  tbls=1")]
+      [Run(TRUN.BASE, null, 100, "cnt=100000  tbls=1")]
       [Run("cnt=100000  tbls=16")]
       [Run("cnt=100000  tbls=512")]
       public void T190_FID_PutGetCorrectness(int cnt, int tbls)
@@ -547,7 +546,7 @@ store
         PileCacheTestCore.FID_PutGetCorrectness(cnt, tbls);
       }
 
-      [Run("workers=16  tables=7   putCount=2500   durationSec=4")]
+      [Run(TRUN.BASE, null, 100, "workers=16  tables=7   putCount=2500   durationSec=4")]
       [Run("workers=5   tables=7   putCount=100    durationSec=2")]
 
       [Run("workers=5   tables=20  putCount=50000  durationSec=2")]

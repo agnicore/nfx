@@ -72,7 +72,7 @@ namespace NFX.Log.Destinations
         }
 
         /// <summary>
-        /// Directory where file should be created. Will create the directory chane if it doesn't exist
+        /// Directory where file should be created. Will create the directory chain if it doesn't exist
         /// </summary>
         [Config]
         public virtual string Path

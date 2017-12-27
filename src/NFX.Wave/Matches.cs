@@ -38,9 +38,7 @@ namespace NFX.Wave
 
     public override JSONDataMap Make(WorkContext work, object context = null)
     {
-      if (context is NFX.Security.AuthorizationException) return null;
-      if (context is FilterPipelineException && ((FilterPipelineException)context).RootException is NFX.Security.AuthorizationException) return null;
-      if (context is Exception && ((Exception)context).InnerException is NFX.Security.AuthorizationException) return null;
+      if (NFX.Security.AuthorizationException.IsDenotedBy(context as Exception)) return null;
       return base.Make(work, context);
     }
   }

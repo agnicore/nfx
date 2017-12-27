@@ -639,8 +639,8 @@ namespace NFX.Serialization.BSON
           //BinData works faster than string 8% and stores 40%-60% less data in index and data segment
           //Also, SEQUENTIAL keys (big endian) yield 30% smaller indexes (vs non-sequential)
           //ObjectId() is very similar if not identical to BinData(UserDefined)
-          var bin = new BSONBinary(BSONBinaryType.UUID, guid.ToByteArray());
-          return name != null ?  new BSONBinaryElement(name, bin) : new BSONBinaryElement( bin);
+          var bin = new BSONBinary(BSONBinaryType.UUID, guid.ToNetworkByteOrder());
+          return name != null ?  new BSONBinaryElement(name, bin) : new BSONBinaryElement(bin);
         }
 
         /// <summary>
@@ -724,7 +724,7 @@ namespace NFX.Serialization.BSON
             if (val.Type != BSONBinaryType.UUID && val.Type != BSONBinaryType.UUIDOld)
               throw new BSONException("type != BSONBinaryType.UUID");
             var buf = val.Data;
-            return new Guid(buf);
+            return buf.GuidFromNetworkByteOrder();
           }
           catch(Exception e)
           {

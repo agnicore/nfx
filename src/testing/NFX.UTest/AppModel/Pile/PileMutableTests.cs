@@ -31,7 +31,7 @@ using NFX.Scripting;
 
 namespace NFX.UTest.AppModel.Pile
 {
-  [Runnable]
+  [Runnable(TRUN.BASE, 9)]
   public class PileMutableTests : IRunHook
   {
       bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
@@ -47,7 +47,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void FitPreallocate()
       {
         using (var pile = new DefaultPile())
@@ -78,7 +78,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void FitPreallocateString()
       {
         using (var pile = new DefaultPile())
@@ -108,7 +108,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void LinkStringNoPreallocate()
       {
         using (var pile = new DefaultPile())
@@ -137,7 +137,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void FitPreallocateByteArray()
       {
         using (var pile = new DefaultPile())
@@ -168,7 +168,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void LinkByteArrayNoPreallocate()
       {
         using (var pile = new DefaultPile())
@@ -198,7 +198,7 @@ namespace NFX.UTest.AppModel.Pile
 
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void LinkNoPreallocate()
       {
         using (var pile = new DefaultPile())
@@ -229,7 +229,7 @@ namespace NFX.UTest.AppModel.Pile
         }
       }
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void LinkPreallocate()
       {
         using (var pile = new DefaultPile())
@@ -263,7 +263,7 @@ namespace NFX.UTest.AppModel.Pile
 
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void Reallocate_BackOriginal()
       {
         using (var pile = new DefaultPile())
@@ -301,7 +301,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run]
+      [Run(TRUN.BASE, null, 8)]
       public void Reallocate_Delete()
       {
         using (var pile = new DefaultPile())
@@ -356,9 +356,9 @@ namespace NFX.UTest.AppModel.Pile
         public byte[] Data;
       }
 
-      [Run("len=50000  deleteEvery=2  parallel=8")]
-      [Run("len=50000  deleteEvery=3  parallel=8")]
-      [Run("len=50000  deleteEvery=5  parallel=8")]
+      [Run(TRUN.BASE, null, 8, "len=50000  deleteEvery=2  parallel=8")]
+      [Run(TRUN.BASE, null, 8, "len=50000  deleteEvery=3  parallel=8")]
+      [Run(TRUN.BASE, null, 8, "len=50000  deleteEvery=5  parallel=8")]
       public void StringCorrectess(int len, int deleteEvery, int parallel)
       {
         using (var pile = new DefaultPile())
@@ -400,7 +400,7 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
-      [Run("len=300")]
+      [Run(TRUN.BASE, null, 8, "len=300")]
       public void ReallocateInPlace(int len)
       {
         using (var pile = new DefaultPile())
