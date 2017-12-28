@@ -132,7 +132,7 @@ namespace NFX.Media.TagCodes
 
       private void createBitmapNGraphics(int width, int height)
       {
-        m_Bitmap = new Image(width, height);
+        m_Bitmap = Image.Of(width, height);
         m_Canvas = new Canvas(m_Bitmap);
       }
 

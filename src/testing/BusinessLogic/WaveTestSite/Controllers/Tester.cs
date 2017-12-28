@@ -335,7 +335,7 @@ namespace WaveTestSite.Controllers
      private Stream makeRandomImage()
      {
        // make image
-       var image = new Image(200, 200);
+       var image = Image.Of(200, 200);
        var imageFormat = JpegImageFormat.Standard;
 
        //todo: ...

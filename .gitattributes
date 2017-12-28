@@ -1,1 +1,8 @@
-text eol=lf
+*.cs eol=lf
+*.js eol=lf
+*.erl eol=lf
+*.csproj eol=lf
+*.sln eol=lf
+*.cmd eol=crlf
+
+#text eol=lf

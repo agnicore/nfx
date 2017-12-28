@@ -34,6 +34,8 @@
     <ProjectReference Include="..\..\NFX\NFX.csproj" />
     <ProjectReference Include="..\..\providers\NFX.MongoDB\NFX.MongoDB.csproj" />
     <ProjectReference Include="..\..\providers\NFX.MySQL\NFX.MySQL.csproj" />
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\NFX.UTest\NFX.UTest.csproj" />
   </ItemGroup>
 
 </Project>

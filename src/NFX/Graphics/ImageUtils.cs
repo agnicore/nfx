@@ -212,8 +212,7 @@ namespace NFX.Graphics
       if (srcImage == null || targetWidth < 1 || targetHeight < 1 || xDpi < 1 || yDpi < 1)
         throw new NFXException(StringConsts.ARGUMENT_ERROR + "NormalizeCenteredImage(...)");
 
-      var result = new Image(targetWidth, targetHeight);
-      result.SetResolution(xDpi, yDpi);
+      var result = Image.Of(targetWidth, targetHeight, xDpi, yDpi);
 
       using (var canvas = new Canvas(result))
       {
@@ -271,8 +270,7 @@ namespace NFX.Graphics
       if (srcImage == null || targetWidth < 1 || targetHeight < 1 || xDpi < 1 || yDpi < 1)
         throw new NFXException(StringConsts.ARGUMENT_ERROR + "FitCenteredImage(...)");
 
-      var result = new Image(targetWidth, targetHeight);
-      result.SetResolution(xDpi, yDpi);
+      var result = Image.Of(targetWidth, targetHeight, xDpi, yDpi);
       result.MakeTransparent();
 
       using (var canvas = new Canvas(result))
