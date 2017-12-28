@@ -11,6 +11,12 @@
 *.erl eol=lf
 *.csproj eol=lf
 *.sln eol=lf
+*.xml=lf
+*.laconf=lf
+*.json=lf
+*.yml=lf
+*.rschema=lf
+
 *.cmd eol=crlf
 
 #text eol=lf
