@@ -1,26 +1,31 @@
 root = true
 
-; Unix-style newlines
-;[*]
-;end_of_line = LF
+; Unix-style newlines by default
+[*]
+end_of_line = LF
 
-; 2-column space indentation
+; 2-column space 
 [*.cs]
 indent_style = space
 indent_size = 2
 
-; 2-column tab indentation
+; 2-column space
 [*.js]
 indent_style = space
 indent_size = 2
 
-; 4-column tab indentation
+; 2-column space
+[*.cmd]
+indent_style = space
+indent_size = 2
+end_of_line = CRLF
+
+
+; 4-column space
 [*.erl]
 indent_style = space
 indent_size = 4
-end_of_line = LF
 
 [*.hrl]
 indent_style = space
 indent_size = 4
-end_of_line = LF
