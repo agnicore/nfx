@@ -18,7 +18,7 @@ namespace NFX.Graphics
     public const int DEFAULT_RESOLUTION_PPI = 72;
 
     /// <summary>
-    /// Denotes image pixel formats
+    /// Specifies image pixel format
     /// </summary>
     public enum PixelFormat
     {
