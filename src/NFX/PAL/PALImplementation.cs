@@ -15,6 +15,7 @@ namespace NFX.PAL
 
 
     public abstract string Name { get; }
+    public abstract bool                  IsNetCore    { get; }
     public abstract Graphics.IPALGraphics Graphics     { get; }
     public abstract IPALMachineInfo       MachineInfo  { get; }
     public abstract IPALFileSystem        FileSystem   { get; }

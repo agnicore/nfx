@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using NFX.PAL;
+using NFX.PAL.Graphics;
 
 namespace NFX.PAL.NetFramework
 {
@@ -20,18 +20,19 @@ namespace NFX.PAL.NetFramework
 
     internal DotNetFrameworkRuntime(bool testMode) : base()
     {
-      m_Machine = new PALMachineInfo();
-      m_FS = new PALFileSystem();
-      m_Graphics = null;
+      m_Machine  = new PALMachineInfo();
+      m_FS       = new PALFileSystem();
+      m_Graphics = new Graphics.NetImaging();
     }
 
     private PALMachineInfo m_Machine;
     private PALFileSystem m_FS;
-    private Graphics.IPALGraphics m_Graphics;
+    private IPALGraphics m_Graphics;
 
     public override string Name => nameof(DotNetFrameworkRuntime);
+    public override bool IsNetCore => false;
     public override IPALFileSystem FileSystem => m_FS;
     public override IPALMachineInfo MachineInfo => m_Machine;
-    public override Graphics.IPALGraphics Graphics => m_Graphics;
+    public override IPALGraphics Graphics => m_Graphics;
   }
 }

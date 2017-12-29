@@ -49,12 +49,23 @@ namespace NFX.ITest.Glue
 
     void IRunnableHook.Prologue(Runner runner, FID id)
     {
-      ProcessStartInfo start = new ProcessStartInfo()
-      {
-        FileName = ProcessFileName,
-        RedirectStandardInput = true,
-        UseShellExecute = false
-      };
+      ProcessStartInfo start;
+      if (NFX.PAL.PlatformAbstractionLayer.IsNetCore)
+        start = new ProcessStartInfo()
+        {
+          FileName = "dotnet",
+          Arguments = "toy.dll -config toy-server.laconf",
+          RedirectStandardInput = true,
+          UseShellExecute = false
+        };
+      else
+        start = new ProcessStartInfo()
+        {
+          FileName = "toy.exe",
+          Arguments = "-config toy-server.laconf",
+          RedirectStandardInput = true,
+          UseShellExecute = false
+        };
 
       m_ServerProcess = new Process() { StartInfo = start };
 

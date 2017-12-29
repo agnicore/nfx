@@ -20,7 +20,6 @@ using System.Linq;
 using System.Text;
 
 using NFX;
-using BusinessLogic;
 
 namespace BusinessLogic.Server
 {

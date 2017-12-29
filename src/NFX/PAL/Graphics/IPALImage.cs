@@ -18,10 +18,11 @@ namespace NFX.PAL.Graphics
 
     Color GetPixel(Point p);
     Color GetPixel(PointF p);
+    Color GetAveragePixel(Point p, Size area);
     void SetPixel(Point p, Color color);
     void SetPixel(PointF p, Color color);
 
-    void MakeTransparent();
+    void MakeTransparent(Color? dflt);
     void Save(Stream stream, ImageFormat format);
   }
 }

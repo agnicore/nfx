@@ -14,17 +14,41 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CRUD\Echo.erl.qry" />
     <None Remove="CRUD\FullGDID.Load.mys.sql" />
+    <None Remove="CRUD\InsertPerzons.mon.json" />
+    <None Remove="CRUD\LoadAllMyData.mon.json" />
+    <None Remove="CRUD\LoadInvoice.mon.json" />
+    <None Remove="CRUD\LoadMuchData.mon.json" />
+    <None Remove="CRUD\LoadPerzon.mon.json" />
+    <None Remove="CRUD\LoadPerzonAge.mon.json" />
+    <None Remove="CRUD\LoadPerzonsInAgeSpan.mon.json" />
     <None Remove="CRUD\Patient.List.mys.sql" />
+    <None Remove="CRUD\SecDef.ByExchange.erl.qry" />
+    <None Remove="CRUD\SECDEF.erl.qry" />
     <None Remove="CRUD\Tuple.LoadAll.mys.sql" />
     <None Remove="CRUD\Types.Load.mys.sql" />
+    <None Remove="CRUD\UpdatePerzons.mon.json" />
+    <None Remove="CRUD\WorldNews.erl.qry" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="CRUD\Echo.erl.qry" />
     <EmbeddedResource Include="CRUD\FullGDID.Load.mys.sql" />
+    <EmbeddedResource Include="CRUD\InsertPerzons.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadAllMyData.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadInvoice.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadMuchData.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadPerzon.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadPerzonAge.mon.json" />
+    <EmbeddedResource Include="CRUD\LoadPerzonsInAgeSpan.mon.json" />
     <EmbeddedResource Include="CRUD\Patient.List.mys.sql" />
+    <EmbeddedResource Include="CRUD\SecDef.ByExchange.erl.qry" />
+    <EmbeddedResource Include="CRUD\SECDEF.erl.qry" />
     <EmbeddedResource Include="CRUD\Tuple.LoadAll.mys.sql" />
     <EmbeddedResource Include="CRUD\Types.Load.mys.sql" />
+    <EmbeddedResource Include="CRUD\UpdatePerzons.mon.json" />
+    <EmbeddedResource Include="CRUD\WorldNews.erl.qry" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,19 +17,6 @@ namespace NFX.Graphics
   {
     public const int DEFAULT_RESOLUTION_PPI = 72;
 
-    /// <summary>
-    /// Specifies image pixel format
-    /// </summary>
-    public enum PixelFormat
-    {
-      Default = 0,
-      BPP1,
-      BPP8,
-      BPP16,
-      RGB24,
-      RGBA32
-    }
-
     /// <summary>Creates a new image instance from a named image file</summary>
     public static Image FromFile(string fileName) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(fileName));
 
@@ -115,10 +102,10 @@ namespace NFX.Graphics
       m_Handle.SetResolution(resolution);
     }
 
-    public void MakeTransparent()
+    public void MakeTransparent(Color? dflt = null)
     {
       EnsureObjectNotDisposed();
-      m_Handle.MakeTransparent();
+      m_Handle.MakeTransparent(dflt);
     }
 
     //todo: Lock bits
@@ -135,6 +122,15 @@ namespace NFX.Graphics
     {
       EnsureObjectNotDisposed();
       return m_Handle.GetPixel(p);
+    }
+
+    /// <summary>
+    /// Gets an average color of the specified pixel performing RGBA component average
+    /// </summary>
+    public Color GetAveragePixel(Point p, Size area)
+    {
+      EnsureObjectNotDisposed();
+      return m_Handle.GetAveragePixel(p, area);
     }
 
     public void SetPixel(int x, int y, Color color) => SetPixel(new Point(x, y), color);

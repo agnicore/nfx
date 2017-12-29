@@ -33,6 +33,7 @@ namespace NFX.PAL.NetCore20
     private Graphics.IPALGraphics m_Graphics;
 
     public override string Name => nameof(NetCore20Runtime);
+    public override bool IsNetCore => true;
     public override IPALFileSystem FileSystem => m_FS;
     public override IPALMachineInfo MachineInfo => m_Machine;
     public override Graphics.IPALGraphics Graphics => m_Graphics;

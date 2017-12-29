@@ -16,6 +16,18 @@ namespace NFX.PAL
     private static object s_Lock = new object();
     private static PALImplementation s_Implementation;
 
+    /// <summary>
+    /// Returns true when platform is NET Core
+    /// </summary>
+    public static bool IsNetCore
+    {
+      get
+      {
+        var result = s_Implementation;
+        if (result==null) throw new PALException(StringConsts.PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR.Args("Implementation"));
+        return result.IsNetCore;
+      }
+    }
 
     /// <summary>
     /// Returns the name of the platform implementation, for example ".NET 4.7.1"

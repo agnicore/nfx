@@ -31,15 +31,6 @@ namespace NFX.UTest.DataAccess
     {
 
         [Run]
-        public void CreateTable_TypedRow()
-        {
-            var tbl1 = new Table(Schema.GetForTypedRow(typeof(Person)));
-            var tbl2 = Table.Create<Person>();
-
-            Aver.AreObjectsEqual(tbl1.Schema, tbl2.Schema);
-        }
-
-        [Run]
         public void PopulateAndFindKey_TypedRows()
         {
             var tbl = new Table(Schema.GetForTypedRow(typeof(Person)));

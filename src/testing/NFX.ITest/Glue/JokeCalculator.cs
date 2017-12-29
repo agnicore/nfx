@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using BusinessLogic;
+
 using NFX.ApplicationModel;
 using NFX.Environment;
 using NFX.Glue;
@@ -28,6 +28,8 @@ using NFX.Glue.Implementation;
 using NFX.Glue.Native;
 using NFX.Security;
 using NFX.Scripting;
+
+using BusinessLogic;
 
 namespace NFX.ITest.Glue
 {
@@ -81,6 +83,5 @@ namespace NFX.ITest.Glue
         }
       }
     }
-
   }
 }

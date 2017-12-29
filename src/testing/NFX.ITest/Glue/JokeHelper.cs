@@ -28,59 +28,58 @@ namespace NFX.ITest.Glue
     const string CONFIG_STR = @"
 nfx
 {
-	disk-root=$(~NFX_TEST_ROOT)\
-	log-root=$(\$disk-root)
-	log-csv='NFX.Log.Destinations.CSVFileDestination, NFX'
-	debug-default-action='Log,Throw'
-	
-	glue
-	{
-		bindings
-		{
-			binding
-			{
-				name='sync'
-				type='NFX.Glue.Native.SyncBinding'
-				max-msg-size='65535'
-				
-				client-inspectors
-				{
-					inspector { type='BusinessLogic.TextInfoReporter, BusinessLogic' }
-				}
-				
-				client-transport
-				{
+  disk-root=$(~NFX_TEST_ROOT)\
+  log-root=$(\$disk-root)
+  log-csv='NFX.Log.Destinations.CSVFileDestination, NFX'
+  debug-default-action='Log,Throw'
+
+  glue
+  {
+    bindings
+    {
+      binding
+      {
+        name='sync'
+        type='NFX.Glue.Native.SyncBinding'
+        max-msg-size='65535'
+
+        client-inspectors
+        {
+          inspector { type='BusinessLogic.TextInfoReporter, BusinessLogic' }
+        }
+
+        client-transport
+        {
           rcv-buf-size='8192'
           snd-buf-size='8192'
           rcv-timeout='10000'
           snd-timeout='10000'
-				}
-			}	
-      
+        }
+      }
+
       binding
       {
         name='mpx'
         type='NFX.Glue.Native.MpxBinding, NFX'
-      }		
-      
+      }
+
       binding
       {
         name='inproc'
         type='NFX.Glue.Native.InProcBinding, NFX'
       }
-		}
-    
+    }
+
     servers
     {
       server
       {
         name='local'
         node='inproc://localhost'
-        contract-servers='TestServer.Glue.JokeServer, TestServer; TestServer.Glue.JokeCalculatorServer, TestServer'
+        contract-servers='BusinessLogic.Server.JokeServer, BusinessLogic; BusinessLogic.Server.JokeCalculatorServer, BusinessLogic'
       }
-
     }
-	}
+  }
 }
 ";
 
