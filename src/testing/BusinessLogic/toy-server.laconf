@@ -1,5 +1,6 @@
 ﻿nfx
 {
+  log-root=$(~NFX_TEST_ROOT)\
   log
   {
     reliable=true
@@ -89,6 +90,21 @@
 
   }//glue
 
+  object-store
+  {
+    name="Main Object Store"
+    guid="A2E59DBB-27AE-4803-A19E-72C99DD8956E"
+    object-life-span-ms="180000"
+    bucket-count="1024"
+
+    provider
+    {
+      name="Disk Object Store Provider"
+      type="NFX.ApplicationModel.Volatile.FileObjectStoreProvider"
+      load-limit="0"
+      root-path=$(/$log-root)
+    }
+  }
 
   security
   {

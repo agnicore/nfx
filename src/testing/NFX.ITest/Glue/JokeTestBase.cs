@@ -50,7 +50,7 @@ namespace NFX.ITest.Glue
     void IRunnableHook.Prologue(Runner runner, FID id)
     {
       ProcessStartInfo start;
-      if (NFX.PAL.PlatformAbstractionLayer.IsNetCore)
+      if (PAL.PlatformAbstractionLayer.IsNetCore)
         start = new ProcessStartInfo()
         {
           FileName = "dotnet",

@@ -33,7 +33,7 @@ namespace NFX.ITest.CRUD
   /// <summary>
   /// Mongo CRUD tests
   /// </summary>
-  [Runnable]
+  [Runnable("!ErlangTests")]
   public class ErlangTests : IRunHook
   {
      private static readonly string[] CCY_PAIRS = new string[]

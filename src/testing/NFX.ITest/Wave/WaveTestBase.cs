@@ -58,9 +58,20 @@ namespace NFX.ITest.Wave
     {
       try
       {
-        ProcessStartInfo start = new ProcessStartInfo()
+        ProcessStartInfo start;
+        if (PAL.PlatformAbstractionLayer.IsNetCore)
+          start = new ProcessStartInfo()
           {
-            FileName = ProcessFileName,
+            FileName = "dotnet",
+            Arguments = "toy.dll wave -config toy-wave.laconf",
+            RedirectStandardInput = true,
+            UseShellExecute = false
+          };
+        else
+          start = new ProcessStartInfo()
+          {
+            FileName = "toy",
+            Arguments = "wave -config toy-wave.laconf",
             RedirectStandardInput = true,
             UseShellExecute = false
           };

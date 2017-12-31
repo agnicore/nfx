@@ -247,9 +247,9 @@ namespace NFX.ITest.Wave
             var obj = JSONReader.DeserializeDynamic(str);
 
             Aver.AreEqual(3, obj.Data.Count);
-            Aver.AreEqual(1UL, obj.Data[0]);
-            Aver.AreEqual(2UL, obj.Data[1]);
-            Aver.AreEqual(3UL, obj.Data[2]);
+            Aver.AreEqual(1, obj.Data[0]);
+            Aver.AreEqual(2, obj.Data[1]);
+            Aver.AreEqual(3, obj.Data[2]);
           }
         }
 
@@ -265,9 +265,9 @@ namespace NFX.ITest.Wave
             var obj = JSONReader.DeserializeDynamic(str);
 
             Aver.AreEqual(3, obj.Data.Count);
-            Aver.AreEqual(1UL, obj.Data[0]);
-            Aver.AreEqual(2UL, obj.Data[1]);
-            Aver.AreEqual(3UL, obj.Data[2]);
+            Aver.AreEqual(1, obj.Data[0]);
+            Aver.AreEqual(2, obj.Data[1]);
+            Aver.AreEqual(3, obj.Data[2]);
           }
         }
 
@@ -321,8 +321,8 @@ namespace NFX.ITest.Wave
             var obj = JSONReader.DeserializeDynamic(str);
 
             Aver.AreEqual(16, obj.Data.Count);
-            Aver.AreEqual(777UL, obj.Data["ID"]);
-            Aver.AreEqual("Test Name", obj.Data["Name"]);
+            Aver.AreObjectsEqual(777, obj.Data["ID"]);
+            Aver.AreObjectsEqual("Test Name", obj.Data["Name"]);
 
             var date = DateTime.Parse(obj.Data["Date"]);
             Aver.IsTrue( (DateTime.Now - start).TotalSeconds >= 2.0d );
@@ -523,8 +523,8 @@ namespace NFX.ITest.Wave
             Console.WriteLine(str);
 
             var obj = JSONReader.DeserializeDynamic(str);
-            Aver.AreEqual(55UL, obj.Data["ID"]);
-            Aver.AreEqual("test", obj.Data["Name"]);
+            Aver.AreObjectsEqual(55, obj.Data["ID"]);
+            Aver.AreObjectsEqual("test", obj.Data["Name"]);
           }
         }
 
@@ -634,16 +634,17 @@ namespace NFX.ITest.Wave
         [Run]
         public void MultipartEncoding()
         {
-          var encoding = Encoding.GetEncoding(1251);
+          var encoding = Encoding.GetEncoding("ISO-8859-1");
+
           var part = new NFX.Web.Multipart.Part("field");
-          part.Content = "Значение";
+          part.Content = "Value";
 
           var mp = new NFX.Web.Multipart(new NFX.Web.Multipart.Part[] { part });
           var enc = mp.Encode(encoding);
 
           var req = HttpWebRequest.CreateHttp(INTEGRATION_HTTP_ADDR + "MultipartEncoding");
           req.Method = "POST";
-          req.ContentType = NFX.Web.ContentType.FORM_MULTIPART_ENCODED + "; charset=windows-1251";
+          req.ContentType = NFX.Web.ContentType.FORM_MULTIPART_ENCODED + "; charset=iso-8859-1";
           req.ContentLength = enc.Length;
           req.CookieContainer = new CookieContainer();
           req.CookieContainer.Add(S_WAVE_URI, S_WAVE_COOKIE);

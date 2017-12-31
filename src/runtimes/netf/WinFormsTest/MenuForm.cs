@@ -64,21 +64,22 @@ namespace WinFormsTest
 
     private void btnGlueServer_Click(object sender, EventArgs e)
     {
-      startProcess("TestServer.exe");
+      startProcess("-config toy-server.laconf");
     }
 
     private void btnWaveServer_Click(object sender, EventArgs e)
     {
-      startProcess("WaveTestSite.exe");
+      startProcess("wave -config toy-wave.laconf");
     }
 
-    private void startProcess(string processName)
+    private void startProcess(string arguments)
     {
       try
       {
         var si = new ProcessStartInfo
         {
-          FileName = processName,
+          FileName = "toy.exe",
+          Arguments = arguments,
           UseShellExecute = false
         };
 
