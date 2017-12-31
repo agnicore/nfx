@@ -16,7 +16,6 @@ namespace NFX.Graphics
     public abstract int BPP{ get;}
 
     public abstract string WebContentType { get;}
-
   }
 
   /// <summary>

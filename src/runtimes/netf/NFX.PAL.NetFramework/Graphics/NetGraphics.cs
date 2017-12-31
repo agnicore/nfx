@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Drawing;
+
+using NFX.Graphics;
+using NFX.PAL.Graphics;
+
+namespace NFX.PAL.NetFramework.Graphics
+{
+  public sealed class NetGraphics : IPALGraphics
+  {
+    public IPALImage CreateImage(string fileName)
+    {
+      var nimg = System.Drawing.Image.FromFile(fileName);
+      return new NetImage(nimg);
+    }
+
+    public IPALImage CreateImage(byte[] data)
+    {
+      using(var ms = new MemoryStream(data))
+      {
+       var nimg = System.Drawing.Image.FromStream(ms);
+       return new NetImage(nimg);
+      }
+    }
+
+    public IPALImage CreateImage(Stream stream)
+    {
+      var nimg = System.Drawing.Image.FromStream(stream);
+      return new NetImage(nimg);
+    }
+
+    public IPALImage CreateImage(Size size, Size resolution, PixelFormat pixFormat)
+    {
+      return new NetImage(size, resolution, pixFormat);
+    }
+  }
+}

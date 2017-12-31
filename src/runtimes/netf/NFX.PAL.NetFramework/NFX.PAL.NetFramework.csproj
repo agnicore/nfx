@@ -47,11 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DotNetFrameworkRuntime.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Graphics\NetImage.cs" />
-    <Compile Include="Graphics\NetImaging.cs" />
+    <Compile Include="Graphics\NetGraphics.cs" />
     <Compile Include="PALFileSystem.cs" />
     <Compile Include="PALMachineInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringConsts.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NFX\NFX.csproj">

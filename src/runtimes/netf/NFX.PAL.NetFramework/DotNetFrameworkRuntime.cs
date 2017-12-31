@@ -22,7 +22,7 @@ namespace NFX.PAL.NetFramework
     {
       m_Machine  = new PALMachineInfo();
       m_FS       = new PALFileSystem();
-      m_Graphics = new Graphics.NetImaging();
+      m_Graphics = new Graphics.NetGraphics();
     }
 
     private PALMachineInfo m_Machine;

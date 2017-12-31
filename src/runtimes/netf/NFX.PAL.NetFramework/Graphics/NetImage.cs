@@ -39,6 +39,14 @@ namespace NFX.PAL.NetFramework.Graphics
       m_Bitmap.SetResolution(resolution.Width, resolution.Height);
     }
 
+    internal NetImage(System.Drawing.Image img)
+    {
+      var bmp = img as NBmp;
+      if (bmp==null)
+        throw new NetFrameworkPALException(StringConsts.ARGUMENT_ERROR + $"{nameof(NetImage)}.ctor(img!bitmap)");
+      m_Bitmap = bmp;
+    }
+
     protected override void Destructor()
     {
       base.Destructor();

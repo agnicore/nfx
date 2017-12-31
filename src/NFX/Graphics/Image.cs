@@ -23,9 +23,6 @@ namespace NFX.Graphics
     /// <summary>Creates a new image instance from image content contained in a byte[]</summary>
     public static Image FromBytes(byte[] data)    => new Image(PlatformAbstractionLayer.Graphics.CreateImage(data));
 
-    /// <summary>Creates a new image instance from image content contained in a segment of byte[]</summary>
-    public static Image FromBytes(ArraySegment<byte> data) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(data));
-
     /// <summary>Creates a new image instance from image content contained in a stream</summary>
     public static Image FromStream(Stream stream) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(stream));
 
