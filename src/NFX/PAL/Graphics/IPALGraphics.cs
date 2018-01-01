@@ -16,6 +16,6 @@ namespace NFX.PAL.Graphics
     IPALImage CreateImage(string fileName);
     IPALImage CreateImage(byte[] data);
     IPALImage CreateImage(Stream stream);
-    IPALImage CreateImage(Size size, Size resolution, PixelFormat pixFormat);
+    IPALImage CreateImage(Size size, Size resolution, ImagePixelFormat pixFormat);
   }
 }

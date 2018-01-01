@@ -11,6 +11,7 @@ namespace NFX.Graphics
 {
   /// <summary>
   /// Represents a 2d graphical in-memory Image.
+  /// The purpose of this object is to provide basic image processing capabilities cross-platform.
   /// Graphics objects are NOT thread-safe
   /// </summary>
   public sealed class Image : DisposableObject
@@ -30,22 +31,22 @@ namespace NFX.Graphics
     public static Image Of(int width, int height) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
     public static Image Of(int width, int height, int xDPI, int yDPI) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(xDPI, yDPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(int width, int height, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(int width, int height, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
                                                                     pixFormat));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(int width, int height, int xDPI, int yDPI, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(int width, int height, int xDPI, int yDPI, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(xDPI, yDPI),
                                                                     pixFormat));
@@ -55,19 +56,19 @@ namespace NFX.Graphics
     public static Image Of(Size size) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     size,
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(Size size, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     size,
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
                                                                     pixFormat));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, Size resolution) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, PixelFormat.Default));
+    public static Image Of(Size size, Size resolution) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, Size resolution, PixelFormat format) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, format));
+    public static Image Of(Size size, Size resolution, ImagePixelFormat format) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, format));
 
 
 
@@ -144,20 +145,31 @@ namespace NFX.Graphics
       m_Handle.SetPixel(p, color);
     }
 
+    /// <summary>
+    /// Saves image to the named file
+    /// </summary>
+    public void Save(string fileName, ImageFormat format)
+    {
+      EnsureObjectNotDisposed();
+      m_Handle.Save(fileName, format);
+    }
+
+    /// <summary>
+    /// Saves image to stream
+    /// </summary>
     public void Save(Stream stream, ImageFormat format)
     {
       EnsureObjectNotDisposed();
       m_Handle.Save(stream, format);
     }
 
+    /// <summary>
+    /// Saves image to byte[]
+    /// </summary>
     public byte[] Save(ImageFormat format)
     {
       EnsureObjectNotDisposed();
-      using(var ms = new MemoryStream())
-      {
-        m_Handle.Save(ms, format);
-        return ms.ToArray();
-      }
+      return m_Handle.Save(format);
     }
 
   }

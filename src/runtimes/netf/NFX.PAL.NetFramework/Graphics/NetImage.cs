@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
-using NBmp=System.Drawing.Bitmap;
+using System.Drawing.Imaging;
 
 using NFX.Graphics;
+using NFXImageFormat=NFX.Graphics.ImageFormat;
 using NFX.PAL.Graphics;
 
 namespace NFX.PAL.NetFramework.Graphics
@@ -17,31 +16,31 @@ namespace NFX.PAL.NetFramework.Graphics
   /// </summary>
   public sealed class NetImage : DisposableObject, IPALImage
   {
-    public static System.Drawing.Imaging.PixelFormat ToGDIPixelFormat(PixelFormat pf)
+    public static System.Drawing.Imaging.PixelFormat ToGDIPixelFormat(ImagePixelFormat pf)
     {
       switch(pf)
       {
-        case PixelFormat.BPP1Indexed: return System.Drawing.Imaging.PixelFormat.Format1bppIndexed;
-        case PixelFormat.BPP4Indexed: return System.Drawing.Imaging.PixelFormat.Format4bppIndexed;
-        case PixelFormat.BPP8Indexed: return System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
-        case PixelFormat.BPP16Gray: return System.Drawing.Imaging.PixelFormat.Format16bppGrayScale;
-        case PixelFormat.RGB24: return System.Drawing.Imaging.PixelFormat.Format24bppRgb;
-        case PixelFormat.RGB32: return System.Drawing.Imaging.PixelFormat.Format32bppRgb;
-        case PixelFormat.RGBA32: return System.Drawing.Imaging.PixelFormat.Format32bppArgb;
-        default: return System.Drawing.Imaging.PixelFormat.Canonical;
+        case ImagePixelFormat.BPP1Indexed: return PixelFormat.Format1bppIndexed;
+        case ImagePixelFormat.BPP4Indexed: return PixelFormat.Format4bppIndexed;
+        case ImagePixelFormat.BPP8Indexed: return PixelFormat.Format8bppIndexed;
+        case ImagePixelFormat.BPP16Gray:   return PixelFormat.Format16bppGrayScale;
+        case ImagePixelFormat.RGB24:       return PixelFormat.Format24bppRgb;
+        case ImagePixelFormat.RGB32:       return PixelFormat.Format32bppRgb;
+        case ImagePixelFormat.RGBA32:      return PixelFormat.Format32bppArgb;
+        default: return PixelFormat.Canonical;
       }
     }
 
-    internal NetImage(Size size, Size resolution, PixelFormat pixFormat)
+    internal NetImage(Size size, Size resolution, ImagePixelFormat pixFormat)
     {
       var pf = ToGDIPixelFormat(pixFormat);
-      m_Bitmap = new NBmp(size.Width, size.Height, pf);
+      m_Bitmap = new Bitmap(size.Width, size.Height, pf);
       m_Bitmap.SetResolution(resolution.Width, resolution.Height);
     }
 
     internal NetImage(System.Drawing.Image img)
     {
-      var bmp = img as NBmp;
+      var bmp = img as Bitmap;
       if (bmp==null)
         throw new NetFrameworkPALException(StringConsts.ARGUMENT_ERROR + $"{nameof(NetImage)}.ctor(img!bitmap)");
       m_Bitmap = bmp;
@@ -53,7 +52,7 @@ namespace NFX.PAL.NetFramework.Graphics
       DisposeAndNull(ref m_Bitmap);
     }
 
-    private NBmp m_Bitmap;
+    private Bitmap m_Bitmap;
 
     public Color GetAveragePixel(Point p, Size area)
     {
@@ -81,9 +80,49 @@ namespace NFX.PAL.NetFramework.Graphics
         m_Bitmap.MakeTransparent();
     }
 
-    public void Save(Stream stream, NFX.Graphics.ImageFormat format)
+    public void Save(string fileName, NFXImageFormat format)
+    {
+      var (codec, pars) = getEncoder(format);
+      m_Bitmap.Save(fileName, codec, pars);
+    }
+
+    public void Save(Stream stream, NFXImageFormat format)
     {
       throw new NotImplementedException();
+    }
+
+    public byte[] Save(NFXImageFormat format)
+    {
+      throw new NotImplementedException();
+    }
+
+    private (ImageCodecInfo codec, EncoderParameters pars) getEncoder(NFXImageFormat format)
+    {
+      ImageCodecInfo codec;
+      EncoderParameters pars;
+
+      if (format is BitmapImageFormat)
+      {
+        codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Bmp.Guid);
+        pars = null;//new EncoderParameters(0);
+      } else if (format is PngImageFormat)
+      {
+        codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Png.Guid);
+        pars = null;//new EncoderParameters(0);
+      } else if (format is GifImageFormat)
+      {
+        codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Gif.Guid);
+        pars = null;//new EncoderParameters(0);
+      } else//default is JPEG
+      {
+        var jpeg = format as JpegImageFormat;
+        codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Jpeg.Guid);
+        pars = new EncoderParameters(1);
+        pars.Param[0] = new EncoderParameter(Encoder.Quality, jpeg?.Quality ?? 80L);
+      }
+
+
+      return ( codec: codec, pars: null );
     }
 
   }

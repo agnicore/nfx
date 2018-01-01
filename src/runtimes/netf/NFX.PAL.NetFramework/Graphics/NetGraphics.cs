@@ -31,7 +31,7 @@ namespace NFX.PAL.NetFramework.Graphics
       return new NetImage(nimg);
     }
 
-    public IPALImage CreateImage(Size size, Size resolution, PixelFormat pixFormat)
+    public IPALImage CreateImage(Size size, Size resolution, ImagePixelFormat pixFormat)
     {
       return new NetImage(size, resolution, pixFormat);
     }

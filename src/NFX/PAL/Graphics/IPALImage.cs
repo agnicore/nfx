@@ -23,6 +23,9 @@ namespace NFX.PAL.Graphics
     void SetPixel(PointF p, Color color);
 
     void MakeTransparent(Color? dflt);
+    void Save(string fileName, ImageFormat format);
+    byte[] Save(ImageFormat format);
     void Save(Stream stream, ImageFormat format);
+
   }
 }
