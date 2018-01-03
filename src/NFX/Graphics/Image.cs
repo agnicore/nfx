@@ -11,10 +11,12 @@ namespace NFX.Graphics
 {
   /// <summary>
   /// Represents a 2d graphical in-memory Image.
+  /// The purpose of this object is to provide basic image processing capabilities cross-platform.
   /// Graphics objects are NOT thread-safe
   /// </summary>
   public sealed class Image : DisposableObject
   {
+
     public const int DEFAULT_RESOLUTION_PPI = 72;
 
     /// <summary>Creates a new image instance from a named image file</summary>
@@ -30,22 +32,22 @@ namespace NFX.Graphics
     public static Image Of(int width, int height) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
     public static Image Of(int width, int height, int xDPI, int yDPI) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(xDPI, yDPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(int width, int height, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(int width, int height, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
                                                                     pixFormat));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(int width, int height, int xDPI, int yDPI, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(int width, int height, int xDPI, int yDPI, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     new Size(width, height),
                                                                     new Size(xDPI, yDPI),
                                                                     pixFormat));
@@ -55,19 +57,19 @@ namespace NFX.Graphics
     public static Image Of(Size size) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     size,
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
-                                                                    PixelFormat.Default));
+                                                                    ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, PixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
+    public static Image Of(Size size, ImagePixelFormat pixFormat) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(
                                                                     size,
                                                                     new Size(DEFAULT_RESOLUTION_PPI, DEFAULT_RESOLUTION_PPI),
                                                                     pixFormat));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, Size resolution) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, PixelFormat.Default));
+    public static Image Of(Size size, Size resolution) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, ImagePixelFormat.Default));
 
     /// <summary>Creates a new image instance of the specified properties</summary>
-    public static Image Of(Size size, Size resolution, PixelFormat format) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, format));
+    public static Image Of(Size size, Size resolution, ImagePixelFormat format) => new Image(PlatformAbstractionLayer.Graphics.CreateImage(size, resolution, format));
 
 
 
@@ -81,14 +83,17 @@ namespace NFX.Graphics
 
     private IPALImage m_Handle;
 
+    public ImagePixelFormat PixelFormat { get {  EnsureObjectNotDisposed(); return m_Handle.PixelFormat; } }
 
     public Size Size { get{  EnsureObjectNotDisposed(); return m_Handle.GetSize(); } }
     public int Width  => Size.Width;
     public int Height => Size.Height;
 
+    public Rectangle Dimensions => new Rectangle(Point.Empty, Size);
+
     public Size Resolution { get{  EnsureObjectNotDisposed(); return m_Handle.GetResolution(); } }
-    public int XResolution => Size.Width;
-    public int YResolution => Size.Height;
+    public int XResolution => Resolution.Width;
+    public int YResolution => Resolution.Height;
 
 
     public void SetResolution(int xDPI, int yDPI) => SetResolution(new Size(xDPI, yDPI));
@@ -121,15 +126,6 @@ namespace NFX.Graphics
       return m_Handle.GetPixel(p);
     }
 
-    /// <summary>
-    /// Gets an average color of the specified pixel performing RGBA component average
-    /// </summary>
-    public Color GetAveragePixel(Point p, Size area)
-    {
-      EnsureObjectNotDisposed();
-      return m_Handle.GetAveragePixel(p, area);
-    }
-
     public void SetPixel(int x, int y, Color color) => SetPixel(new Point(x, y), color);
     public void SetPixel(Point p, Color color)
     {
@@ -144,20 +140,62 @@ namespace NFX.Graphics
       m_Handle.SetPixel(p, color);
     }
 
+    public Image ResizeTo(int newWidth, int newHeight, InterpolationMode interpolation = InterpolationMode.Default) => ResizeTo(new Size(newWidth, newHeight), interpolation);
+    public Image ResizeTo(Size newSize, InterpolationMode interpolation = InterpolationMode.Default)
+    {
+      if (newSize.Width==0 || newSize.Height==0)
+        throw new NFXException(StringConsts.ARGUMENT_ERROR + "Resize(size is empty)");
+
+      var result = Image.Of(newSize, Resolution, PixelFormat);
+
+      using (var canvas = result.CreateCanvas())
+      {
+        canvas.Interpolation = interpolation;
+        canvas.DrawImage(this, result.Dimensions);
+      }
+
+      return result;
+    }
+
+
+    /// <summary>
+    /// Saves image to the named file
+    /// </summary>
+    public void Save(string fileName, ImageFormat format)
+    {
+      EnsureObjectNotDisposed();
+      m_Handle.Save(fileName, format);
+    }
+
+    /// <summary>
+    /// Saves image to stream
+    /// </summary>
     public void Save(Stream stream, ImageFormat format)
     {
       EnsureObjectNotDisposed();
       m_Handle.Save(stream, format);
     }
 
+    /// <summary>
+    /// Saves image to byte[]
+    /// </summary>
     public byte[] Save(ImageFormat format)
     {
       EnsureObjectNotDisposed();
-      using(var ms = new MemoryStream())
-      {
-        m_Handle.Save(ms, format);
-        return ms.ToArray();
-      }
+      return m_Handle.Save(format);
+    }
+
+    /// <summary>
+    /// Create a canvas object for this image. Canvases are used to draw on images.
+    /// Canvas must be disposed after drawing is finished.
+    /// Check Canvas.OwnsAssets to determine cacing for graphics primitives (suchs as pens, brushes etc.) beyond the
+    /// lifecycle of Canvas
+    /// </summary>
+    public Canvas CreateCanvas()
+    {
+      EnsureObjectNotDisposed();
+      var hcanvas = m_Handle.CreateCanvas();
+      return new Canvas(hcanvas);
     }
 
   }

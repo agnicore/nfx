@@ -19,8 +19,8 @@ namespace NFX.ITest.Web.Messaging
           {
             type='NFX.Web.Messaging.TwilioSink, NFX.Web'
             name='Twilio'
-            account-sid='AC31483195bf01c8be5c0a6883d1288055'  // $(~TWILIO_ACCOUNT_SID)
-            auth-token='dfbedd7b09865fafaebd1605728f6e2c'     // $(~TWILIO_AUTH_TOKEN)
+            account-sid=$(~TWILIO_ACCOUNT_SID)
+            auth-token=$(~TWILIO_AUTH_TOKEN)
             from='+15005550006'
           }
         }

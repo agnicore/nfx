@@ -9,12 +9,13 @@ namespace NFX.Graphics
 {
   public sealed partial class Canvas : DisposableObject
   {
-    public abstract class Brush : Asset<IPALCanvasBrush>
+    public sealed class Font : Asset<IPALCanvasFont>
     {
-      protected Brush(IPALCanvasBrush handle) : base(handle)
+      protected Font(IPALCanvasFont handle) : base(handle)
       {
 
       }
+      public readonly string FamilyName;
     }
   }
 }

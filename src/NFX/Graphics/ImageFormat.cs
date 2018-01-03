@@ -10,11 +10,8 @@ namespace NFX.Graphics
   public abstract class ImageFormat
   {
 
-    /// <summary>
-    /// Gets bits per pixel
-    /// </summary>
+    /// <summary> Gets bits per pixel </summary>
     public abstract int BPP{ get;}
-
     public abstract string WebContentType { get;}
   }
 
@@ -84,15 +81,15 @@ namespace NFX.Graphics
     /// </summary>
     public static readonly JpegImageFormat Standard = new JpegImageFormat(80);
 
-    public JpegImageFormat(int compression)
+    public JpegImageFormat(int quality)
     {
-      if (compression<0 || compression>100)
-        throw new GraphicsException(StringConsts.ARGUMENT_ERROR+"{0}.ctor(compression<0|>100)".Args(nameof(JpegImageFormat)));
+      if (quality<0 || quality>100)
+        throw new GraphicsException(StringConsts.ARGUMENT_ERROR+"{0}.ctor(quality<0|>100)".Args(nameof(JpegImageFormat)));
 
-      Compression = compression;
+      Quality = quality;
     }
 
-    public readonly int Compression;
+    public readonly int Quality;
 
     public override int BPP{ get => 0;}
     public override string WebContentType { get => "image/jpeg"; }

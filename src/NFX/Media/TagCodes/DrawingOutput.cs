@@ -43,18 +43,15 @@ namespace NFX.Media.TagCodes
   {
     #region .ctor
 
-      public DrawingOutput()
-      {
-      }
-
       public DrawingOutput(int width, int height)
       {
         createBitmapNGraphics(width, height);
       }
 
-      public DrawingOutput(int width, int height, Canvas.Brush fillBrush): this(width, height)
+      public DrawingOutput(int width, int height, Color colorFill, Color colorDraw): this(width, height)
       {
-        FillRect(0, 0, width, height, fillBrush);
+      #warning PEREPISAT normalno, ubrat etot class voobshe!!!!
+      //  FillRect(0, 0, width, height, fillBrush);
       }
 
     #endregion
@@ -133,7 +130,7 @@ namespace NFX.Media.TagCodes
       private void createBitmapNGraphics(int width, int height)
       {
         m_Bitmap = Image.Of(width, height);
-        m_Canvas = new Canvas(m_Bitmap);
+        m_Canvas = m_Bitmap.CreateCanvas();
       }
 
       private void purgeBitmapNGraphics()

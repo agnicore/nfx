@@ -10,6 +10,8 @@ namespace NFX.PAL.Graphics
   {
     Size GetSize();
 
+    ImagePixelFormat PixelFormat { get; }
+
     /// <summary>
     /// PPI resolution
     /// </summary>
@@ -18,11 +20,15 @@ namespace NFX.PAL.Graphics
 
     Color GetPixel(Point p);
     Color GetPixel(PointF p);
-    Color GetAveragePixel(Point p, Size area);
     void SetPixel(Point p, Color color);
     void SetPixel(PointF p, Color color);
 
     void MakeTransparent(Color? dflt);
+    void Save(string fileName, ImageFormat format);
+    byte[] Save(ImageFormat format);
     void Save(Stream stream, ImageFormat format);
+
+    IPALCanvas CreateCanvas();
+
   }
 }

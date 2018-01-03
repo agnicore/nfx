@@ -19,7 +19,7 @@ namespace NFX.Graphics
     /// <summary>
     /// Specifies image pixel format
     /// </summary>
-    public enum PixelFormat
+    public enum ImagePixelFormat
     {
       /// <summary>
       /// The default pixel format of 32 bits per pixel. The format specifies 24-bit color depth and an 8-bit alpha channel

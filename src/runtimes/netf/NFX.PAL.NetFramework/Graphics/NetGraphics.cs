@@ -10,6 +10,11 @@ namespace NFX.PAL.NetFramework.Graphics
 {
   public sealed class NetGraphics : IPALGraphics
   {
+    /// <summary>
+    /// This GDI+ implementation allows to create assets outside of GDI+.Graphics scope
+    /// </summary>
+    public bool CanvasOwnsAssets => false;
+
     public IPALImage CreateImage(string fileName)
     {
       var nimg = System.Drawing.Image.FromFile(fileName);
@@ -31,7 +36,7 @@ namespace NFX.PAL.NetFramework.Graphics
       return new NetImage(nimg);
     }
 
-    public IPALImage CreateImage(Size size, Size resolution, PixelFormat pixFormat)
+    public IPALImage CreateImage(Size size, Size resolution, ImagePixelFormat pixFormat)
     {
       return new NetImage(size, resolution, pixFormat);
     }

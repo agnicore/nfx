@@ -31,6 +31,8 @@ using NFX.Graphics;
 
 namespace NFX.Media.TagCodes.QR
 {
+
+  #warning MUST REWRITE!!!! get rid of DrawingOutput etc...
   public static class QRImageRenderer
   {
     #region CONSTS
@@ -116,26 +118,26 @@ namespace NFX.Media.TagCodes.QR
         int canvasWidth = matrix.Width * scaleFactor;
         int canvasHeight = matrix.Height * scaleFactor;
 
-    //TODO: Can we not cache brush instances on color in static dictionary? i.e. var blackbrush = BRUSHES[black]; Is brush thread safe for reading only?
-        using(var blackBrush = new Canvas.SolidBrush(black))
-        using(var whiteBrush = new Canvas.SolidBrush(white))
-        {
-          var drawingOutput = new DrawingOutput(canvasWidth, canvasHeight, blackBrush);
-          for (int yMatrix = 0, yCanvasStart = 0, yCanvasStop = scaleFactor;
-            yMatrix < matrix.Height;
-            yMatrix++, yCanvasStart+=scaleFactor, yCanvasStop+=scaleFactor)
-          {
-            for (int xMatrix = 0, xCanvasStart = 0, xCanvasStop = scaleFactor;
-              xMatrix < matrix.Width;
-              xMatrix++, xCanvasStart+=scaleFactor, xCanvasStop+=scaleFactor)
-            {
-              if (matrix[xMatrix, yMatrix] == 0)
-                drawingOutput.SetPixelScaled(xMatrix, yMatrix, whiteBrush, scaleFactor);
-            }
-          }
+    #warning Perepisat ubrat etot Drawingutput
+        //using(var drawingOutput = new DrawingOutput(canvasWidth, canvasHeight, black, white))
+        //{
 
-          return drawingOutput;
-        }
+        //  for (int yMatrix = 0, yCanvasStart = 0, yCanvasStop = scaleFactor;
+        //    yMatrix < matrix.Height;
+        //    yMatrix++, yCanvasStart+=scaleFactor, yCanvasStop+=scaleFactor)
+        //  {
+        //    for (int xMatrix = 0, xCanvasStart = 0, xCanvasStop = scaleFactor;
+        //      xMatrix < matrix.Width;
+        //      xMatrix++, xCanvasStart+=scaleFactor, xCanvasStop+=scaleFactor)
+        //    {
+        //      if (matrix[xMatrix, yMatrix] == 0)
+        //        drawingOutput.SetPixelScaled(xMatrix, yMatrix, white, scaleFactor);
+        //    }
+        //  }
+
+        //  return drawingOutput;
+        //}
+        return null;
       }
 
     #endregion
