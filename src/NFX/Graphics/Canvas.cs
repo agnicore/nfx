@@ -61,12 +61,30 @@ namespace NFX.Graphics
 
     public void Clear(Color color)
     {
-
+      EnsureObjectNotDisposed();
+      m_Handle.Clear(color);
     }
 
-    public void FillRectangle(Canvas.Brush brush, float x, float y, float w, float h)
+    public void FillRectangle(Canvas.Brush brush, int x, int y, int w, int h) => FillRectangle(brush, new Rectangle(x, y, w, h));
+    public void FillRectangle(Canvas.Brush brush, Point p, Size s) => FillRectangle(brush, new Rectangle(p, s));
+    public void FillRectangle(Canvas.Brush brush, Rectangle rect)
     {
+      if (brush==null)
+        throw new GraphicsException(StringConsts.ARGUMENT_ERROR+"{0}.{1}(brush=null)".Args(nameof(Canvas), nameof(FillRectangle)));
 
+      EnsureObjectNotDisposed();
+      m_Handle.FillRectangle(brush.Handle, rect);
+    }
+
+    public void FillRectangle(Canvas.Brush brush, float x, float y, float w, float h) => FillRectangle(brush, new RectangleF(x, y, w, h));
+    public void FillRectangle(Canvas.Brush brush, PointF p, SizeF s) => FillRectangle(brush, new RectangleF(p, s));
+    public void FillRectangle(Canvas.Brush brush, RectangleF rect)
+    {
+      if (brush==null)
+        throw new GraphicsException(StringConsts.ARGUMENT_ERROR+"{0}.{1}(brush=null)".Args(nameof(Canvas), nameof(FillRectangle)));
+
+      EnsureObjectNotDisposed();
+      m_Handle.FillRectangle(brush.Handle, rect);
     }
 
     public Pen CreateSolidPen(Color color, float width)
@@ -76,7 +94,9 @@ namespace NFX.Graphics
 
     public Brush CreateSolidBrush(Color color)
     {
-      return null;
+      EnsureObjectNotDisposed();
+      var brush = m_Handle.CreateSolidBrush(color);
+      return new Canvas.Brush(brush);
     }
 
   }

@@ -49,6 +49,7 @@
     <Compile Include="DotNetFrameworkRuntime.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Graphics\NetCanvas.cs" />
+    <Compile Include="Graphics\NetBrush.cs" />
     <Compile Include="Graphics\NetImage.cs" />
     <Compile Include="Graphics\NetGraphics.cs" />
     <Compile Include="PALFileSystem.cs" />

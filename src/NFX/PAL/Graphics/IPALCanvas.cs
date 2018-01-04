@@ -16,5 +16,12 @@ namespace NFX.PAL.Graphics
   public interface IPALCanvas : IDisposable
   {
     InterpolationMode Interpolation{ get; set;}
+
+
+    IPALCanvasBrush CreateSolidBrush(Color color);
+
+    void Clear(Color color);
+    void FillRectangle(IPALCanvasBrush brush, Rectangle rect);
+    void FillRectangle(IPALCanvasBrush brush, RectangleF rect);
   }
 }

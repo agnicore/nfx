@@ -12,7 +12,7 @@ namespace NFX.Graphics
     /// <summary> All Canvas objects derived from this one </summary>
     public abstract class Asset : DisposableObject, IPALCanvasAsset
     {
-      protected abstract IPALCanvasAsset AssetHandle { get; }
+      public abstract IPALCanvasAsset AssetHandle { get; }
     }
 
     /// <summary> All Canvas objects derived from this one </summary>
@@ -31,8 +31,8 @@ namespace NFX.Graphics
 
       private THandle m_Handle;
 
-      protected THandle Handle { get => m_Handle; }
-      protected override IPALCanvasAsset AssetHandle { get => m_Handle; }
+      public THandle Handle { get => m_Handle; }
+      public override IPALCanvasAsset AssetHandle { get => m_Handle; }
     }
 
 

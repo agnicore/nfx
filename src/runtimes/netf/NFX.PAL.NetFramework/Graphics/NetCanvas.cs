@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using NGR = System.Drawing.Graphics;
 
 using NFX.Graphics;
@@ -36,6 +33,16 @@ namespace NFX.PAL.NetFramework.Graphics
       get => xlat(m_Graphics.InterpolationMode);
       set => m_Graphics.InterpolationMode = xlat(value);
     }
+
+    public IPALCanvasBrush CreateSolidBrush(Color color)
+    {
+      return new NetBrush(color);
+    }
+
+    public void Clear(Color color) => m_Graphics.Clear(color);
+
+    public void FillRectangle(IPALCanvasBrush brush, Rectangle rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
+    public void FillRectangle(IPALCanvasBrush brush, RectangleF rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
 
     private static InterpolationMode xlat(System.Drawing.Drawing2D.InterpolationMode mode)
     {

@@ -9,9 +9,9 @@ namespace NFX.Graphics
 {
   public sealed partial class Canvas : DisposableObject
   {
-    public abstract class Brush : Asset<IPALCanvasBrush>
+    public sealed class Brush : Asset<IPALCanvasBrush>
     {
-      protected Brush(IPALCanvasBrush handle) : base(handle)
+      internal Brush(IPALCanvasBrush handle) : base(handle)
       {
 
       }
