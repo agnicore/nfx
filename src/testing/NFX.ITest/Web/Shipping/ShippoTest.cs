@@ -19,9 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NFX.Scripting;
-
 using NFX.ApplicationModel;
+using NFX.Scripting;
 using NFX.Web.Shipping;
 
 namespace NFX.ITest.Web.Shipping

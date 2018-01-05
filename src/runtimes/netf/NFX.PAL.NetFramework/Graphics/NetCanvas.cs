@@ -44,6 +44,13 @@ namespace NFX.PAL.NetFramework.Graphics
     public void FillRectangle(IPALCanvasBrush brush, Rectangle rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
     public void FillRectangle(IPALCanvasBrush brush, RectangleF rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
 
+    public void DrawImage(IPALImage image, Rectangle rect) => m_Graphics.DrawImage(((NetImage)image).Bitmap, rect);
+    public void DrawImage(IPALImage image, RectangleF rect) => m_Graphics.DrawImage(((NetImage)image).Bitmap, rect);
+    public void DrawImage(IPALImage image, Rectangle src, Rectangle dest) => m_Graphics.DrawImage(((NetImage)image).Bitmap, src, dest, GraphicsUnit.Pixel);
+    public void DrawImage(IPALImage image, RectangleF src, RectangleF dest) => m_Graphics.DrawImage(((NetImage)image).Bitmap, src, dest, GraphicsUnit.Pixel);
+
+
+
     private static InterpolationMode xlat(System.Drawing.Drawing2D.InterpolationMode mode)
     {
       switch(mode)

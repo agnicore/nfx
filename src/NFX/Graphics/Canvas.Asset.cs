@@ -31,8 +31,8 @@ namespace NFX.Graphics
 
       private THandle m_Handle;
 
-      public THandle Handle { get => m_Handle; }
-      public override IPALCanvasAsset AssetHandle { get => m_Handle; }
+      public THandle Handle { get { EnsureObjectNotDisposed();  return m_Handle;} }
+      public override IPALCanvasAsset AssetHandle => Handle;
     }
 
 

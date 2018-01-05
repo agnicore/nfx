@@ -23,5 +23,10 @@ namespace NFX.PAL.Graphics
     void Clear(Color color);
     void FillRectangle(IPALCanvasBrush brush, Rectangle rect);
     void FillRectangle(IPALCanvasBrush brush, RectangleF rect);
+
+    void DrawImage(IPALImage image, Rectangle rect);
+    void DrawImage(IPALImage image, RectangleF rect);
+    void DrawImage(IPALImage image, Rectangle src, Rectangle dest);
+    void DrawImage(IPALImage image, RectangleF src, RectangleF dest);
   }
 }

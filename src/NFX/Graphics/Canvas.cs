@@ -45,18 +45,32 @@ namespace NFX.Graphics
 
 
 
+    public void DrawImage(Image image, Point p) => DrawImage(image, new Rectangle(p, image.Size));
+    public void DrawImage(Image image, int x, int y, int w, int h) => DrawImage(image, new Rectangle(x, y, w, h));
     public void DrawImage(Image image, Rectangle rect)
     {
+      EnsureObjectNotDisposed();
+      m_Handle.DrawImage(image.Handle, rect);
     }
 
-    public void DrawImage(Image image, float x, float y, float w, float h)
+    public void DrawImage(Image image, PointF p) => DrawImage(image, new RectangleF(p, image.Size));
+    public void DrawImage(Image image, float x, float y, float w, float h) => DrawImage(image, new RectangleF(x, y, w, h));
+    public void DrawImage(Image image, RectangleF rect)
     {
+      EnsureObjectNotDisposed();
+      m_Handle.DrawImage(image.Handle, rect);
     }
-
-
 
     public void DrawImage(Image image, Rectangle src, Rectangle dest)
     {
+      EnsureObjectNotDisposed();
+      m_Handle.DrawImage(image.Handle, src, dest);
+    }
+
+    public void DrawImage(Image image, RectangleF src, RectangleF dest)
+    {
+      EnsureObjectNotDisposed();
+      m_Handle.DrawImage(image.Handle, src, dest);
     }
 
     public void Clear(Color color)

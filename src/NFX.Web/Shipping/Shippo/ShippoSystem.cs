@@ -461,13 +461,13 @@ namespace NFX.Web.Shipping.Shippo
                            {
                              CarrierID=shipment.Carrier.Name,
                              ServiceID=shipment.Service.Name,
-                             PackageID=shipment.Package.Name
+                             PackageID=shipment.Package?.Name
                            };
         var bestAltRate = new ShippingRate
                           {
                             CarrierID=shipment.Carrier.Name,
                             ServiceID=shipment.Service.Name,
-                            PackageID=shipment.Package.Name,
+                            PackageID=shipment.Package?.Name,
                             IsAlternative = true
                           };
 

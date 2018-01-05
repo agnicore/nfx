@@ -83,6 +83,15 @@ namespace NFX.Graphics
 
     private IPALImage m_Handle;
 
+    internal IPALImage Handle
+    {
+      get
+      {
+        EnsureObjectNotDisposed();
+        return m_Handle;
+      }
+    }
+
     public ImagePixelFormat PixelFormat { get {  EnsureObjectNotDisposed(); return m_Handle.PixelFormat; } }
 
     public Size Size { get{  EnsureObjectNotDisposed(); return m_Handle.GetSize(); } }
