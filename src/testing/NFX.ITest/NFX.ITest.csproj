@@ -30,6 +30,7 @@
     <None Remove="CRUD\Types.Load.mys.sql" />
     <None Remove="CRUD\UpdatePerzons.mon.json" />
     <None Remove="CRUD\WorldNews.erl.qry" />
+    <None Remove="ExternalCfg.laconf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,7 @@
     <EmbeddedResource Include="CRUD\Types.Load.mys.sql" />
     <EmbeddedResource Include="CRUD\UpdatePerzons.mon.json" />
     <EmbeddedResource Include="CRUD\WorldNews.erl.qry" />
+    <EmbeddedResource Include="ExternalCfg.laconf" />
   </ItemGroup>
 
   <ItemGroup>

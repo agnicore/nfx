@@ -15,6 +15,8 @@ namespace NFX.Graphics
       {
 
       }
+
+      public Color Color => Handle.Color;
     }
   }
 }

@@ -48,10 +48,13 @@
   <ItemGroup>
     <Compile Include="DotNetFrameworkRuntime.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Graphics\NetFont.cs" />
+    <Compile Include="Graphics\NetPen.cs" />
     <Compile Include="Graphics\NetCanvas.cs" />
     <Compile Include="Graphics\NetBrush.cs" />
     <Compile Include="Graphics\NetImage.cs" />
     <Compile Include="Graphics\NetGraphics.cs" />
+    <Compile Include="Graphics\xlator.cs" />
     <Compile Include="PALFileSystem.cs" />
     <Compile Include="PALMachineInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -27,8 +27,9 @@ namespace NFX.PAL.NetFramework.Graphics
       DisposeAndNull(ref m_Brush);
     }
 
-    private Brush m_Brush;
+    private SolidBrush m_Brush;
 
     internal Brush GDIBrush => m_Brush;
+    public Color Color => m_Brush.Color;
   }
 }

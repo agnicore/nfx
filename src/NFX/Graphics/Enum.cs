@@ -49,4 +49,59 @@ namespace NFX.Graphics
       /// <summary> R G B take 8 bits remaining 4th byte is Alpha</summary>
       RGBA32
     }
+
+    /// <summary>
+    /// Specifies the style of dashed lines drawn with pens
+    /// </summary>
+    public enum PenDashStyle
+    {
+      /// <summary>Specifies a solid line.</summary>
+      Solid = 0,
+      /// <summary>Specifies a line consisting of dashes.</summary>
+      Dash,
+      /// <summary>Specifies a line consisting of dots.</summary>
+      Dot,
+      /// <summary>Specifies a line consisting of a repeating pattern of dash-dot.</summary>
+      DashDot,
+      /// <summary>Specifies a line consisting of a repeating pattern of dash-dot-dot.</summary>
+      DashDotDot
+    }
+
+    /// <summary>Specifies style information applied to text.</summary>
+    [Flags]
+    public enum FontStyling
+    {
+      /// <summary>Normal text.</summary>
+      Regular = 0,
+      /// <summary>Bold text.</summary>
+      Bold = 1,
+      /// <summary>Italic text.</summary>
+      Italic = 1 << 1,
+      /// <summary>Underlined text.</summary>
+      Underline = 1 << 2,
+      /// <summary>Text with a line through the middle.</summary>
+      Strikeout = 1 << 3
+    }
+
+    /// <summary>Specifies the unit of measure for graphics</summary>
+    public enum MeasureUnit
+    {
+      /// <summary>Specifies the world coordinate system unit as the unit of measure.</summary>
+      World,
+      /// <summary>Specifies the unit of measure of the display device. Typically pixels for video displays, and 1/100 inch for printers.</summary>
+      Display,
+      /// <summary>Specifies a device pixel as the unit of measure.</summary>
+      Pixel,
+      /// <summary>Specifies a printer's point (1/72 inch) as the unit of measure.</summary>
+      Point,
+      /// <summary>Specifies the inch as the unit of measure.</summary>
+      Inch,
+      /// <summary>Specifies the document unit (1/300 inch) as the unit of measure.</summary>
+      Document,
+      /// <summary>Specifies the millimeter as the unit of measure.</summary>
+      Millimeter
+    }
+
+
+
 }

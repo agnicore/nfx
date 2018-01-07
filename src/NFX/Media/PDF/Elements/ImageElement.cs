@@ -113,7 +113,7 @@ namespace NFX.Media.PDF.Elements
           OwnWidth = image.Width;
           Height = image.Height;
           OwnHeight = image.Height;
-          BitsPerPixel = imgf.BPP;
+          BitsPerPixel = 24;//todo - review, this was jpeg.BPP - but what is the point of jpeg.bpp?
         }
     }
   }

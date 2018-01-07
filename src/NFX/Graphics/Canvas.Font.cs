@@ -11,11 +11,14 @@ namespace NFX.Graphics
   {
     public sealed class Font : Asset<IPALCanvasFont>
     {
-      protected Font(IPALCanvasFont handle) : base(handle)
+      internal Font(IPALCanvasFont handle) : base(handle)
       {
 
       }
-      public readonly string FamilyName;
+      public string Name => Handle.Name;
+      public float Size => Handle.Size;
+      public FontStyling Style => Handle.Style;
+      public MeasureUnit Unit => Handle.Unit;
     }
   }
 }

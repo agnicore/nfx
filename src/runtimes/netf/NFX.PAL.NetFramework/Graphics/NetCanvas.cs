@@ -30,8 +30,13 @@ namespace NFX.PAL.NetFramework.Graphics
 
     public InterpolationMode Interpolation
     {
-      get => xlat(m_Graphics.InterpolationMode);
-      set => m_Graphics.InterpolationMode = xlat(value);
+      get => xlator.xlat(m_Graphics.InterpolationMode);
+      set => m_Graphics.InterpolationMode = xlator.xlat(value);
+    }
+
+    public IPALCanvasPen CreatePen(Color color, float width, PenDashStyle style)
+    {
+      return new NetPen(color, width, style);
     }
 
     public IPALCanvasBrush CreateSolidBrush(Color color)
@@ -39,50 +44,46 @@ namespace NFX.PAL.NetFramework.Graphics
       return new NetBrush(color);
     }
 
+    public IPALCanvasFont CreateFont(string name, float size, FontStyling style, MeasureUnit unit)
+    {
+      return new NetFont(name, size, style, unit);
+    }
+
     public void Clear(Color color) => m_Graphics.Clear(color);
+
+
+    public void DrawRectangle(IPALCanvasPen pen, Rectangle rect) => m_Graphics.DrawRectangle(((NetPen)pen).GDIPen, rect);
+    public void DrawRectangle(IPALCanvasPen pen, RectangleF rect) => m_Graphics.DrawRectangle(((NetPen)pen).GDIPen, rect.X, rect.Y, rect.Width, rect.Height);
 
     public void FillRectangle(IPALCanvasBrush brush, Rectangle rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
     public void FillRectangle(IPALCanvasBrush brush, RectangleF rect) => m_Graphics.FillRectangle(((NetBrush)brush).GDIBrush, rect);
+
+    public void DrawLine(IPALCanvasPen pen, Point p1, Point p2) => m_Graphics.DrawLine(((NetPen)pen).GDIPen, p1, p2);
+    public void DrawLine(IPALCanvasPen pen, PointF p1, PointF p2) => m_Graphics.DrawLine(((NetPen)pen).GDIPen, p1, p2);
+
+    public void DrawEllipse(IPALCanvasPen pen, Rectangle rect) => m_Graphics.DrawEllipse(((NetPen)pen).GDIPen, rect);
+    public void DrawEllipse(IPALCanvasPen pen, RectangleF rect) => m_Graphics.DrawEllipse(((NetPen)pen).GDIPen, rect);
+
+
+    public void DrawImageUnscaled(IPALImage image, Point p) => m_Graphics.DrawImageUnscaled(((NetImage)image).Bitmap, p);
+    //GDI does not expose DrawImageUnscaled with PointF, hence (int) cast below:
+    public void DrawImageUnscaled(IPALImage image, PointF p) => m_Graphics.DrawImageUnscaled(((NetImage)image).Bitmap, new Point((int)p.X, (int)p.Y));
 
     public void DrawImage(IPALImage image, Rectangle rect) => m_Graphics.DrawImage(((NetImage)image).Bitmap, rect);
     public void DrawImage(IPALImage image, RectangleF rect) => m_Graphics.DrawImage(((NetImage)image).Bitmap, rect);
     public void DrawImage(IPALImage image, Rectangle src, Rectangle dest) => m_Graphics.DrawImage(((NetImage)image).Bitmap, src, dest, GraphicsUnit.Pixel);
     public void DrawImage(IPALImage image, RectangleF src, RectangleF dest) => m_Graphics.DrawImage(((NetImage)image).Bitmap, src, dest, GraphicsUnit.Pixel);
 
-
-
-    private static InterpolationMode xlat(System.Drawing.Drawing2D.InterpolationMode mode)
+    public SizeF MeasureString(IPALCanvasFont font, string text, SizeF? bounds)
     {
-      switch(mode)
-      {
-        case System.Drawing.Drawing2D.InterpolationMode.Low:                 return InterpolationMode.Low;
-        case System.Drawing.Drawing2D.InterpolationMode.High:                return InterpolationMode.High;
-        case System.Drawing.Drawing2D.InterpolationMode.Bilinear:            return InterpolationMode.Bilinear;
-        case System.Drawing.Drawing2D.InterpolationMode.Bicubic:             return InterpolationMode.Bicubic;
-        case System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor:     return InterpolationMode.NearestNeighbor;
-        case System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear: return InterpolationMode.HQBilinear;
-        case System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic:  return InterpolationMode.HQBicubic;
-        //Invalid = -1,
-        //Default,
-        default: return InterpolationMode.Default;
-      }
+      return  bounds.HasValue ?
+         m_Graphics.MeasureString(text,((NetFont)font).GDIFont, bounds.Value) :
+         m_Graphics.MeasureString(text,((NetFont)font).GDIFont);
     }
 
-    private static System.Drawing.Drawing2D.InterpolationMode xlat(InterpolationMode mode)
+    public void DrawString(IPALCanvasFont font,  IPALCanvasBrush brush, string text, PointF p)
     {
-      switch(mode)
-      {
-        case  InterpolationMode.Low:              return System.Drawing.Drawing2D.InterpolationMode.Low                 ;
-        case  InterpolationMode.High:             return System.Drawing.Drawing2D.InterpolationMode.High                ;
-        case  InterpolationMode.Bilinear:         return System.Drawing.Drawing2D.InterpolationMode.Bilinear            ;
-        case  InterpolationMode.Bicubic:          return System.Drawing.Drawing2D.InterpolationMode.Bicubic             ;
-        case  InterpolationMode.NearestNeighbor:  return System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor     ;
-        case  InterpolationMode.HQBilinear:       return System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear ;
-        case  InterpolationMode.HQBicubic:        return System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic  ;
-        //Invalid = -1,
-        //Default,
-        default: return System.Drawing.Drawing2D.InterpolationMode.Default;
-      }
+      m_Graphics.DrawString(text,((NetFont)font).GDIFont, ((NetBrush)brush).GDIBrush, p);
     }
   }
 }

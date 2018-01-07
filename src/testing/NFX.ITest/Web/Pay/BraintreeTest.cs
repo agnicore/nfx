@@ -18,12 +18,11 @@
 using System;
 using System.Linq;
 
-using NFX.Scripting;
-
 using NFX.ApplicationModel;
-using NFX.Web.Pay;
-using NFX.Environment;
 using NFX.Financial;
+using NFX.Scripting;
+using NFX.Web.Pay;
+using NFX.Web.Pay.Braintree;
 
 namespace NFX.ITest.Web.Pay
 {
@@ -39,7 +38,7 @@ namespace NFX.ITest.Web.Pay
       {
         starter
         {
-          name='Pay Systems'
+          name='PaySystem'
           type='NFX.Web.Pay.PaySystemStarter, NFX.Web'
           application-start-break-on-exception=true
         }
@@ -47,27 +46,14 @@ namespace NFX.ITest.Web.Pay
 
       web-settings
       {
-        service-point-manager
-        {
-          security-protocol=4032 // Tls|Tls11|Tls12 binary flag
-
-          service-point { uri=$(/$braintree-server-url) expect-100-continue=true }
-
-          policy
-          {
-            default-certificate-validation
-            {
-              case { uri=$(/$braintree-server-url) trusted=true}
-            }
-          }
-        }
 
         payment-processing
         {
           pay-system-host
           {
-            name='BraintreePrimary'
+            name='FakePaySystemHost'
             type='NFX.ITest.Web.Pay.FakePaySystemHost, NFX.ITest'
+            pay-system-prefix='BT'
           }
 
           pay-system
@@ -80,7 +66,7 @@ namespace NFX.ITest.Web.Pay
 
             default-session-connect-params
             {
-              name='BraintreePrimary'
+              name='Braintree'
               type='NFX.Web.Pay.Braintree.BraintreeConnectionParameters, NFX.Web'
 
               merchant-id=$(~BRAINTREE_SANDBOX_MERCHANT_ID)
@@ -109,28 +95,82 @@ namespace NFX.ITest.Web.Pay
     [Run]
     public void ValidNonce()
     {
-      #warning Should be rewritten
-      /*
-      var ps = PaySystem;
-
-      var acc = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, FakePaySystemHost.BRAINTREE_NONCE);
       Transaction tran = null;
-      using (var session = ps.StartSession())
-        tran = session.Charge(ctx, acc, Account.EmptyInstance, new Amount("usd", 99M), capture: false);
+      using (var session = PaySystem.StartSession())
+      {
+        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
 
-      var split = tran.ProcessorToken.AsString().Split(':');
+        var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, FakePaySystemHost.BRAINTREE_NONCE);
+        var toAccount = Account.EmptyInstance;
+        session.StoreAccountData(new ActualAccountData(fromAccount)
+          {
+            Identity = fromAccount.Identity,
+            IsNew = true,
+            IsWebTerminal = true,
+            AccountID = fromAccount.AccountID,
+            FirstName = "Stan",
+            LastName = "Ulam",
+            Phone = "(333) 777-77-77",
+            EMail = "s-ulam@myime.com",
+            BillingAddress = new Address { Address1 = "587 KIVA ST", PostalCode = "87544", City = "LOS ALAMOS", Region = "NM", Country = "USA" }
+          });
+        session.StoreAccountData(new ActualAccountData(toAccount));
+        tran = session.Charge(fromAccount, toAccount, new Amount("usd", 99M), capture: false);
+      }
 
-      tran.Capture(ctx);
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.IsTrue(tran.Type == TransactionType.Charge);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 0M));
+      Aver.IsTrue(tran.CanCapture);
+      Aver.IsFalse(tran.CanRefund);
+      Aver.IsTrue(tran.CanVoid);
 
-      ctx.IsNewCustomer = false;
-      ctx.CustomerId = split[0];
-      acc = new Account("user", acc.AccountID, split[1]);
-      FakePaySystemHost.SaveAccount(acc);
-      using (var session = ps.StartSession())
-        tran = session.Charge(ctx, acc, Account.EmptyInstance, new Amount("usd", 1000M), capture: false);
+      tran.Capture();
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountRefunded, new Amount("usd", 0M));
+      Aver.IsFalse(tran.CanCapture);
+      Aver.IsTrue(tran.CanRefund);
+      Aver.IsFalse(tran.CanVoid);
 
-      tran.Refund(ctx);
-      */
+      tran.Refund();
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountRefunded, new Amount("usd", 99M));
+      Aver.IsFalse(tran.CanCapture);
+      Aver.IsFalse(tran.CanRefund);
+      Aver.IsFalse(tran.CanVoid);
+    }
+
+    [Run]
+    [Aver.Throws(typeof(PaymentException), Message = "Expired Card", MsgMatch = Aver.ThrowsAttribute.MatchType.Exact)]
+    public void DeclinedNonce()
+    {
+      Transaction tran = null;
+      using (var session = PaySystem.StartSession())
+      {
+        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
+
+        var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, FakePaySystemHost.BRAINTREE_PROCESSOR_DECLINED_VISA_NONCE);
+        var toAccount = Account.EmptyInstance;
+        session.StoreAccountData(new ActualAccountData(fromAccount)
+          {
+            Identity = fromAccount.Identity,
+            IsNew = true,
+            IsWebTerminal = true,
+            AccountID = fromAccount.AccountID,
+            FirstName = "Stan",
+            LastName = "Ulam",
+            Phone = "(333) 777-77-77",
+            EMail = "s-ulam@myime.com",
+            BillingAddress = new Address { Address1 = "587 KIVA ST", PostalCode = "87544", City = "LOS ALAMOS", Region = "NM", Country = "USA" }
+          });
+        session.StoreAccountData(new ActualAccountData(toAccount));
+        tran = session.Charge(fromAccount, toAccount, new Amount("usd", 2004M), capture: false);
+      }
     }
 
     private IPaySystem m_PaySystem;

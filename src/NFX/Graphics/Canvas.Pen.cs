@@ -9,12 +9,16 @@ namespace NFX.Graphics
 {
   public sealed partial class Canvas : DisposableObject
   {
-    public abstract class Pen : Asset<IPALCanvasPen>
+    public sealed class Pen : Asset<IPALCanvasPen>
     {
-      protected Pen(IPALCanvasPen handle):base(handle)
+      internal Pen(IPALCanvasPen handle):base(handle)
       {
 
       }
+
+      public Color Color => Handle.Color;
+      public float Width => Handle.Width;
+      public PenDashStyle DashStyle => Handle.DashStyle;
     }
 
   }

@@ -9,9 +9,13 @@ namespace NFX.Graphics
   /// </summary>
   public abstract class ImageFormat
   {
+    public ImageFormat(int colors)
+    {
+      Colors = colors;
+    }
 
-    /// <summary> Gets bits per pixel </summary>
-    public abstract int BPP{ get;}
+    public readonly int Colors;
+
     public abstract string WebContentType { get;}
   }
 
@@ -22,12 +26,10 @@ namespace NFX.Graphics
   {
     public static readonly BitmapImageFormat Monochrome = new BitmapImageFormat(2);
 
-    public BitmapImageFormat(int colors)
+    public BitmapImageFormat(int colors) : base(colors)
     {
-
     }
 
-    public override int BPP{ get => 0;}
     public override string WebContentType { get => "image/bmp"; }
   }
 
@@ -41,16 +43,15 @@ namespace NFX.Graphics
     public static readonly PngImageFormat Standard = new PngImageFormat();
 
 
-    public PngImageFormat()//create full resolution
+    public PngImageFormat() : base(Int32.MaxValue) //create full resolution
     {
     }
 
-    public PngImageFormat(int colors)
+    public PngImageFormat(int colors) : base(colors)
     {
 
     }
 
-    public override int BPP{ get => 0;}
     public override string WebContentType { get => "image/png"; }
   }
 
@@ -61,12 +62,11 @@ namespace NFX.Graphics
   {
     public static readonly GifImageFormat Monochrome = new GifImageFormat(2);
 
-    public GifImageFormat(int colors)
+    public GifImageFormat(int colors) : base(colors)
     {
 
     }
 
-    public override int BPP{ get => 0;}
     public override string WebContentType { get => "image/gif"; }
   }
 
@@ -81,7 +81,7 @@ namespace NFX.Graphics
     /// </summary>
     public static readonly JpegImageFormat Standard = new JpegImageFormat(80);
 
-    public JpegImageFormat(int quality)
+    public JpegImageFormat(int quality) : base(Int32.MaxValue)
     {
       if (quality<0 || quality>100)
         throw new GraphicsException(StringConsts.ARGUMENT_ERROR+"{0}.ctor(quality<0|>100)".Args(nameof(JpegImageFormat)));
@@ -91,7 +91,6 @@ namespace NFX.Graphics
 
     public readonly int Quality;
 
-    public override int BPP{ get => 0;}
     public override string WebContentType { get => "image/jpeg"; }
   }
 }

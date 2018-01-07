@@ -104,7 +104,7 @@ nfx
       pay-system-host
       {
         name='StripePrimary'
-        type='NFX.NUnit.Integration.Web.Pay.FakePaySystemHost, NFX.NUnit.Integration'
+        type='NFX.ITest.Web.Pay.FakePaySystemHost, NFX.ITest'
 
         paypal-valid-account='[PAYPAL_VALID_ACCOUNT]'
       }

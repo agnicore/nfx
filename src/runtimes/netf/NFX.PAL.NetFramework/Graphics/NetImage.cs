@@ -19,7 +19,7 @@ namespace NFX.PAL.NetFramework.Graphics
 
     internal NetImage(Size size, Size resolution, ImagePixelFormat pixFormat)
     {
-      var pf = xlat(pixFormat);
+      var pf = xlator.xlat(pixFormat);
       m_Bitmap = new Bitmap(size.Width, size.Height, pf);
       m_Bitmap.SetResolution(resolution.Width, resolution.Height);
     }
@@ -42,7 +42,7 @@ namespace NFX.PAL.NetFramework.Graphics
 
     internal Bitmap Bitmap => m_Bitmap;
 
-    public ImagePixelFormat PixelFormat => xlat(m_Bitmap.PixelFormat);
+    public ImagePixelFormat PixelFormat => xlator.xlat(m_Bitmap.PixelFormat);
 
     public Color GetPixel(Point p) => m_Bitmap.GetPixel(p.X, p.Y);
     public void SetPixel(Point p, Color color) => m_Bitmap.SetPixel(p.X, p.Y, color);
@@ -99,7 +99,8 @@ namespace NFX.PAL.NetFramework.Graphics
       if (format is BitmapImageFormat)
       {
         codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Bmp.Guid);
-        pars = null;//new EncoderParameters(0);
+        pars = new EncoderParameters(1);
+        pars.Param[0] = new EncoderParameter(Encoder.ColorDepth, format.Colors);
       } else if (format is PngImageFormat)
       {
         codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == System.Drawing.Imaging.ImageFormat.Png.Guid);
@@ -118,36 +119,6 @@ namespace NFX.PAL.NetFramework.Graphics
 
 
       return ( codec: codec, pars: null );
-    }
-
-    private static System.Drawing.Imaging.PixelFormat xlat(ImagePixelFormat pf)
-    {
-      switch(pf)
-      {
-        case ImagePixelFormat.BPP1Indexed: return System.Drawing.Imaging.PixelFormat.Format1bppIndexed;
-        case ImagePixelFormat.BPP4Indexed: return System.Drawing.Imaging.PixelFormat.Format4bppIndexed;
-        case ImagePixelFormat.BPP8Indexed: return System.Drawing.Imaging.PixelFormat.Format8bppIndexed;
-        case ImagePixelFormat.BPP16Gray:   return System.Drawing.Imaging.PixelFormat.Format16bppGrayScale;
-        case ImagePixelFormat.RGB24:       return System.Drawing.Imaging.PixelFormat.Format24bppRgb;
-        case ImagePixelFormat.RGB32:       return System.Drawing.Imaging.PixelFormat.Format32bppRgb;
-        case ImagePixelFormat.RGBA32:      return System.Drawing.Imaging.PixelFormat.Format32bppArgb;
-        default: return System.Drawing.Imaging.PixelFormat.Canonical;
-      }
-    }
-
-    private static ImagePixelFormat xlat(System.Drawing.Imaging.PixelFormat pf)
-    {
-      switch(pf)
-      {
-        case  System.Drawing.Imaging.PixelFormat.Format1bppIndexed:     return ImagePixelFormat.BPP1Indexed;
-        case  System.Drawing.Imaging.PixelFormat.Format4bppIndexed:     return ImagePixelFormat.BPP4Indexed;
-        case  System.Drawing.Imaging.PixelFormat.Format8bppIndexed:     return ImagePixelFormat.BPP8Indexed;
-        case  System.Drawing.Imaging.PixelFormat.Format16bppGrayScale:  return ImagePixelFormat.BPP16Gray;
-        case  System.Drawing.Imaging.PixelFormat.Format24bppRgb:        return ImagePixelFormat.RGB24;
-        case  System.Drawing.Imaging.PixelFormat.Format32bppRgb:        return ImagePixelFormat.RGB32;
-        case  System.Drawing.Imaging.PixelFormat.Format32bppArgb:       return ImagePixelFormat.RGBA32;
-        default: return ImagePixelFormat.Default;
-      }
     }
   }
 }
