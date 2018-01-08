@@ -100,17 +100,14 @@ namespace NFX.Graphics
 
     public Rectangle Dimensions => new Rectangle(Point.Empty, Size);
 
-    public Size Resolution { get{  EnsureObjectNotDisposed(); return m_Handle.GetResolution(); } }
-    public int XResolution => Resolution.Width;
-    public int YResolution => Resolution.Height;
+    public int XResolution { get{  EnsureObjectNotDisposed(); return m_Handle.GetXResolution(); } }
+    public int YResolution { get{  EnsureObjectNotDisposed(); return m_Handle.GetYResolution(); } }
 
 
-    public void SetResolution(int xDPI, int yDPI) => SetResolution(new Size(xDPI, yDPI));
-
-    public void SetResolution(Size resolution)
+    public void SetResolution(int xDPI, int yDPI)
     {
       EnsureObjectNotDisposed();
-      m_Handle.SetResolution(resolution);
+      m_Handle.SetResolution(xDPI, yDPI);
     }
 
     public void MakeTransparent(Color? dflt = null)
@@ -155,7 +152,7 @@ namespace NFX.Graphics
       if (newSize.Width==0 || newSize.Height==0)
         throw new NFXException(StringConsts.ARGUMENT_ERROR + "Resize(size is empty)");
 
-      var result = Image.Of(newSize, Resolution, PixelFormat);
+      var result = Image.Of(newSize.Width, newSize.Height, XResolution, YResolution, PixelFormat);
 
       using (var canvas = result.CreateCanvas())
       {

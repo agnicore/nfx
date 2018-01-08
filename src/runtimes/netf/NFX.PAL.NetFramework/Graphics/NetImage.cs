@@ -19,7 +19,7 @@ namespace NFX.PAL.NetFramework.Graphics
 
     internal NetImage(Size size, Size resolution, ImagePixelFormat pixFormat)
     {
-      var pf = xlator.xlat(pixFormat);
+      var pf = System.Drawing.Imaging.PixelFormat.Format32bppArgb; // xlator.xlat(pixFormat);  20180108 SPOL: PixelFormat hardcoded for .NET
       m_Bitmap = new Bitmap(size.Width, size.Height, pf);
       m_Bitmap.SetResolution(resolution.Width, resolution.Height);
     }
@@ -50,8 +50,9 @@ namespace NFX.PAL.NetFramework.Graphics
     public Color GetPixel(PointF p) => m_Bitmap.GetPixel((int)p.X, (int)p.Y);
     public void SetPixel(PointF p, Color color) => m_Bitmap.SetPixel((int)p.X, (int)p.Y, color);
 
-    public Size GetResolution() => new Size((int)m_Bitmap.HorizontalResolution, (int)m_Bitmap.VerticalResolution);
-    public void SetResolution(Size resolution) => m_Bitmap.SetResolution(resolution.Width, resolution.Height);
+    public int GetXResolution() => (int)m_Bitmap.HorizontalResolution;
+    public int GetYResolution() => (int)m_Bitmap.VerticalResolution;
+    public void SetResolution(int xDPI, int yDPI) => m_Bitmap.SetResolution(xDPI, yDPI);
 
     public Size GetSize() => m_Bitmap.Size;
 

@@ -64,4 +64,13 @@
     <ProjectReference Include="..\NFX.UTest\NFX.UTest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Graphics\test.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Graphics\test.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

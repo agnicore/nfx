@@ -15,8 +15,9 @@ namespace NFX.PAL.Graphics
     /// <summary>
     /// PPI resolution
     /// </summary>
-    Size GetResolution();
-    void SetResolution(Size resolution);
+    int GetXResolution();
+    int GetYResolution();
+    void SetResolution(int xDPI, int yDPI);
 
     Color GetPixel(Point p);
     Color GetPixel(PointF p);
