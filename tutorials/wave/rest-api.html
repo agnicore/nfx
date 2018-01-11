@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>REST Server </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="REST Server ">
+    <meta name="generator" content="docfx 2.29.1.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse nfx-navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a href="../../index.html">
+                <img id="nfx-logo" src="../../images/NFX.Logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="rest-server">REST Server</h1>
+
+<p>With <strong>NFX.WAVE</strong> you can create Web API in a REST manner.
+In the present tutorial we demonstrate how this can be done.
+Some moments are described quite briefly, so please see previous tutorials for details.</p>
+<p>Let&#39;s create the simplest <strong>NFX.Wave</strong> REST API for the Clinic App - a web application that stores
+information about patients of some clinic.</p>
+<p>1. Create new C# Console Application project <code>ClinicApp</code>.</p>
+<p>2. Add reference to <strong>NFX</strong> (e.g. <a href="https://www.nuget.org/packages/NFX" target="_target">via NuGet</a>).</p>
+<p>3. Go to <code>Program.cs</code> and create <code>WaveServer</code> instance in the scope of <strong>NFX</strong> <code>ServiceBaseApplication</code> application container:</p>
+<pre><code class="lang-cs">using System;
+using NFX.ApplicationModel;
+using NFX.Wave;
+
+namespace ClinicApp
+{
+  class Program
+  {
+    static void Main(string[] args)
+    {
+      try
+      {
+        using (var app = new ServiceBaseApplication(args, null))
+        using (var server = new WaveServer())
+        {
+          server.Configure(null);
+          server.Start();
+          Console.WriteLine(&quot;server started...&quot;);
+          Console.ReadLine();
+        }
+      }
+      catch (Exception error)
+      {
+        Console.WriteLine(&quot;Critical error:&quot;);
+        Console.WriteLine(error);
+        Environment.ExitCode = -1;
+      }
+    }
+  }
+}
+</code></pre><p>4. Create the following project folders: <code>Controllers</code>, <code>Data</code>, <code>Data\Models</code>. </p>
+<p>5.
+Let us add application data infrastructure.</p>
+<p>Add the following classes in <code>Data\Models</code> folder:</p>
+<pre><code class="lang-cs">public class Doctor : TypedRow
+{
+  [Field(required: true)]
+  public int ID { get; set; }
+
+  [Field(required: true, maxLength: 32, description: &quot;First Name&quot;)]
+  public string FirstName { get; set; }
+
+  [Field(required: true, maxLength: 32, description: &quot;Last Name&quot;)]
+  public string LastName { get; set; }
+
+  public string FullName { get { return &quot;{0} {1}&quot;.Args(FirstName, LastName); } }
+}
+
+public class Patient : TypedRow
+{
+  [Field(required: true)]
+  public int ID { get; set; }
+
+  [Field(description: &quot;Doctor&quot;)]
+  public int? DoctorID { get; set; }
+
+  [Field(required: true, maxLength: 32, description: &quot;First Name&quot;)]
+  public string FirstName { get; set; }
+
+  [Field(required: true, maxLength: 32, description: &quot;Last Name&quot;)]
+  public string LastName { get; set; }
+
+  [Field(required: true, min: 0, description: &quot;Age&quot;)]
+  public int Age { get; set; }
+
+  public void UpdateFrom(Patient other)
+  {
+    this.DoctorID  = other.DoctorID;
+    this.FirstName = other.FirstName;
+    this.LastName  = other.LastName;
+    this.Age       = other.Age;
+  }
+}
+</code></pre><p>Note that both models are inherited from <code>NFX.DataAccess.CRUD.TypedRow</code> class.</p>
+<p>6. We also need some data store to persist our data. In real life application some RDBMS most likely will be used. 
+In our toy example the data will be stored in memory for the case of simplicity.</p>
+<p>Let us implement our data store. Add the following <code>ClinicDataStore</code> class to <code>Data\</code> folder</p>
+<pre><code class="lang-cs">public class ClinicDataStore : ApplicationComponent, IDataStoreImplementation, IConfigurable
+{
+  private readonly Dictionary&lt;int, Doctor&gt;  m_Doctors  = new Dictionary&lt;int, Doctor&gt;();
+  private readonly Dictionary&lt;int, Patient&gt; m_Patients = new Dictionary&lt;int, Patient&gt;();
+
+  public ClinicDataStore()
+  {
+    m_Doctors.Add(1, new Doctor { ID=1, FirstName=&quot;Stephan&quot;, LastName=&quot;Bankh&quot; });
+    m_Doctors.Add(2, new Doctor { ID=2, FirstName=&quot;Stan&quot;,    LastName=&quot;Ulem&quot; });
+
+    m_Patients.Add(1, new Patient { ID=1, FirstName=&quot;Johny&quot;,  LastName=&quot;Oldman&quot;,      Age=34, DoctorID=1 });
+    m_Patients.Add(2, new Patient { ID=2, FirstName=&quot;Rob&quot;,    LastName=&quot;Closeheimer&quot;, Age=43, DoctorID=1 });
+    m_Patients.Add(3, new Patient { ID=3, FirstName=&quot;Andrew&quot;, LastName=&quot;Sugarov&quot;,     Age=29, DoctorID=2 });
+  }
+
+  #region CRUD
+
+  #endregion
+
+  #region IDataStoreImplementation, IApplicationComponent, IConfigurable
+
+  #endregion
+}
+</code></pre><p>We use the concept of <strong>NFX</strong> Data Store - a single application data access point.
+After proper setup of this class in configuration file, its instance will be accessible through <code>App.DataStore</code> static property.</p>
+<p>Let us leave interfaces implementation default</p>
+<pre><code class="lang-cs">
+#region IDataStoreImplementation, IApplicationComponent, IConfigurable
+
+  public string TargetName { get { return &quot;ClinicDB&quot;; } }
+  public StoreLogLevel LogLevel { get; set;}
+  public bool InstrumentationEnabled { get; set; }
+  public IEnumerable&lt;KeyValuePair&lt;string, Type&gt;&gt; ExternalParameters { get { return null; } } 
+
+  public void TestConnection()
+  {
+  }
+
+  public void Configure(IConfigSectionNode node)
+  {
+    ConfigAttribute.Apply(this, node);
+  }
+
+  public IEnumerable&lt;KeyValuePair&lt;string, Type&gt;&gt; ExternalParametersForGroups(params string[] groups)
+  {
+    throw new NotImplementedException();
+  }
+
+  public bool ExternalGetParameter(string name, out object value, params string[] groups)
+  {
+    throw new NotImplementedException();
+  }
+
+  public bool ExternalSetParameter(string name, object value, params string[] groups)
+  {
+    throw new NotImplementedException();
+  }
+
+#endregion
+</code></pre><p>Add basic CRUD logic to our data store:</p>
+<pre><code class="lang-cs">#region CRUD
+
+  public void CreatePatient(Patient patient)
+  {
+    var id = m_Patients.Keys.Max() + 1;
+    patient.ID = id;
+    m_Patients.Add(id, patient);
+  }
+
+  public IEnumerable&lt;Patient&gt; GetPatients()
+  {
+    return m_Patients.Values;
+  }
+
+  public Patient GetPatient(int id)
+  {
+    return m_Patients[id];
+  }
+
+  public void UpdatePatient(Patient patient)
+  {
+    var persisted = m_Patients[patient.ID];
+    persisted.UpdateFrom(patient);
+  }
+
+  public void DeletePatient(int id)
+  {
+    m_Patients.Remove(id);
+  }
+
+  public Doctor GetDoctor(int id)
+  {
+    return m_Doctors[id];
+  }
+
+  public IEnumerable&lt;Doctor&gt; GetDoctors()
+  {
+    return m_Doctors.Values;
+  }
+
+#endregion
+</code></pre><p>7. Now we need to add API controller to our project. </p>
+<p>Add the class <code>Patients</code> to <code>Controllers</code> folder:</p>
+<pre><code class="lang-cs">using NFX;
+using NFX.Serialization.JSON;
+using NFX.Wave.MVC;
+using ClinicApp.Data;
+using ClinicApp.Data.Models;
+
+namespace ClinicApp.Contollers
+{
+  public class Patients : Controller
+  {
+    [Action(&quot;index&quot;, 0, &quot;match{methods=GET accept-json=true}&quot;)]
+    public object Index()
+    {
+      var data = (ClinicDataStore)App.DataStore;
+      var patients = data.GetPatients().OrderBy(p =&gt; p.ID);
+      var result = new JSONDataArray(patients);
+
+      return result;
+    }
+
+    [Action(&quot;details&quot;, 0, &quot;match{methods=GET accept-json=true}&quot;)]
+    public object Details_GET(int id)
+    {
+      var data = (ClinicDataStore)App.DataStore;
+      var patient = (id==0) ? new Patient() : data.GetPatient(id);
+      return patient;
+    }
+
+    [Action(&quot;details&quot;, 1, &quot;match{methods=POST accept-json=true}&quot;)]
+    public object Details_POST(Patient patient)
+    {
+      var data = (ClinicDataStore)App.DataStore;
+      data.CreatePatient(patient);
+
+      return NFX.Wave.SysConsts.JSON_RESULT_OK;
+    }
+
+    [Action(&quot;details&quot;, 2, &quot;match{methods=PUT accept-json=true}&quot;)]
+    public object Details_PUT(Patient patient)
+    {
+      var data = (ClinicDataStore)App.DataStore;
+      data.UpdatePatient(patient);
+
+      return NFX.Wave.SysConsts.JSON_RESULT_OK;
+    }
+
+    [Action(&quot;details&quot;, 3, &quot;match{methods=DELETE accept-json=true}&quot;)]
+    public object Details_DELETE(int id)
+    {
+      var data = (ClinicDataStore)App.DataStore;
+      data.DeletePatient(id);
+      return NFX.Wave.SysConsts.JSON_RESULT_OK;
+    }
+  }
+}
+</code></pre><p>8. The last step is to add config file with server settings, MVC handler path matches etc.</p>
+<pre><code class="lang-js">application
+{
+  data-store
+  {
+    type=&quot;ClinicApp.Data.ClinicDataStore, ClinicApp&quot;
+  }
+
+  wave
+  {
+    server
+    {
+      prefix { name=&quot;http://localhost:8070/&quot; }
+      dispatcher
+      {
+        handler
+        {
+          order=1
+          name=&quot;Stock Content Embedded Site&quot;
+          order=1000
+          type=&quot;NFX.Wave.Handlers.StockContentSiteHandler, NFX.Wave&quot;
+          match{ path=&quot;/stock/{*path}&quot;}
+        }
+
+        handler
+        {
+          order=10
+          type=&quot;NFX.Wave.Handlers.MVCHandler, NFX.Wave&quot;
+          type-location
+          {
+            assembly=&quot;ClinicApp.exe&quot;
+            ns { name=&quot;ClinicApp.Contollers&quot; }
+          }
+
+          match
+          {
+            order=1
+            path=&quot;patients&quot;
+            var{ name=type default=&#39;Patients&#39; }
+            var{ name=mvc-action default=&#39;Index&#39; }
+          }
+
+          match
+          {
+            order=10
+            path=&#39;patients/{id}&#39;
+            var{ query-name=* }
+            var{ name=type default=&#39;Patients&#39; }
+            var{ name=mvc-action default=&#39;Details&#39; }
+          }
+
+          match
+          {
+            order=100
+            path=&quot;/{type=Patients}/{mvc-action=Index}&quot;
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre><p>Make sure that Build Action is set to None and Copy to Output Directory is set to Copy Always.</p>
+<p>9. Our REST API is ready to use. You can test it via any HTTP request generator. The following <strong>curl</strong> request</p>
+<pre><code>curl -H &quot;Accept: application/json&quot;
+     -X GET http://localhost:8070/patients/
+</code></pre><p>will return</p>
+<pre><code>[
+  {&quot;ID&quot;:1,&quot;DoctorID&quot;:1,&quot;FirstName&quot;:&quot;Johny&quot;,&quot;LastName&quot;:&quot;Oldman&quot;,&quot;Age&quot;:24},
+  {&quot;ID&quot;:2,&quot;DoctorID&quot;:1,&quot;FirstName&quot;:&quot;Rob&quot;,&quot;LastName&quot;:&quot;Closeheimer&quot;,&quot;Age&quot;:43},
+  {&quot;ID&quot;:3,&quot;DoctorID&quot;:2,&quot;FirstName&quot;:&quot;Andrew&quot;,&quot;LastName&quot;:&quot;Sugarov&quot;,&quot;Age&quot;:29}
+]
+</code></pre><p>Try requests</p>
+<pre><code>curl -i
+     -H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot; 
+     -X POST -d {\&quot;FirstName\&quot;:\&quot;Bill\&quot;,\&quot;LastName\&quot;:\&quot;Zimmer\&quot;,\&quot;Age\&quot;:55} http://localhost:8070/patients/0
+</code></pre><pre><code>curl -i
+     -H &quot;Accept: application/json&quot; -H &quot;Content-Type: application/json&quot; 
+     -X PUT -d {\&quot;ID\&quot;:1,\&quot;FirstName\&quot;:\&quot;New\&quot;,\&quot;LastName\&quot;:\&quot;Name\&quot;,\&quot;Age\&quot;:55} http://localhost:8070/patients/1
+</code></pre><pre><code>curl -i 
+     -H &quot;Accept: application/json&quot; 
+     -X DELETE http://localhost:8070/patients/3
+</code></pre><p>followed by GET request to see our API in work.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2006-2017 
+            <a href="http://itadapter.com/" target="_blank" title="ITAdapter Corp Inc">
+              <img id="itadapter-logo-small" src="/images/itadapter.Logo.png" alt="ITAdapter Corp Inc">
+            </a>
+            <br>
+            Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-98640025-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>  </body>
+</html>

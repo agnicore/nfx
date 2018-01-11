@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>High Load Server </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="High Load Server ">
+    <meta name="generator" content="docfx 2.29.1.0">
+    
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse nfx-navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a href="../../index.html">
+                <img id="nfx-logo" src="../../images/NFX.Logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="high-load-server">High Load Server</h1>
+
+<p>One of the main benefit of <strong>Glue</strong> technology is speed, which is achieved by fast and effectiove <strong>Slim</strong> technology.
+Below is step-by-step guide to of high-load server. You can also choose between parallel and syncronous version of the test.
+The guide is quite brief in some places. For details, please check the <a href="echo.html">demo</a>.</p>
+<p>1. Create new blank C# solution and add Class Library project <code>DemoContracts</code>
+with the reference to <strong>NFX</strong> (e.g. <a href="https://www.nuget.org/packages/NFX" target="_target">via NuGet</a>)</p>
+<p>2. Add IHighLoadService.cs file with the following contents:</p>
+<pre><code class="lang-cs">[Glued]
+public interface IHighLoadService
+{
+  /// &lt;summary&gt;
+  /// Does not generate call receipt (one-way call)
+  /// &lt;/summary&gt;
+  [OneWay]
+  void Ping1();
+
+  /// &lt;summary&gt;
+  /// Generates call receipt (two-way call)
+  /// &lt;/summary&gt;
+  void Ping2();
+}
+</code></pre><p>3. Add new C# Console Application project <code>DemoServer</code> with the references to <strong>NFX</strong> and <code>DemoContracts</code> project. Add DemoServer.laconf laconic configuration file:</p>
+<pre><code class="lang-js">application
+{
+  glue
+  {
+    bindings
+    {
+      binding
+      {
+        name=&quot;sync&quot;
+        type=&quot;NFX.Glue.Native.SyncBinding, NFX&quot;
+      }
+    }
+
+    servers
+    {
+      server
+      {
+        node=&quot;sync://localhost:8080&quot;
+        contract-servers=$&quot;DemoServer.HighLoadService, DemoServer&quot;
+      }
+    }
+  }
+}
+</code></pre><p>Be sure to set Build Action : None and Copy to Output Directory: Always in the config file properties.</p>
+<p>4. Add HighLoadService.cs file with the contents:</p>
+<pre><code class="lang-cs">public class HighLoadService : IHighLoadService
+{
+  public void Ping1()
+  {
+  }
+
+  public void Ping2()
+  {
+  }
+}
+</code></pre><p>5. Add the following code to the <code>Main</code> method of DemoServer.Program.cs file</p>
+<pre><code class="lang-cs">using (var application = new ServiceBaseApplication(args, null))
+{
+  Console.WriteLine(&quot;server is running...&quot;);
+  Console.WriteLine(&quot;Glue servers:&quot;);
+  foreach (var service in App.Glue.Servers)
+    Console.WriteLine(&quot;   &quot; + service);
+
+  Console.ReadLine();
+}
+</code></pre><p>6. Add the last one C# Console Application project <code>DemoClient</code> with the references to <strong>NFX</strong> and <code>DemoContracts</code> project.
+Add DemoClient.laconf laconic configuration file:</p>
+<pre><code class="lang-js">application
+{
+  glue
+  {
+    bindings
+    {
+      binding
+      {
+        name=&quot;sync&quot;
+        type=&quot;NFX.Glue.Native.SyncBinding, NFX&quot;
+      }
+    }
+  }
+}
+</code></pre><p>Again, be sure to set Build Action : None and Copy to Output Directory: Always in the file properties.</p>
+<p>7. Create client proxy class that will operate with the service above:</p>
+<p>gluec &quot;$(SolutionDir)DemoContracts/bin/Debug/DemoContracts.dll&quot; /o out=&quot;$(SolutionDir)DemoClient&quot; cl-suffix=&quot;AutoClient&quot;</p>
+<p>Rebuild <code>DemoContracts</code> project and add the file HighLoadServiceAutoClient.cs to the <code>DemoClient</code> project (the file will appear in the root of the project).</p>
+<p>8. Add the following code to the <code>Main</code> method of DemoClient.Program.cs:</p>
+<pre><code class="lang-cs">using (var application = new ServiceBaseApplication(args, null))
+{
+  using (var client = new HighLoadServiceAutoClient(&quot;sync://localhost:8080&quot;))
+  {
+    while (true)
+    {
+      var input = Console.ReadLine();
+      var cmd = input.Split(new char[] { &#39; &#39; }, StringSplitOptions.RemoveEmptyEntries);
+      exeCommand(client, cmd);
+    }
+  }
+}
+</code></pre><p>Add the following method:</p>
+<pre><code class="lang-cs">private static void exeCommand(HighLoadServiceAutoClient client, string[] cmd)
+{
+  var ops = cmd[0].AsInt();
+  var isOneWay = cmd[1].AsBool();
+  var isParallel = cmd[2].AsBool();
+
+  var timer = new Stopwatch();
+  timer.Start();
+
+  if (isOneWay)
+  {
+    if (isParallel)
+      Parallel.For(0, ops, i =&gt; client.Ping1());
+    else
+      for (int i=0; i&lt;ops; i++)
+        client.Ping1();
+  }
+  else
+  {
+    if (isParallel)
+      Parallel.For(0, ops, i =&gt; client.Ping2());
+    else
+      for (int i = 0; i &lt; ops; i++)
+        client.Ping2();
+  }
+
+  timer.Stop();
+
+  Console.WriteLine(&quot;Executed:    {0} ops {1} {2}&quot;, ops, isOneWay ? &quot;one-way&quot; : &quot;&quot;, isParallel ? &quot;parallel&quot; : &quot;&quot;);
+  Console.WriteLine(&quot;Total time:  {0} ms&quot;, timer.Elapsed.TotalMilliseconds);
+  Console.WriteLine(&quot;Performance: {0} ops/sec&quot;, (ops / timer.Elapsed.TotalSeconds).AsInt());
+}
+</code></pre><p>You will also need to add usings</p>
+<pre><code class="lang-cs">using System.Diagnostics;
+using NFX;
+using NFX.ApplicationModel;
+using DemoContracts.GluedClients;
+</code></pre><p>9. Run <code>DemoServer</code> server host and start the <code>DemoClient</code> client application.
+Execute the following commands sequentially: &quot;100000 true false&quot;, &quot;100000 true true&quot;, &quot;100000 false true&quot;, &quot;100000 false false&quot;. 
+The output will be like</p>
+<pre><code>Executed:    100000 ops one-way
+Total time:  1005 ms
+Performance: 99414 ops/sec
+
+Executed:    100000 ops one-way parallel
+Total time:  433 ms
+Performance: 230915 ops/sec
+
+Executed:    100000 ops parallel
+Total time:  1028 ms
+Performance: 97246 ops/sec
+
+Executed:    100000 ops
+Total time:  4008 ms
+Performance: 24949 ops/sec
+</code></pre></article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2006-2017 
+            <a href="http://itadapter.com/" target="_blank" title="ITAdapter Corp Inc">
+              <img id="itadapter-logo-small" src="/images/itadapter.Logo.png" alt="ITAdapter Corp Inc">
+            </a>
+            <br>
+            Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="text/javascript">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-98640025-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>  </body>
+</html>
