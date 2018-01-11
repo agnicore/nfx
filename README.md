@@ -21,9 +21,9 @@ License: **Apache 2.0**
 Runs/Builds:  **.NET 4.7.1+**, **Core 2+** 
 
 
-[<img src="https://ci.appveyor.com/api/projects/status/github/agnicore/nfx?svg=true" alt="Project Badge" width="200">](https://ci.appveyor.com/project/agnicore/nfx/history)
+[<img src="https://ci.appveyor.com/api/projects/status/6qhr08iclbbfc5f5?svg=true" alt="Project Badge" width="150">](https://ci.appveyor.com/project/itadapter/nfx-29btl/history)
 
-Documentation: [http://nfxlib.com TO BE UPDATED  ](http://nfxlib.com)
+Documentation: [http://nfxlib.com](http://nfxlib.com)
 
 ## Framework/Platform Support
 NFX is now based on .NET Standard which works on different runtimes. Officially we support .NET Core and .NET Framework:
