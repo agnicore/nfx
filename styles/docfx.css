@@ -1024,15 +1024,9 @@ div.embeddedvideo iframe {
     margin: 8px 8px 8px 0;
 }
 
-#itadapter-logo {
-    height: 19px;
-    margin-top: -3px;
-    padding: 8px 8px 4px 0;
-}
-
-#itadapter-logo-small {
-    height: 20px;
-    margin: 8px 8px 4px 0;
+#agnicore-logo-small {
+    height: 15px;
+    margin: -2px 8px 4px 0;
 }
 
 .imgHomePage {
