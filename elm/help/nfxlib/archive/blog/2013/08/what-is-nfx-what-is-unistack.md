@@ -1,0 +1,144 @@
+# What is NFX? What is Unistack?
+
+The name "NFX" stands for ".NET Framework Extension", there is also "JFX" and "\*FX" in works. All of them form a "Unistack". "Unistack" = "Unified Software Stack", a conceptually-monolithic library that facilitates whatever service/facilities developers need to create **scale-able**, solid business/data-driven application systems (not just applications). As such, the unistack support many facilities that traditionally are scattered among myriads of disjoint software frameworks.
+
+## What is NFX?
+NFX is a **application-system development framework** that addresses the following concerns in a **UNIFIED** (as in the "same pattern") way. Oh, and one more thing. NFX does not use any 3rd party libraries for the services it provides, except for things like database driver (i.e. MongoDB driver). So, NFX is a self-contained library (but for DB drivers) which is less than 2 mb in size compiled that provides:
+- **Application Container** - no counterpart in .NET framework
+  - Provides a unified model (the same way of working with) for **all application types**: console, web, forms, service
+  - Provides central hub for all application services: log, instrumentation, glue, throttling, security, zoned time etc.
+  - Dependency injection container
+  - Policy/Behavior injection container
+  - Configuration management
+  - **Big Memory** object database client - promotes **stateful in-memory programming mode** for web and other server applications. Supports **virtual out-of-process** heaps of native CLR objects, supported by custom-purposed CLR-specific - - serialization mechanisms, with **ability to transform object memory field structure between software upgrades**
+- **Code Analysis** - no counterpart in .NET framework
+  - Promotes run-time code/textual analysis that is very useful for pattern matching, serialization of dynamic formats and code inventorization
+  - Provides general abstraction for **languages**, their **lexers, parsers** and semantic analyzers
+  - Facilitates code analysis, provides pattern-matching **language polymorphic Finite State Machine** implementations
+  - Organically supports non-copying serializers/deserializers of various text-based dynamic formats (XML, JSON, Erlang tuple stream, Laconic, etc.)
+- **Data Abstraction Layer** - replaces System.Data, ORMs (nHibernate, LINQ to SQL, Entity Framework)
+  - Decouples business code from particular backing store implementations, supports SQL and NoSQL backends in the same way
+  - Scaffolds RDB and NoSQL data, based on meta-information
+  - Generates CRUD SQL automatically according to "Convention-over-Config" pattern, with ability to override any underlying provider statement
+  - Abstracts non-homogeneous/hybrid data stores in a unified data-access service available within the application container
+  - Support as of right now: **PostgreSQL, MsSQLServer, MySQL, MongoDB**. Planned: Oracle, DB2, Riak, CouchDB, Redis, Mnesia
+  - DataStore providers may utilizes NATIVE CAPABILITIES of the target backend, developers can use backend-proprietary features without sacrificing performance (i.e. use CONNECT BY in ORACLE)
+  - Ability to optionaly implement Query handlers in code i.e. when particular backend can not perform some action using built-in command
+- **Environment / Configuration** - compensates for .NET configuration framework deficiencies described [here](/archive/blog/2013/08/aum-configuration-as-facilitated-by-nfx.html "Aum Configuration as Facilitated By NFX")
+  - Format-abstract configuration tree in memory
+  - Non-file-based configurations (i.e. database configuration, cluster configuration, command-args-based configuration)
+  - Supports XML and Laconic configuration file formats by default
+  - Embed-able in Microsoft configuration system (i.e. web.config)
+  - Full support for variable evaluation within configuration, path concatenation support (slashes)
+  - Node navigation a la XPath (but works on any format including JSON and INI files)
+  - Full support for imperative macro execution within configuration (IF, LOOP, SET)
+  - Structural configuration merging, overrides, with rules (allow/stop/deny)
+  - Aspect injection with Behaviors
+  - Host environment variables support
+  - APIs to configure classes (fields/properties) using attributes declaratively or imperatively
+  - Plug-able macros for variable and function evaluation (i.e. DATE= :NOW)
+  - Dependency injection class factory utils integrated
+  - Unified way to configure any compoent in NFX (be it logger, CRUD data store, MVC, or anything else)
+- **Instrumentation** - much more flexible than .NET performance counters (i.e.write into cluster server or NoSQL db or file)
+  - Events, gauges, levels, typed classes - Datum-based type safe classes checked at compile time
+  - Multiple classifications of instruments (i.e. MyDatabaseFreePrimaryDisk = MyDatabaseIsntrument, IOInstrument, DataVolumeInstrument, etc. )
+  - Asynchronous transparent acquisition of data - non performance affecting
+  - Plug-able instrumentation backends (i.e. MongoDB, log file, Aum Cluster Server)
+  - Application container log integration
+  - Multidimensional histograms
+- **Code Inventorization** - no counterpart in .NET framework
+  - Promotes decoration of types and methods with Inventory attribute
+  - Allows to automatically discover various components of the system based on their logical classification (i.e. deployment risk)
+  - Allows for creation of various automation tools that may generate/transform code based on some other code/metadata provided by inventorization
+  - In cloud/cluster framework allows for automatic registration of components, services and their coupling
+- **Various IO Formats** - no such concept in .NET framework
+  - Provides polymorphic StreamerFormat-derived classes that allow for efficient reading/writing of various binary terms
+  - Supports unified parsing of binary format such as Slim, Erlang OTP etc.
+  - Supports native Hadoop binary formatting (protocol)
+- **Logging** - no built-in library in .NET framework (replaces MS EntLib, Log4Net, NLog, etc.)
+  - Asynchronous logging, priority logging
+  - Sinks: MsSQLServer, SMTP, CSV file, debug file, MongoDB, Composite, AsyncComposite, *nix Syslog
+  - Filters: Level ranges, days of week, hour ranges, date ranges, message patterns, custom filters (injectable filter statement)
+  - SLA, Failures, Failovers (when A fails, log to B)
+  - Flood prevention (log message time latch)
+  - DEBUG/TRACE integration
+  - Instrumentation integration
+- **Record Model - MVVM not only for Web** - no built-in library in .NET framework
+  - Unified model for: Web, console, Forms, or anything else (Wpf, Silverlight etc.)
+  - Allows developers to write complex business logic without considering the particular view/UI engine
+  - Supports complex lookup scenarios - foreign keys selectable from a different model/screen
+  - Various levels of validation: record-level, field-level, deferred
+  - Field attributes: Enabled, Visible, Applicable, ReadOnly, Validated, Valid, Modified, Description, Watermark... and many more
+  - Field validation attributes: Required, Default, Min/Max checking, Regexp, US Zip/Phone, Lookup Dictionaries, Char Casing, Passwords
+  - Automatic DataStore CRUD (no need to write any SQL or NoSQL commands to load/save records) with ability to override default behaviors
+  - Stateful programming - models may be retained between calls in BigMemory heap allowing for 100% stateful programming in volatile environments (i.e. on the Web)
+  - Custom validation scripts for various targets (i.e. field/record-level validation JavaScript for browser)
+- **Relational Model** - no built-in library either .NET or any other major framework
+  - Declarative well-structured programming language for database design (not only for RDBMS)
+  - Database schema becomes parsable configuration file - i.e. can generate code, analyze dependencies etc. Can not parse ORACLE specific DDL now to generate C# code? How about MongoDB?(there is no DDL in MongoDB), however there is RelationSchema in NFX which is the same source be it ORACLE, MongoDB, Google BigTable or anything else that you may to want to model against
+  - Pluggable backend compiler generates DDL/script for particular backends
+  - Supports: tables, check constraints, keys, indexes, foreign keys, comments, verbatim scripts, domains, identities
+  - Allows to execute macros - i.e.create many tables in a loop and make them inter-dependent
+  - Outputs DDL statements of various kinds in either different or the single files
+  - Supports data domains (even if backend does not support it) with pick-lists and range checks
+  - Supports identities that result in different entities (Sequence in ORACLE, IDENTITY in MsSQL etc..)
+  - Supports delta schema generation
+- **Security** - built-in support in .NET is very weak and hard to deal with (especially when there are 100s of permissions to check). .NEt permissions are called "Roles" and basically are boolean flags. In NFX permissions are complex vectors that may support integer levels of access along with any number of custom flags (i.e. "allow to print invoice, but hide The co-payor names")
+  - Integrated with all components of NFX
+  - Unified security model for: web, console, service, forms, wpf, etc.
+  - Declaratively guard mathods/classes/actions, or imperatively check access levels by hand
+  - **Typed permissions**, no need to type strings, type classes instead and get a compile-time error if mispelled
+  - **Imperative permissions**, write addition security assertions in the permission - inversion of control principle
+  - Designed to handle 1000s of permissions/grants per user - this is needed for systems with many screens where every field/button may need to be protected
+  - Smart security descriptor caching /invalidation
+  - Credentials/Identity/Tokens marshalling, transparent impersonation of users on remote hosts via Glued endpoints
+  - Built for modern web/distributed systems: Integration with **OAuth, Twitter, Facebook, LinkedIn and others** using flexible Credentials class (that you can derive from)
+- **Serialization** - replaces various 3rd party libs working with JSON. Replaces DataContractSerializer for internal Glue programming
+  - Slim Serialization - supports efficient binary serialization of CLR types. Implementation uses dynamic compilation of expression trees that yields much better (up to 15 times faster) performace than binary formatter. No need for   - data contracts.
+  - JSON Serialization - very fast reading/writing objects without extra string copies. Perform JSON pattern matching over lexer-provided token stream (no need to parse the content if match does not happen). Output objects into JSON in   - a custom way (IJSONWritable).
+  - Erlang native binary term serialization
+  - Portable Object Documents - a format to express complex (including cyclical) native object graphs in normalized way (i.e. without reference cycles). Change object version and migrate objects using transforms
+- **Service Model** - no counterpart in .NET
+  - Promotes a concept of a light-weight service - a "process" that may or may not own a thread/threads
+  - Integrates in dependency injection application container. All major components in NFX are services
+  - Provides message pumps/queues for asynchronous parallel programming
+- **Templatization** - in .NET only text templates are implemented for web an VS templates
+  - Allows to create templates for any content generation (not only text, i.e. may create templatized images)
+  - Provides text-based engine for generic document generation, and web documents. Performs 25% faster than classic ASP.NET pages and up to 40% faster than Razor
+  - Web: may be served as pages or MVC views. Templates are 100% embed-able in DLL, no need to deploy files. No one will mend web page files by hand on a 100 server farm
+- **Throttling** - no counterpart in .NET
+  - Declarative/imperative control of throughput
+  - Time sliding/spacing throttles
+  - Execution quotas (transactions per second, CPU% etc.)
+- **Time Services** - no counterpart in .NET as there are no "service" and "application" concepts
+  - Facilitates distributed cluster-enabled programming in regions that span many time zones
+  - Time Zoning in the application container. All components of the container may work in pre-configured zones (i.e. log time, transaction time, local time etc.). Zones defined by policies (possibly cluster-global)
+  - Injectable external time sources (high precision/remote clocks)
+  - Inter-component Time zone conversions
+- **Web-specific MVC (Model View Controller)** - supersedes ASP.MVC
+  - Tiny implementation (less than 15 classes)
+  - Routing support, controllers, actions, parameter binding, JSON support
+  - 100% integrated with security/authorization/authentication - just tag action methods with permission attributes (that may be typed)
+  - May use MVC without routing
+  - Supports 100% stateful controllers (in addition to traditional stateless architecture) - controller instances may live in BigMemory heaps
+  - Declarative control of controller lifecycle, timeouts, security, Http constraints etc.
+  - Automatic payload parsing/assignment toform action methods
+  - Integrated support for NFX.Templatization (return typed views etc.)
+- **Web controls for RecordModel MVVM (auto building controls)** - no similar concept in .NET or other major frameworks
+  - Utilize metadata
+  - Think about records and fields, not about divs and CSS
+  - Override by hand in custom cases
+  - Field views and grids
+  - We support foreign keys (when they have to be looked-up from other screens with 100000 rows )
+  - Declarative fields placement in HTML template markup
+- **Windows forms controls for RecordModel** - no similar concept in .NET or other major frameworks
+  - Very similar to the controls on the Web
+  - Utilize metadata
+  - Thinks about records and fields, not boxes/buttons and style properties
+  - Override by hand in custom cases
+  - Field views, grids and forms
+  - We support foreign keys (when they have to be looked-up from other screens with 100000 rows)
+
+  ---
+  Dmitriy Khmaladze  
+  August 21, 2013

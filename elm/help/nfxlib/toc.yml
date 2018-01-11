@@ -1,0 +1,23 @@
+- name: Book
+  tocHref: book/toc.yml
+  topicHref: book/
+ 
+- name: Specifications
+  tocHref: specs/toc.yml
+  topicHref: specs/
+
+- name: Tutorials
+  tocHref: tutorials/toc.yml
+  topicHref: tutorials/
+  
+- name: Tools
+  href: tools/
+
+- name: Documentation
+  href: docs/
+  
+- name: Archive
+  href: archive/
+
+- name: Contribute
+  href: "https://github.com/aumcode/nfx"

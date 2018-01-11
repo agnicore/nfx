@@ -1,0 +1,76 @@
+- name: Blog
+  href: blog/index.md
+  items:
+  - name: 2015 (1)
+    items:
+    - name: March (1)
+      items:
+      - name: Apache Thrift vs NFX.Glue Benchmark
+        href: blog/2015/03/thrift-vs-glue-benchmark.md
+  - name: 2014 (3)
+    items:
+    - name: August (2)
+      items:
+      - name: Aum Cluster or Cloud?
+        href: blog/2014/08/aum-cluster-or-cloud.md
+      - name: NFX.Glue - Interprocess Communication
+        href: blog/2014/08/glue-interprocess-communication.md
+    - name: July (1)
+      items:
+      - name: UNISTACK - a form of Intellectual Property Compression
+        href: blog/2014/07/unistack-form-of-intellectual-property-compression.md
+  - name: 2013 (11)
+    items:
+    - name: November (3)
+      items:
+      - name: NFX Instrumentation and Telemetry
+        href: blog/2013/11/nfx-instrumentation-and-telemetry.md
+      - name: Working with JSON data in NFX
+        href: blog/2013/11/working-with-json-data-in-nfx.md
+      - name: Aum Cluster - Application Remote Terminals
+        href: blog/2013/11/aum-cluster-application-remote-terminals.md
+    - name: October (1)
+      items:
+      - name: NFX Native Interoperability of .NET with Erlang
+        href: blog/2013/10/nfx-native-interoperability-of-net-with-erlang.md
+    - name: September (1)
+      items:
+      - name: NFX Online Documentation Released
+        href: blog/2013/09/nfx-online-documentation-released.md
+    - name: August (2)
+      items:
+      - name: What is NFX? What is Unistack?
+        href: blog/2013/08/what-is-nfx-what-is-unistack.md
+      - name: Aum Configuration as Facilitated By NFX
+        href: blog/2013/08/aum-configuration-as-facilitated-by-nfx.md
+    - name: July (1)
+      items:
+      - name: Aum Security Permission Model
+        href: blog/2013/07/aum-security-permission-model.md
+    - name: May (2)
+      items:
+      - name: Parallel integer summation challenge Erlang vs CLR/C#
+        href: blog/2013/05/parallel-integer-summation-challenge.md
+      - name: C# CLR JIT Optimization - Register allocation for primitives
+        href: blog/2013/05/c-clr-jit-optimization-register.md
+    - name: February (1)
+      items:
+      - name: NFX / Aum Cluster - The Philosophy
+        href: blog/2013/02/nfx-aum-cluster-philosophy.md
+  - name: 2012 (1)
+    items:
+    - name: December (1)
+      items:
+      - name: NFX is Aum's Runtime Library
+        href: blog/2012/12/nfx-is-aums-runtime-library.md
+  - name: 2010 (2)
+    items:
+    - name: March (1)
+      items:
+      - name: ORM Condemnation (....Continued)
+        href: blog/2010/03/orm-condemnation-continued.md
+    - name: January (1)
+      items:
+      - name: ORM Idiotizm
+        href: blog/2010/01/orm-idiotizm.md
+

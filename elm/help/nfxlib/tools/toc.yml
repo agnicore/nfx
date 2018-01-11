@@ -1,0 +1,41 @@
+- name: Tools
+  href: index.md
+  items:
+  - name: arow - Arow Serializer Code Generator
+    href: arow.md
+
+  - name: buildinfo - Build Information Stub
+    href: buildinfo.md
+
+  - name: File Utilities
+    href: fileutil.md
+    items:
+    - name: delbydate - Deletes Files by Date
+      href: delbydate.md
+    - name: getdatetime - Gets Formatted Timestamp
+      href: getdatetime.md
+    
+  
+  - name: gluec - Glue Compiler
+    href: gluec.md
+    
+  - name: inventory - Inventorization Extractor
+    href: inventory.md    
+    
+  - name: ntc - NFX Template Compiler
+    href: ntc.md    
+    
+  - name: phash - Password Hash Generator
+    href: phash.md
+  
+  - name: rsc - Relational Schema Compiler
+    href: rsc.md
+    
+  - name: TelemetryViewer
+    href: telemetry.md
+
+- name: Visual Studio Plugin
+  href: vsplugin.md
+  
+- name: Serbench
+  href: serbench.md

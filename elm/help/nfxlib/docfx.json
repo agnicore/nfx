@@ -1,0 +1,82 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "/**.csproj"
+          ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**",
+            "Testing/**"
+          ],
+          "src": "../../../src" 
+        }
+      ],
+      "dest": "docs"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "docs/**.yml",
+          "docs/index.md"
+        ]
+      },
+      {
+        "files": [
+          "book/**.md",
+          "book/**/toc.yml",
+          "specs/**.md",
+          "specs/**/toc.yml",
+          "tools/**.md",
+          "tools/**/toc.yml",
+          "tutorials/**.md",
+          "tutorials/**/toc.yml",
+          "archive/**.md",
+          "archive/**/toc.yml",
+          "toc.yml",
+          "*.md"
+        ],
+        "exclude": [
+          "obj/**",
+          "../../../out/_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**",
+          "robot.txt"
+        ],
+        "exclude": [
+          "obj/**",
+          "../../../out/_site/**"
+        ]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "exclude": [
+          "obj/**",
+          "../../../out/_site/**"
+        ]
+      }
+    ],
+    "dest": "../../../out/_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "templates/override"
+    ],
+    "postProcessors": [],
+    "noLangKeyword": false
+  }
+}
