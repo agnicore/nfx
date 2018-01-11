@@ -24,42 +24,8 @@ using NFX.Scripting;
 namespace NFX.UTest.Graphics
 {
   [Runnable(TRUN.BASE)]
-  public class BaseImageTests : IRunnableHook
+  public class BaseImageTests : GraphicsTestBase
   {
-    #region Fields
-
-      private Image m_TestImg;
-
-    #endregion
-
-    #region Runnable Setup
-
-      void IRunnableHook.Prologue(Runner runner, FID id)
-      {
-        m_TestImg = Image.Of(8, 4, ImagePixelFormat.RGB24);
-
-        var r = Color.FromArgb(255, 0, 0);
-        var g = Color.FromArgb(0, 255, 0);
-        var b = Color.FromArgb(0, 0, 255);
-        var map = new Color[4, 8]
-        {
-          { g, b, r, b, b, r, b, g },
-          { g, b, b, b, b, b, b, g },
-          { g, b, r, b, b, r, b, g },
-          { g, g, b, r, r, b, g, g },
-        };
-        for (int h=0; h<4; h++)
-        for (int w=0; w<8; w++)
-          m_TestImg.SetPixel(w, h, map[h, w]);
-      }
-
-      bool IRunnableHook.Epilogue(Runner runner, FID id, Exception error)
-      {
-        return false;//<--- The exception is NOT handled here, do default handling
-      }
-
-    #endregion
-
     [Run]
     public void Image_Ctors()
     {
@@ -218,7 +184,7 @@ namespace NFX.UTest.Graphics
     [Run]
     public void Image_ResizeTo()
     {
-      using (var img = m_TestImg.ResizeTo(7, 3))
+      using (var img = TestImg1.ResizeTo(7, 3))
       {
         Aver.AreEqual(7,  img.Width);
         Aver.AreEqual(3,  img.Height);

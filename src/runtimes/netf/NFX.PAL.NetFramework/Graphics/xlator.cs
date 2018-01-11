@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using NFX.Graphics;
 
@@ -103,22 +100,58 @@ namespace NFX.PAL.NetFramework.Graphics
 
     internal static FontStyling xlat(System.Drawing.FontStyle style)
     {
-      throw new NotImplementedException("Implement!!!");
+      switch (style)
+      {
+        case System.Drawing.FontStyle.Bold:      return FontStyling.Bold;
+        case System.Drawing.FontStyle.Italic:    return FontStyling.Italic;
+        case System.Drawing.FontStyle.Regular:   return FontStyling.Regular;
+        case System.Drawing.FontStyle.Strikeout: return FontStyling.Strikeout;
+        case System.Drawing.FontStyle.Underline: return FontStyling.Underline;
+        default: return FontStyling.Regular;
+      }
     }
 
     internal static System.Drawing.FontStyle xlat(FontStyling style)
     {
-      throw new NotImplementedException("Implement!!!");
+      switch (style)
+      {
+        case FontStyling.Bold:      return System.Drawing.FontStyle.Bold;
+        case FontStyling.Italic:    return System.Drawing.FontStyle.Italic;
+        case FontStyling.Regular:   return System.Drawing.FontStyle.Regular;
+        case FontStyling.Strikeout: return System.Drawing.FontStyle.Strikeout;
+        case FontStyling.Underline: return System.Drawing.FontStyle.Underline;
+        default: return System.Drawing.FontStyle.Regular;
+      }
     }
 
     internal static MeasureUnit xlat(System.Drawing.GraphicsUnit unit)
     {
-      throw new NotImplementedException("Implement!!!");
+      switch (unit)
+      {
+        case System.Drawing.GraphicsUnit.Display:    return MeasureUnit.Display;
+        case System.Drawing.GraphicsUnit.Document:   return MeasureUnit.Document;
+        case System.Drawing.GraphicsUnit.Inch:       return MeasureUnit.Inch;
+        case System.Drawing.GraphicsUnit.Millimeter: return MeasureUnit.Millimeter;
+        case System.Drawing.GraphicsUnit.Pixel:      return MeasureUnit.Pixel;
+        case System.Drawing.GraphicsUnit.Point:      return MeasureUnit.Point;
+        case System.Drawing.GraphicsUnit.World:      return MeasureUnit.World;
+        default: return MeasureUnit.World;
+      }
     }
 
     internal static System.Drawing.GraphicsUnit xlat(MeasureUnit unit)
     {
-      throw new NotImplementedException("Implement!!!");
+      switch (unit)
+      {
+        case MeasureUnit.Display:    return System.Drawing.GraphicsUnit.Display;
+        case MeasureUnit.Document:   return System.Drawing.GraphicsUnit.Document;
+        case MeasureUnit.Inch:       return System.Drawing.GraphicsUnit.Inch;
+        case MeasureUnit.Millimeter: return System.Drawing.GraphicsUnit.Millimeter;
+        case MeasureUnit.Pixel:      return System.Drawing.GraphicsUnit.Pixel;
+        case MeasureUnit.Point:      return System.Drawing.GraphicsUnit.Point;
+        case MeasureUnit.World:      return System.Drawing.GraphicsUnit.World;
+        default: return System.Drawing.GraphicsUnit.World;
+      }
     }
   }
 }

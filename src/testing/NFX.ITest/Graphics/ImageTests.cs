@@ -19,13 +19,14 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using NFX.Graphics;
 using NFX.Scripting;
 
 namespace NFX.ITest.Graphics
 {
   [Runnable]
-  public class ImageTests : IRunnableHook
+  public class ImageTests : IRunHook
   {
     #region CONSTS
 
@@ -38,17 +39,18 @@ namespace NFX.ITest.Graphics
 
     #region Init/TearDown
 
-      void IRunnableHook.Prologue(Runner runner, FID id)
+      bool IRunHook.Prologue(Runner runner, FID id, MethodInfo method, RunAttribute attr, ref object[] args)
       {
         if (File.Exists(STUB_JPG_FILENAME)) File.Delete(STUB_JPG_FILENAME);
         if (File.Exists(STUB_PNG_FILENAME)) File.Delete(STUB_PNG_FILENAME);
+        return false; //<--- The exception is NOT handled here, do default handling
       }
-     
-      bool IRunnableHook.Epilogue(Runner runner, FID id, Exception error)
+
+      bool IRunHook.Epilogue(Runner runner, FID id, MethodInfo method, RunAttribute attr, Exception error)
       {
         if (File.Exists(STUB_JPG_FILENAME)) File.Delete(STUB_JPG_FILENAME);
         if (File.Exists(STUB_PNG_FILENAME)) File.Delete(STUB_PNG_FILENAME);
-        return true;
+        return false; //<--- The exception is NOT handled here, do default handling
       }
 
     #endregion
@@ -150,7 +152,7 @@ namespace NFX.ITest.Graphics
         Aver.AreEqual(119, img.YResolution);
 
         Aver.AreObjectsEqual(ImagePixelFormat.RGBA32, img.PixelFormat);
-        
+
         Aver.AreObjectsEqual(g, img.GetPixel(0, 0));
         Aver.AreObjectsEqual(b, img.GetPixel(1, 0));
         Aver.AreObjectsEqual(r, img.GetPixel(2, 0));
