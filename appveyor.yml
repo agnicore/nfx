@@ -1,4 +1,7 @@
+version: 1.0.{build}
+image: Visual Studio 2017
 configuration: Release
-
+build:
+  verbosity: minimal
 ##for now disable tests
-test: off 
+test: off
