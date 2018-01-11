@@ -587,14 +587,14 @@ namespace NFX.Log.Destinations
                     var minmax = p.Split(new char[] { '-' }, 2).Select(s => s.Trim()).ToArray();
 
                     if (minmax.Length == 0)
-                        throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR + "levels: " + p);
+                        throw new NFXException(StringConsts.ARGUMENT_ERROR + "levels: " + p);
 
                     MessageType min, max;
 
                     if (string.IsNullOrWhiteSpace(minmax[0]))
                         min = MessageType.Debug;
                     else if (!Enum.TryParse(minmax[0], true, out min))
-                        throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR +
+                        throw new NFXException(StringConsts.ARGUMENT_ERROR +
                             "levels: {0} (error parsing: {1})".Args(p, minmax[0]));
 
                     if (minmax.Length < 2)
@@ -602,7 +602,7 @@ namespace NFX.Log.Destinations
                     else if (string.IsNullOrWhiteSpace(minmax[1]))
                         max = MessageType.CatastrophicError;
                     else if (!Enum.TryParse(minmax[1], true, out max))
-                        throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR +
+                        throw new NFXException(StringConsts.ARGUMENT_ERROR +
                             "levels: {0} (error parsing: {1})".Args(p, minmax[1]));
 
                     result.Add(new Tuple<MessageType, MessageType>(min, max));

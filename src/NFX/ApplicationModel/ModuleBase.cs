@@ -18,7 +18,10 @@ namespace NFX.ApplicationModel
     /// </summary>
     protected ModuleBase() : base(){ }
 
-    protected ModuleBase(ModuleBase parent) : base(parent) { }
+    /// <summary>
+    /// Creates a module under a parent module, such as HubModule
+    /// </summary>
+    protected ModuleBase(IModule parent) : base(parent) { }
 
     protected override void Destructor()
     {
@@ -63,6 +66,57 @@ namespace NFX.ApplicationModel
 
     public abstract bool IsHardcodedModule{ get; }
 
+
+    public virtual TModule Get<TModule>(Func<TModule, bool> filter = null) where TModule : class, IModule
+    {
+      var result = TryGet<TModule>(filter);
+      if (result==null)
+        throw new NFXException(StringConsts.APP_MODULE_GET_BY_TYPE_ERROR.Args(typeof(TModule).DisplayNameWithExpandedGenericArgs()));
+
+      return result;
+    }
+
+    public TModule TryGet<TModule>(Func<TModule, bool> filter) where TModule : class, IModule
+    {
+      foreach(var module in m_Children.OrderedValues)
+      {
+        var tm = module as TModule;
+        if (tm==null) continue;
+        if (filter!=null && !filter(tm)) continue;
+        return tm;
+      }
+      return null;
+    }
+
+    public virtual TModule Get<TModule>(string name) where TModule : class, IModule
+    {
+      var result = TryGet<TModule>(name);
+      if (result==null)
+        throw new NFXException(StringConsts.APP_MODULE_GET_BY_NAME_ERROR.Args(name, typeof(TModule).DisplayNameWithExpandedGenericArgs()));
+
+      return result;
+    }
+
+    public virtual TModule TryGet<TModule>(string name) where TModule : class, IModule
+    {
+      if (name.IsNullOrWhiteSpace()) throw new NFXException(StringConsts.ARGUMENT_ERROR + "Module.TryGet(name==null|empty");
+      var result = m_Children[name] as TModule;
+      return result;
+    }
+
+    void IModuleImplementation.ApplicationAfterInit(IApplication application)
+    {
+      var handled = DoApplicationAfterInit(application);
+      if (!handled)
+        m_Children.OrderedValues.ForEach( c => ((IModuleImplementation)c).ApplicationAfterInit(application));
+    }
+
+    void IModuleImplementation.ApplicationBeforeCleanup(IApplication application)
+    {
+      var handled = DoApplicationBeforeCleanup(application);
+      if (!handled)
+        m_Children.OrderedValues.ForEach( c => ((IModuleImplementation)c).ApplicationBeforeCleanup(application));
+    }
 
     void IConfigurable.Configure(IConfigSectionNode node)
     {
@@ -171,6 +225,31 @@ namespace NFX.ApplicationModel
     protected virtual IEnumerable<KeyValuePair<string, Type>> DoGetExternalParametersForGroups(params string[] groups)
     {
       return ExternalParameterAttribute.GetParameters(this, groups);
+    }
+
+
+    /// <summary>
+    /// Override to perform this module-specific actions after app container init.
+    /// Return true only when the system should not continue to call all child modules, false to let the system call all child modules.
+    /// The call is used to perform initialization tasks such as inter-service dependency fixups,
+    /// initial data loads (e.g. initial cache fetch etc..) after everything has loaded in the application container.
+    /// The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)
+    /// </summary>
+    protected virtual bool DoApplicationAfterInit(IApplication application)
+    {
+      return false;
+    }
+
+    /// <summary>
+    /// Override to perform this module-specific actions before app container shutdown.
+    /// Return true only when the system should not continue to call all child modules, false let the system call all child modules.
+    /// The call is used to perform finalization tasks such as inter-service dependency tears and flushes before
+    /// everything is about to be shutdown in the application container.
+    /// The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)
+    /// </summary>
+    protected virtual bool DoApplicationBeforeCleanup(IApplication application)
+    {
+      return false;
     }
 
   }

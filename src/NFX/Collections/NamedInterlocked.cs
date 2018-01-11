@@ -120,7 +120,7 @@ namespace NFX.Collections
       /// </summary>
       public bool Clear(string name)
       {
-        if (name==null) throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR+GetType().FullName+".Clear(name==null)");
+        if (name==null) throw new NFXException(StringConsts.ARGUMENT_ERROR+GetType().FullName+".Clear(name==null)");
         return m_Data.Unregister( name );
       }
 
@@ -129,7 +129,7 @@ namespace NFX.Collections
       /// </summary>
       public bool Exists(string name)
       {
-        if (name==null) throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR+GetType().FullName+".Exists(name==null)");
+        if (name==null) throw new NFXException(StringConsts.ARGUMENT_ERROR+GetType().FullName+".Exists(name==null)");
         return m_Data.ContainsName( name );
       }
 
@@ -199,7 +199,7 @@ namespace NFX.Collections
 
                           private slot getSlot(string name, [System.Runtime.CompilerServices.CallerMemberName]string opName = "")
                           {
-                            if (name==null) throw new NFXException(StringConsts.INVALID_ARGUMENT_ERROR + GetType().FullName + opName);
+                            if (name==null) throw new NFXException(StringConsts.ARGUMENT_ERROR + GetType().FullName + opName);
                             return m_Data.GetOrRegister(name, (_) => new slot(name) , this);
                           }
 

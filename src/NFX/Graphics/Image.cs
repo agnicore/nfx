@@ -73,7 +73,7 @@ namespace NFX.Graphics
 
 
 
-    private Image(IPALImage handle) { m_Handle = handle; }
+    public Image(IPALImage handle) { m_Handle = handle; }
 
     protected override void Destructor()
     {

@@ -258,78 +258,18 @@ namespace NFX
     public const string APP_MODULE_DUPLICATE_CHILD_ERROR =
         "Application module duplicate name: '{0}' module already contains a child module named '{1}'";
 
-    public const string INVALID_RECORD_TYPE_ERROR =
-        "Invalid record type: ";
+    public const string APP_MODULE_GET_BY_TYPE_ERROR =
+        "Application could not get the requested module of type `{0}`";
 
+    public const string APP_MODULE_GET_BY_NAME_ERROR =
+        "Application could not get the requested named module `{0}` of type `{1}`";
 
-    public const string LOOKUP_COMMAND_ERROR =
-        "Lookup command error: ";
-
-    public const string FORM_LOOKUP_COMMAND_ERROR =
-        "Form lookup command error: ";
-
-    public const string MODEL_OPERATION_NOT_ALLOWED_ERROR =
-        "Operation not allowed in this state. Current state: \"{0}\", Operation: \"{1}\"";
-
-    public const string FIELD_OPERATION_NOT_ALLOWED_ERROR =
-        "Operation not allowed when field is hosted by a record.\nField: \"{0}\", Operation: \"{1}\"";
-
-    public const string ENABLE_BINDINGS_ERROR =
-         "Call to EnableBindings() was mismatched for: \"{0}\"";
-
-
-    public const string FIELD_LOOKUP_NOT_ALLOWED_ERROR =
-        "Can not call Lookup() on a field when prior lookup call is pending. Field: ";
-
-
-    public const string INVALID_ARGUMENT_ERROR =
-        "Invalid argument supplied";
 
     public const string INVALID_OPERATION_ERROR =
         "Invalid operation: ";
 
     public const string READONLY_COLLECTION_MUTATION_ERROR =
         "Can not mutate read-only collection: ";
-
-    public const string DUPLICATE_FIELD_NAME_ERROR =
-        "Field with such a name already exists in a containing record. Field name: <{0}>";
-
-    public const string FIELD_NAME_NOT_FOUND_ERROR =
-        "Field with such a name was not found. Field name: <{0}>";
-
-    public const string FAILED_TO_CREATE_FILE_ERROR =
-        "{0} failed to create file {1}: ";
-
-    public const string FAILED_TO_ALLOCATE_RESOURCE_ERROR =
-        "{0} failed to allocate resource: ";
-
-    public const string NOT_EDIT_STATE_ERROR =
-        "Model is not in Editing state";
-
-    public const string NOT_CREATE_EDIT_STATE_ERROR =
-        "Model is not in Creating or Editing state";
-
-    public const string NOT_UNINIT_VIEW_STATE_ERROR =
-        "Model is not in Uninitialized or View state";
-
-    public const string NOT_LOADING_STATE_ERROR =
-        "Model is not in Loading/Initializing state";
-
-    public const string NOT_VALID_ON_LOAD_ERROR =
-        "Model is not in valid state after it was loaded/initialized";
-
-    public const string NOT_VALID_ON_POST_ERROR =
-        "Model is not in valid state and can not be posted";
-
-    public const string NOT_APPROPRIATE_STATE_FOR_SAVE_ERROR =
-        "Model is not in appropriate state to be saved";
-
-    public const string NOT_APPROPRIATE_STATE_FOR_DELETE_ERROR =
-        "Model is not in appropriate state to be deleted";
-
-    public const string STORAGE_OPERATION_IN_PROGRESS_ERROR =
-        "Model storage operation is already in progress";
-
 
     public const string CHECK_LIST_ALREADY_RUN_ERROR =
         "Checklist has already been run";

@@ -152,7 +152,7 @@ namespace NFX.ApplicationModel
         }
 
         /// <summary>
-        /// True to force app container set proccess-wide invariant culture on boot
+        /// True to force app container set process-wide invariant culture on boot
         /// </summary>
         public virtual bool ForceInvariantCulture
         {
@@ -589,7 +589,7 @@ namespace NFX.ApplicationModel
 
         ExecutionContext.__BindApplication(this);
         DoInitApplication(); //<----------------------------------------------
-
+        DoModuleAfterInitApplication();
 
 
             name = CoreConsts.UNKNOWN;
@@ -637,6 +637,7 @@ namespace NFX.ApplicationModel
 
         try
         {
+          DoModuleBeforeCleanupApplication();
           DoCleanupApplication(); //<----------------------------------------------
         }
         finally
@@ -832,7 +833,7 @@ namespace NFX.ApplicationModel
         if (node.Exists)
           try
           {
-            m_Module = FactoryUtils.MakeAndConfigure(node, null) as IModuleImplementation;
+            m_Module = FactoryUtils.MakeAndConfigure(node, typeof(HubModule)) as IModuleImplementation;
 
             if (m_Module==null) throw new NFXException(StringConsts.APP_INJECTION_TYPE_MISMATCH_ERROR  +
                                                     node
@@ -1085,9 +1086,26 @@ namespace NFX.ApplicationModel
             WriteLog(MessageType.CatastrophicError, FROM, msg, error);
             throw new NFXException(msg, error);
           }
+      }
 
+      protected virtual void DoModuleAfterInitApplication()
+      {
+        const string FROM = "app.mod.init";
 
-
+        if (m_Module!=null)
+        {
+          WriteLog(MessageType.Info, FROM, "Call module root .ApplicationAfterInit()");
+          try
+          {
+            m_Module.ApplicationAfterInit(this);
+          }
+          catch(Exception error)
+          {
+            var msg = "Error in call module root .ApplicationAfterInit()" + error.ToMessageWithType();
+            WriteLog(MessageType.CatastrophicError, FROM, msg, error);
+            throw new NFXException(msg, error);
+          }
+        }
 
         WriteLog(MessageType.Info, FROM, "Common application initialized in '{0}' time location".Args(this.TimeLocation));
         WriteLog(MessageType.Info, FROM, "Component dump:");
@@ -1097,10 +1115,28 @@ namespace NFX.ApplicationModel
 
 
 
+      protected virtual void DoModuleBeforeCleanupApplication()
+      {
+         const string FROM = "app.mod.cleanup";
+
+         if (m_Module!=null)
+         {
+           WriteLog(MessageType.Info, FROM, "Call module root .ApplicationBeforeCleanup()");
+           try
+           {
+             m_Module.ApplicationBeforeCleanup(this);
+           }
+           catch(Exception error)
+           {
+             WriteLog(MessageType.CatastrophicError, FROM, "Error in call module root .ApplicationBeforeCleanup()" + error.ToMessageWithType(), error);
+           }
+         }
+      }
+
+
       protected virtual void DoCleanupApplication()
       {
          const string FROM = "app.cleanup";
-
 
          if (m_Glue!=null)
          {
@@ -1254,28 +1290,6 @@ namespace NFX.ApplicationModel
              WriteLog(MessageType.Error, FROM, "Error finalizing TimeSource: " + error.ToMessageWithType(), error);
            }
          }
-
-         if (m_Module != null)
-         {
-           WriteLog(MessageType.Info, FROM, "Finalizing Module root");
-           try
-           {
-             if (m_Module is Service)
-             {
-                 ((Service)m_Module).SignalStop();
-                 ((Service)m_Module).WaitForCompleteStop();
-                 WriteLog(MessageType.Info, FROM, "Module root stopped");
-             }
-
-             m_Module.Dispose();
-             WriteLog(MessageType.Info, FROM, "Module root disposed");
-           }
-           catch(Exception error)
-           {
-             WriteLog(MessageType.Error, FROM, "Error finalizing Module root: " + error.ToMessageWithType(), error);
-           }
-         }
-
 
          if (m_Log!=null)
          {
