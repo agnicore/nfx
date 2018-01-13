@@ -173,6 +173,64 @@ namespace NFX.ITest.Web.Pay
       }
     }
 
+    // to run this test you must have valid paymethod token in the braintree vault
+    [Run]
+    public void PaymethodToken()
+    {
+      var conf = "nfx { paymethod-token=$(~BRAINTREE_SANDBOX_PAYMETHOD_TOKEN) }".AsLaconicConfig();
+      var token = conf.AttrByIndex(0).ValueAsString();
+
+      if (token.IsNullOrEmpty()) Aver.Fail("System variable BRAINTREE_SANDBOX_PAYMETHOD_TOKEN is not set");
+
+      Transaction tran = null;
+      using (var session = PaySystem.StartSession())
+      {
+        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
+
+        var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, "PaymethodToken");
+        var toAccount = Account.EmptyInstance;
+        session.StoreAccountData(new ActualAccountData(fromAccount)
+          {
+            Identity = fromAccount.Identity,
+            IsWebTerminal = false,
+            AccountID = token,
+            FirstName = "Stan",
+            LastName = "Ulam",
+            Phone = "(333) 777-77-77",
+            EMail = "s-ulam@myime.com"
+          });
+        session.StoreAccountData(new ActualAccountData(toAccount));
+        tran = session.Charge(fromAccount, toAccount, new Amount("usd", 99M), capture: false);
+      }
+
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.IsTrue(tran.Type == TransactionType.Charge);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 0M));
+      Aver.IsTrue(tran.CanCapture);
+      Aver.IsFalse(tran.CanRefund);
+      Aver.IsTrue(tran.CanVoid);
+
+      tran.Capture();
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountRefunded, new Amount("usd", 0M));
+      Aver.IsFalse(tran.CanCapture);
+      Aver.IsTrue(tran.CanRefund);
+      Aver.IsFalse(tran.CanVoid);
+
+      tran.Refund();
+      Aver.IsTrue(tran.Status == TransactionStatus.Success);
+      Aver.AreObjectsEqual(tran.Amount, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountCaptured, new Amount("usd", 99M));
+      Aver.AreObjectsEqual(tran.AmountRefunded, new Amount("usd", 99M));
+      Aver.IsFalse(tran.CanCapture);
+      Aver.IsFalse(tran.CanRefund);
+      Aver.IsFalse(tran.CanVoid);
+
+    }
+
     private IPaySystem m_PaySystem;
     public IPaySystem PaySystem
     {

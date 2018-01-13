@@ -25,20 +25,49 @@ using NFX.DataAccess.Distributed;
 
 namespace NFX.ITest.CRUD
 {
-    [Serializable]
-    public class Patient : TypedRow
+    public abstract class Perzon : TypedRow
     {
-        public Patient() {}
-
-
-        [Field(storeFlag: StoreFlag.None)]
-        public string Marker {get; set;}
-
         [Field(required: true, key: true)]
         public long COUNTER {get; set;}
 
         [Field(required: true)]
         public string SSN {get; set;}
+
+        [Field(required: true)]
+        public DateTime DOB {get; set;}
+
+        [Field]
+        public string Address1 {get; set;}
+
+        [Field]
+        public string Address2 {get; set;}
+
+        [Field]
+        public string City {get; set;}
+
+        [Field]
+        public string State {get; set;}
+
+        [Field]
+        public string Zip {get; set;}
+
+        [Field]
+        public string Phone {get; set;}
+
+        [Field]
+        public string Years_In_Service {get; set;}
+
+        [Field]
+        public decimal Amount {get; set;}
+
+        [Field]
+        public string Note {get; set;}
+    }
+
+    [Serializable]
+    public class Patient : Perzon
+    {
+        public Patient() {}
 
         [Field(required: true, backendName: "fname")]
         public string First_Name {get; set;}
@@ -46,40 +75,17 @@ namespace NFX.ITest.CRUD
         [Field(required: true, backendName: "lname")]
         public string Last_Name {get; set;}
 
-        [Field(required: true)]
-        public DateTime DOB {get; set;}
+        [Field(storeFlag: StoreFlag.None)]
+        public string Marker {get; set;}
 
-
-        [Field()]
-        public string Address1 {get; set;}
-        [Field()]
-        public string Address2 {get; set;}
-        [Field()]
-        public string City {get; set;}
-        [Field()]
-        public string State {get; set;}
-        [Field()]
-        public string Zip {get; set;}
-
-
-        [Field()]
+        [Field]
         public long C_DOCTOR {get; set;}
+
         [Field(storeFlag: StoreFlag.OnlyLoad)]
         public string Doctor_Phone {get; set;}
+
         [Field(storeFlag: StoreFlag.OnlyLoad)]
         public string Doctor_ID {get; set;}
-
-        [Field()]
-        public string Phone {get; set;}
-
-        [Field()]
-        public string Years_In_Service {get; set;}
-
-        [Field()]
-        public decimal Amount {get; set;}
-
-        [Field()]
-        public string Note {get; set;}
     }
 
 
@@ -92,6 +98,26 @@ namespace NFX.ITest.CRUD
         [Field(storeFlag: StoreFlag.OnlyLoad)]
         public bool Superman {get; set;}
 
+    }
+
+
+    [Serializable]
+    [Table(name: "tbl_doctor")]
+    public class Doctor : Perzon
+    {
+        public Doctor() {}
+
+        [Field(required: true)]
+        public string First_Name {get; set;}
+
+        [Field(required: true)]
+        public string Last_Name {get; set;}
+
+        [Field(required: true)]
+        public string NPI {get; set;}
+
+        [Field]
+        public bool Is_Certified {get; set;}
     }
 
 

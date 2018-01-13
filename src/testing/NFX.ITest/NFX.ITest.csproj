@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CRUD\Doctor.List.mys.sql" />
     <None Remove="CRUD\Echo.erl.qry" />
     <None Remove="CRUD\FullGDID.Load.mys.sql" />
     <None Remove="CRUD\InsertPerzons.mon.json" />
@@ -24,6 +25,7 @@
     <None Remove="CRUD\LoadPerzonAge.mon.json" />
     <None Remove="CRUD\LoadPerzonsInAgeSpan.mon.json" />
     <None Remove="CRUD\Patient.List.mys.sql" />
+    <None Remove="CRUD\Patient.UpdateAmount.mys.sql" />
     <None Remove="CRUD\SecDef.ByExchange.erl.qry" />
     <None Remove="CRUD\SECDEF.erl.qry" />
     <None Remove="CRUD\Tuple.LoadAll.mys.sql" />
@@ -43,6 +45,8 @@
     <EmbeddedResource Include="CRUD\LoadPerzon.mon.json" />
     <EmbeddedResource Include="CRUD\LoadPerzonAge.mon.json" />
     <EmbeddedResource Include="CRUD\LoadPerzonsInAgeSpan.mon.json" />
+    <EmbeddedResource Include="CRUD\Doctor.List.mys.sql" />
+    <EmbeddedResource Include="CRUD\Patient.UpdateAmount.mys.sql" />
     <EmbeddedResource Include="CRUD\Patient.List.mys.sql" />
     <EmbeddedResource Include="CRUD\SecDef.ByExchange.erl.qry" />
     <EmbeddedResource Include="CRUD\SECDEF.erl.qry" />

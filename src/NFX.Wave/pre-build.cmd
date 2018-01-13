@@ -6,7 +6,7 @@ set TOOL_DIR=%SOLUTION_DIR%\..\out\%CONFIG%\run-netf\
 
 "%TOOL_DIR%buildinfo" > "%PROJECT_DIR%BUILD_INFO.txt"
 
-"%TOOL_DIR%ntc" "%PROJECT_DIR%Templatization\StockContent\*.htm" -r -ext ".auto.cs" -src -c "NFX.Templatization.NHTCompiler, NFX"
+"%TOOL_DIR%ntc" "%PROJECT_DIR%Templatization\StockContent\*.htm" -sub -r -ext ".auto.cs" -src -c "NFX.Templatization.NHTCompiler, NFX"
 "%TOOL_DIR%ntc" "%PROJECT_DIR%Templatization\StockContent\Embedded\script\ljs\*.ntc.js" -ext ".js" -replace ".ntc.js" -dest "%PROJECT_DIR%Templatization\StockContent\Embedded\script" -src -c "NFX.Templatization.TextJSTemplateCompiler, NFX" -o dom-gen="cmp{pretty=1}"
 
 where /q java

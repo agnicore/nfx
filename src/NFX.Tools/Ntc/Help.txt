@@ -14,7 +14,8 @@
               [/r | /recurse]
               [/c | /compiler  fully_qualified_type_name]
               [/src]
-              [/dest]
+              [/dest path]
+              [/sub subdir-name]
               [/ext file_extension]
               [/replace file_segment]
 
@@ -43,7 +44,9 @@
   When omitted, default language extension will be appended to source file name
  <f color=darkCyan>/replace<f color=gray> - replaces the specified file segment
  <f color=darkCyan>/src<f color=gray> - writes compiled source files to disk
- <f color=darkCyan>/dest<f color=gray> - specifies destination folder for compiled source files
+ <f color=darkCyan>/dest<f color=gray> - specifies destination directory for compiled source files
+ <f color=darkCyan>/sub<f color=gray> - specifies the name of subdirectory where the output files
+ should be placed. The '.tc' is used by default. The directory gets created if does not exist
 
 
 <f color=magenta>

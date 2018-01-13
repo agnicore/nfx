@@ -149,26 +149,44 @@ namespace NFX.Tools.Ntc
 
                                   static void writeToDiskCompiledSourceFiles(TemplateCompiler compiler, IConfigSectionNode configRoot)
                                   {
-                                     var ext = configRoot["ext"].AttrByIndex(0).ValueAsString(compiler.LanguageSourceFileExtension);
-                                     var re = configRoot["replace"].AttrByIndex(0).ValueAsString();
-                                     var dest = configRoot["dest"].AttrByIndex(0).ValueAsString();
+                                    const string DEFAULT_SUBDIR = ".tc";
 
-                                      foreach(var cu in compiler)
+                                    var ext = configRoot["ext"].AttrByIndex(0).ValueAsString(compiler.LanguageSourceFileExtension);
+                                    var re = configRoot["replace"].AttrByIndex(0).ValueAsString();
+                                    var dest = configRoot["dest"].AttrByIndex(0).ValueAsString();
+
+                                    string subdir = null;
+                                    var nsub = configRoot["sub"];
+                                    if (nsub.Exists)
+                                      subdir = nsub.AttrByIndex(0).ValueAsString(DEFAULT_SUBDIR);
+
+
+                                    foreach(var cu in compiler)
+                                    {
+                                      if (cu.CompilationException!=null) continue;
+                                      var fs = cu.TemplateSource as FileTemplateStringContentSource;
+                                      if (fs==null) continue;
+
+                                      var fn = (re.IsNotNullOrWhiteSpace() ? fs.FileName.Replace(re, string.Empty) : fs.FileName) + ext;
+                                      if (dest.IsNullOrWhiteSpace())
                                       {
-                                        if (cu.CompilationException!=null) continue;
-                                        var fs = cu.TemplateSource as FileTemplateStringContentSource;
-                                        if (fs==null) continue;
-
-                                        var fn = (re.IsNotNullOrWhiteSpace() ? fs.FileName.Replace(re, string.Empty) : fs.FileName) + ext;
-                                        if (dest.IsNullOrWhiteSpace())
-                                          File.WriteAllText(fn , cu.CompiledSource, Encoding.UTF8);
-                                        else
+                                        if (subdir.IsNotNullOrEmpty())
                                         {
-                                          var path = Path.Combine(dest, Path.GetFileName(fn));
-                                          if (!Directory.Exists(path)) Directory.CreateDirectory(dest);
-                                          File.WriteAllText(path, cu.CompiledSource, Encoding.UTF8);
+                                          var fnDir = Path.GetDirectoryName(fn);
+                                          var fnFile = Path.GetFileName(fn);
+                                          fnDir = Path.Combine(fnDir, subdir);
+                                          if (!Directory.Exists(fnDir)) Directory.CreateDirectory(fnDir);
+                                          fn = Path.Combine(fnDir, fnFile);
                                         }
+                                        File.WriteAllText(fn , cu.CompiledSource, Encoding.UTF8);
                                       }
+                                      else
+                                      {
+                                        var path = Path.Combine(dest, Path.GetFileName(fn));
+                                        if (!Directory.Exists(path)) Directory.CreateDirectory(dest);
+                                        File.WriteAllText(path, cu.CompiledSource, Encoding.UTF8);
+                                      }
+                                    }
                                   }
 
 

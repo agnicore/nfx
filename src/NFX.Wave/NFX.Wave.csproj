@@ -21,9 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Templatization/StockContent/*.htm.auto.cs">
-      <DependentUpon>Templatization/StockContent/*.htm</DependentUpon>
-    </Compile>
     <Compile Remove="Templatization/StockContent/Embedded/script/mtest/**" />
     <Compile Remove="Templatization/StockContent/Embedded/script/utest/**" />
   </ItemGroup>
@@ -43,6 +40,11 @@
     <None Remove="Templatization\StockContent\Embedded\script\wv.gui.js" />
     <None Remove="Templatization\StockContent\Embedded\script\wv.js" />
     <None Remove="Templatization\StockContent\Embedded\script\wv.stripe.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Templatization\StockContent\.tc\Error.htm.auto.cs" />
+    <Compile Include="Templatization\StockContent\.tc\Master.htm.auto.cs" />
   </ItemGroup>
 
   <ItemGroup>

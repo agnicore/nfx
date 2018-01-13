@@ -17,12 +17,13 @@ create table TBL_DOCTOR
     STATE       char(2),
     ZIP         char(10),
     PHONE       char(15),
-    IS_CERTIFIED bool,
+    IS_CERTIFIED char(1),
 
     YEARS_IN_SERVICE   int,
-    AMOUNT             decimal,
+    AMOUNT             decimal(12,4),
     NOTE         text,
-    PRIMARY KEY (COUNTER)
+    PRIMARY KEY (COUNTER),
+    UNIQUE INDEX `SSN` (`SSN`)
 );
 
 
@@ -41,7 +42,7 @@ create table TBL_PATIENT
     PHONE       char(15),
 
     YEARS_IN_SERVICE   int,
-    AMOUNT             decimal,
+    AMOUNT             decimal(12,4),
     NOTE         text,
     c_doctor           bigint references TBL_DOCTOR(COUNTER),
     PRIMARY KEY (COUNTER)
@@ -60,8 +61,8 @@ create table TBL_TYPES
   BOOL_BOOL  bool,
   AMOUNT     DECIMAL(12,4),
   DOB   date,
-  AGE   int, 
-   
+  AGE   int,
+
   PRIMARY KEY (GDID)
 );
 
