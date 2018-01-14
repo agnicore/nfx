@@ -3,5 +3,8 @@ image: Visual Studio 2017
 configuration: Release
 build:
   verbosity: minimal
+
+before_build:
+  - nuget restore  
 ##for now disable tests
 test: off
