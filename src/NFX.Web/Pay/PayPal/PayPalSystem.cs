@@ -103,7 +103,7 @@ namespace NFX.Web.Pay.PayPal
           var status = ((HttpWebResponse)ex.Response).StatusCode;
           if (status == HttpStatusCode.Unauthorized && retry)
           {
-            Log(MessageType.Warning, "DoRefresh()", "Unauthorized payment. Trying to refresh OAuth token.");
+            Log(MessageType.Warning, "DoVoid()", "Unauthorized payment. Trying to refresh OAuth token.");
             retry = false;
             ps.ResetAuthorizationToken();
             continue;

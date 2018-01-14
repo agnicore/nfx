@@ -23,6 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="WaveTestSite\Pages\.tc\AboutUs.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\.tc\ImageBoxTest.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\.tc\Master.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\.tc\RecordTest.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\.tc\SocialLogin.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\.tc\Welcome.htm.auto.cs" />
+    <Compile Include="WaveTestSite\Pages\SubTopic\.tc\Latest.htm.auto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="ClientValidation\Patient.AdmDate.nfx.js" />
     <EmbeddedResource Include="ClientValidation\Patient.AdmDate.profiler.js" />
     <EmbeddedResource Include="ClientValidation\Patient.nfx.js" />
@@ -50,8 +60,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WaveTestSite\" />
     <Folder Include="SlimTest\" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(ProjectDir)pre-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="$(ProjectDir)post-build $(SolutionDir) $(ConfigurationName)" />
+  </Target>
 
 </Project>

@@ -17,14 +17,13 @@
 
 using System;
 using System.Linq;
-
-using NFX.Scripting;
+using System.Threading;
 
 using NFX.ApplicationModel;
-using NFX.Web.Pay;
 using NFX.Financial;
+using NFX.Scripting;
+using NFX.Web.Pay;
 using NFX.Web.Pay.PayPal;
-using System.Threading;
 using static NFX.Aver.ThrowsAttribute;
 
 namespace NFX.ITest.Web.Pay
@@ -32,6 +31,7 @@ namespace NFX.ITest.Web.Pay
   [Runnable]
   public class PayPalTest : IRunnableHook
   {
+    #region CONFIGURATION
     public const string LACONF = @"
     nfx
     {
@@ -55,20 +55,14 @@ namespace NFX.ITest.Web.Pay
 
           service-point { uri=$(/$paypal-server-url) expect-100-continue=true }
 
-          policy
-          {
-            default-certificate-validation
-            {
-              case { uri=$(/$paypal-server-url) trusted=true}
-            }
-          }
+          policy {}
         }
 
         payment-processing
         {
           pay-system-host
           {
-            name='PayPalPrimary'
+            name='PayPalHost'
             type='NFX.ITest.Web.Pay.FakePaySystemHost, NFX.ITest'
 
             paypal-valid-account=$(~PAYPAL_SANDBOX_VALID_ACCOUNT)
@@ -76,41 +70,19 @@ namespace NFX.ITest.Web.Pay
 
           pay-system
           {
-            name='PayPalAsync'
+            name='PayPalSys'
             type='NFX.Web.Pay.PayPal.PayPalSystem, NFX.Web'
             auto-start=true
+
+            api-uri=$(/$paypal-server-url)
             sync-mode=false
 
-            api-uri=$(/$paypal-server-url)
-
             payout-email-subject='Payout from NFX PayPalTest'
             payout-note='Thanks for using NFX PayPalTest'
 
             default-session-connect-params
             {
-              name='PayPalPayoutsPrimary'
-              type='NFX.Web.Pay.PayPal.PayPalConnectionParameters, NFX.Web'
-
-              client-id=$(~PAYPAL_SANDBOX_CLIENT_ID)
-              client-secret=$(~PAYPAL_SANDBOX_CLIENT_SECRET)
-            }
-          }
-
-          pay-system
-          {
-            name='PayPalSync'
-            type='NFX.Web.Pay.PayPal.PayPalSystem, NFX.Web'
-            auto-start=true
-            sync-mode=true
-
-            api-uri=$(/$paypal-server-url)
-
-            payout-email-subject='Payout from NFX PayPalTest'
-            payout-note='Thanks for using NFX PayPalTest'
-
-            default-session-connect-params
-            {
-              name='PayPalPayoutsPrimary'
+              name='PayPalPayouts'
               type='NFX.Web.Pay.PayPal.PayPalConnectionParameters, NFX.Web'
 
               client-id=$(~PAYPAL_SANDBOX_CLIENT_ID)
@@ -120,8 +92,182 @@ namespace NFX.ITest.Web.Pay
         }
       }
     }";
+    #endregion
+
+    [Run]
+    public void PayoutTest()
+    {
+      var ps = PayPalSys;
+
+      var amount = new Amount("USD", 1.0m);
+      var from = new Account("SYSTEM", 111, 222);
+      var to = new Account("USER", 111, 222);
+
+      object id = null;
+      using (var session = ps.StartSession())
+      {
+        session.StoreAccountData(new ActualAccountData(from)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = from.AccountID
+        });
+
+        session.StoreAccountData(new ActualAccountData(to)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = PayPalHost.PaypalValidAccount
+        });
+
+        var tran = session.Transfer(from, to, amount);
+        Aver.IsNotNull(tran);
+        Aver.IsNotNull(tran.ID);
+        id = tran.ID;
+        Aver.IsTrue(TransactionType.Transfer == tran.Type);
+        Aver.AreEqual(amount, tran.Amount);
+        Aver.AreEqual(from, tran.From);
+        Aver.AreEqual(to, tran.To);
+        Aver.IsTrue(TransactionStatus.Promised == tran.Status);
+
+        Aver.IsNotNull(((PayPalSession)session).AuthorizationToken); // token occured on first call
+        var token = session.User.AuthToken.Data as PayPalOAuthToken;
+        Aver.IsNotNull(token);
+        Aver.IsTrue(token.ObtainTime > App.TimeSource.Now.AddMinutes(-1));
+        Aver.AreEqual(3600, token.ExpirationMarginSec);
+        Aver.IsTrue(token.ApplicationID.IsNotNullOrEmpty());
+        Aver.IsTrue(token.ExpiresInSec > 0);
+        Aver.IsTrue(token.AccessToken.IsNotNullOrEmpty());
+        Aver.IsTrue(token.Scope.IsNotNullOrEmpty());
+        Aver.IsTrue(token.Nonce.IsNotNullOrEmpty());
+      }
+
+      var transaction = PayPalHost.FetchTransaction(id);
+      Aver.IsNotNull(transaction);
+
+      // actually, the transfer is made only when Refresh() method is calling
+      refreshTransaction(transaction);
+      Aver.IsNotNull(transaction);
+      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
+      Aver.AreEqual(amount, transaction.Amount);
+      Aver.AreEqual(from, transaction.From);
+      Aver.AreEqual(to, transaction.To);
+      Aver.IsTrue(TransactionStatus.Pending == transaction.Status);
+
+      refreshTransaction(transaction);
+      Aver.IsNotNull(transaction);
+      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
+      Aver.AreEqual(amount, transaction.Amount);
+      Aver.AreEqual(from, transaction.From);
+      Aver.AreEqual(to, transaction.To);
+      Aver.IsTrue(TransactionStatus.Success == transaction.Status);
+    }
+
+    [Run]
+    [Aver.Throws(typeof(PaymentException), Message = "ITEM_INCORRECT_STATUS", MsgMatch = MatchType.Contains)]
+    public void VoidSuccessedPayoutTest()
+    {
+      var ps = PayPalSys;
+
+      var amount = new Amount("USD", 1.1m);
+      var from = new Account("SYSTEM", 111, 222);
+      var to = new Account("USER", 111, 222);
+
+      object id = null;
+      using (var session = ps.StartSession())
+      {
+        session.StoreAccountData(new ActualAccountData(from)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = from.AccountID
+        });
+        session.StoreAccountData(new ActualAccountData(to)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = PayPalHost.PaypalValidAccount
+        });
+        var tran = session.Transfer(from, to, amount);
+        id = tran.ID;
+      }
+
+      var transaction = PayPalHost.FetchTransaction(id);
+      Aver.IsNotNull(transaction);
+
+      refreshTransaction(transaction);
+      Aver.IsTrue(TransactionStatus.Pending == transaction.Status);
+
+      refreshTransaction(transaction);
+      Aver.IsTrue(TransactionStatus.Success == transaction.Status);
+
+      transaction.Void();
+    }
+
+    [Run]
+    [Aver.Throws(typeof(PaymentException), Message = "USER_BUSINESS_ERROR", MsgMatch = MatchType.Contains)]
+    public void DuplicatePayoutTest()
+    {
+      var ps = PayPalSys;
+
+      var amount = new Amount("USD", 1.2m);
+      var from = new Account("SYSTEM", 111, 222);
+      var to = new Account("USER", 111, 222);
+
+      object id = null;
+      using (var session = ps.StartSession())
+      {
+        session.StoreAccountData(new ActualAccountData(from)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = from.AccountID
+        });
+        session.StoreAccountData(new ActualAccountData(to)
+        {
+          Identity = from.Identity,
+          IdentityID = from.IdentityID,
+          AccountID = PayPalHost.PaypalValidAccount
+        });
+        var tran = session.Transfer(from, to, amount);
+        id = tran.ID;
+      }
+
+      var transaction = PayPalHost.FetchTransaction(id);
+      refreshTransaction(transaction);
+
+      //refreshTransaction(transaction);
+      //Aver.IsTrue(TransactionStatus.Success == transaction.Status);
+
+      PayPalHost.SetNextTransactionID(id);
+
+      using (var session = ps.StartSession())
+        session.Transfer(from, to, amount);
+
+      transaction = PayPalHost.FetchTransaction(id);
+      refreshTransaction(transaction);
+    }
 
     private ServiceBaseApplication m_App;
+
+    private IPaySystem m_PayPalSys;
+    public IPaySystem PayPalSys
+    {
+      get
+      {
+        if (m_PayPalSys == null) { m_PayPalSys = PaySystem.Instances["PayPalSys"]; }
+        return m_PayPalSys;
+      }
+    }
+
+    internal FakePaySystemHost PayPalHost
+    {
+      get
+      {
+        return PaySystem.PaySystemHost as FakePaySystemHost;
+      }
+    }
+
 
     void IRunnableHook.Prologue(Runner runner, FID id)
     {
@@ -135,307 +281,13 @@ namespace NFX.ITest.Web.Pay
       return false;
     }
 
-    [Run]
-    public void AsyncPayoutTest()
+    private void refreshTransaction(Transaction transaction)
     {
-      var ps = PaySystemAsync;
-
-      var amount = new Amount("USD", 1.0m);
-      var from = new Account("SYSTEM", 111, 222);
-      var to = new Account("USER", 111, 222);
-
-      object id = null;
-      using (var session = ps.StartSession())
+      for (var i = 0; i < 5; i++)
       {
-        session.StoreAccountData(new ActualAccountData(from)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = from.AccountID
-        });
-
-        session.StoreAccountData(new ActualAccountData(to)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = PaySystemHost.PaypalValidAccount
-        });
-
-        var tran = session.Transfer(from, to, amount);
-        Aver.IsNotNull(tran);
-        Aver.IsNotNull(tran.ID);
-        id = tran.ID;
-        Aver.IsTrue(TransactionType.Transfer == tran.Type);
-        Aver.AreEqual(amount, tran.Amount);
-        Aver.AreEqual(from, tran.From);
-        Aver.AreEqual(to, tran.To);
-        Aver.IsTrue(TransactionStatus.Pending == tran.Status);
-
-        Aver.IsNotNull(session.User.AuthToken.Data); // token occured on first call
-        Aver.IsTrue(session.User.AuthToken.Data is PayPalOAuthToken);
-
-        var token = session.User.AuthToken.Data as PayPalOAuthToken;
-        Aver.IsTrue(token.ObtainTime > App.TimeSource.Now.AddMinutes(-1));
-        Aver.IsTrue(token.ObtainTime < App.TimeSource.Now);
-        Aver.AreEqual(3600, token.ExpirationMarginSec);
-        Aver.IsTrue(token.ApplicationID.IsNotNullOrEmpty());
-        Aver.IsTrue(token.ExpiresInSec > 0);
-        Aver.IsTrue(token.AccessToken.IsNotNullOrEmpty());
-        Aver.IsTrue(token.Scope.IsNotNullOrEmpty());
-        Aver.IsTrue(token.Nonce.IsNotNullOrEmpty());
-      }
-
-      var transaction = PaySystemHost.FetchTransaction(id);
-
-      Aver.IsNotNull(transaction);
-      for (int i = 0; i < 5 && (i == 0 || !transaction.Refresh()); i++)
-      {
-        if (i != 0)
-          Console.WriteLine("...try refresh #" + i);
-
-        Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-        Aver.AreEqual(amount, transaction.Amount);
-        Aver.AreEqual(from, transaction.From);
-        Aver.AreEqual(to, transaction.To);
-        Aver.IsTrue(TransactionStatus.Pending == transaction.Status);
-
-        var sleep = ExternalRandomGenerator.Instance.NextScaledRandomInteger(5000, 10000);
-        Console.WriteLine("Sleep {0} ms...".Args(sleep));
+        var sleep = ExternalRandomGenerator.Instance.NextScaledRandomInteger(5000, 8000);
         Thread.Sleep(sleep);
-      }
-
-      Aver.IsNotNull(transaction);
-      Aver.IsTrue(transaction.Token.AsString().Split(':').Length == 3);
-      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-      Aver.AreEqual(amount, transaction.Amount);
-      Aver.AreEqual(from, transaction.From);
-      Aver.AreEqual(to, transaction.To);
-      Aver.IsTrue(TransactionStatus.Success == transaction.Status);
-    }
-
-    [Run]
-    public void SyncPayoutTest()
-    {
-      var ps = PaySystemSync;
-
-      var amount = new Amount("USD", 1.0m);
-      var from = new Account("SYSTEM", 111, 222);
-      var to = new Account("USER", 111, 222);
-
-      object id = null;
-      using (var session = ps.StartSession())
-      {
-        session.StoreAccountData(new ActualAccountData(from)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = from.AccountID
-        });
-
-        session.StoreAccountData(new ActualAccountData(to)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = PaySystemHost.PaypalValidAccount
-        });
-
-        var tran = session.Transfer(from, to, amount);
-        Aver.IsNotNull(tran);
-        Aver.IsNotNull(tran.ID);
-        Aver.IsTrue(tran.Token.AsString().Split(':').Length == 3);
-        id = tran.ID;
-        Aver.IsTrue(TransactionType.Transfer == tran.Type);
-        Aver.AreEqual(amount, tran.Amount);
-        Aver.AreEqual(from, tran.From);
-        Aver.AreEqual(to, tran.To);
-        Aver.IsTrue(TransactionStatus.Success == tran.Status);
-      }
-
-      var transaction = PaySystemHost.FetchTransaction(id);
-      Aver.IsNotNull(transaction);
-      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-      Aver.AreEqual(amount, transaction.Amount);
-      Aver.AreEqual(from, transaction.From);
-      Aver.AreEqual(to, transaction.To);
-      Aver.IsTrue(TransactionStatus.Success == transaction.Status);
-    }
-
-    [Run]
-    public void SyncUnclaimedPayoutTest()
-    {
-      var ps = PaySystemSync;
-
-      var amount = new Amount("USD", 1.0m);
-      var from = new Account("SYSTEM", 111, 222);
-      var to = new Account("USER", 111, 222);
-
-      object id = null;
-      using (var session = ps.StartSession())
-      {
-        session.StoreAccountData(new ActualAccountData(from)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = from.AccountID
-        });
-
-        session.StoreAccountData(new ActualAccountData(to)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = "nfx@example.com"
-        });
-
-        var tran = session.Transfer(from, to, amount);
-        Aver.IsNotNull(tran);
-        Aver.IsNotNull(tran.ID);
-        Aver.IsTrue(tran.Token.AsString().Split(':').Length == 3);
-        id = tran.ID;
-        Aver.IsTrue(TransactionType.Transfer == tran.Type);
-        Aver.AreEqual(amount, tran.Amount);
-        Aver.AreEqual(from, tran.From);
-        Aver.AreEqual(to, tran.To);
-        Aver.IsTrue(TransactionStatus.Unclaimed == tran.Status);
-      }
-
-      var transaction = PaySystemHost.FetchTransaction(id);
-      Aver.IsNotNull(transaction);
-      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-      Aver.AreEqual(amount, transaction.Amount);
-      Aver.AreEqual(from, transaction.From);
-      Aver.AreEqual(to, transaction.To);
-      Aver.IsTrue(TransactionStatus.Unclaimed == transaction.Status);
-
-      var voided = transaction.Void();
-      Aver.IsTrue(voided);
-      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-      Aver.AreEqual(amount, transaction.Amount);
-      Aver.AreEqual(from, transaction.From);
-      Aver.AreEqual(to, transaction.To);
-      Aver.IsTrue(TransactionStatus.Refunded == transaction.Status);
-    }
-
-    [Run]
-    [Aver.Throws(typeof(PaymentException), Message = "ITEM_INCORRECT_STATUS", MsgMatch = MatchType.Contains)]
-    public void VoidSuccessedPayoutTest()
-    {
-      var ps = PaySystemSync;
-
-      var amount = new Amount("USD", 1.0m);
-      var from = new Account("SYSTEM", 111, 222);
-      var to = new Account("USER", 111, 222);
-
-      object id = null;
-      using (var session = ps.StartSession())
-      {
-        session.StoreAccountData(new ActualAccountData(from)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = from.AccountID
-        });
-
-        session.StoreAccountData(new ActualAccountData(to)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = PaySystemHost.PaypalValidAccount
-        });
-
-        var tran = session.Transfer(from, to, amount);
-        Aver.IsNotNull(tran);
-        Aver.IsNotNull(tran.ID);
-        Aver.IsTrue(tran.Token.AsString().Split(':').Length == 3);
-        id = tran.ID;
-        Aver.IsTrue(TransactionType.Transfer == tran.Type);
-        Aver.AreEqual(amount, tran.Amount);
-        Aver.AreEqual(from, tran.From);
-        Aver.AreEqual(to, tran.To);
-        Aver.IsTrue(TransactionStatus.Success == tran.Status);
-      }
-
-      var transaction = PaySystemHost.FetchTransaction(id);
-      Aver.IsNotNull(transaction);
-      Aver.IsTrue(TransactionType.Transfer == transaction.Type);
-      Aver.AreEqual(amount, transaction.Amount);
-      Aver.AreEqual(from, transaction.From);
-      Aver.AreEqual(to, transaction.To);
-      Aver.IsTrue(TransactionStatus.Success == transaction.Status);
-
-      transaction.Void();
-    }
-
-    [Run]
-    [Aver.Throws(typeof(PaymentException), Message = "USER_BUSINESS_ERROR", MsgMatch = MatchType.Contains)]
-    public void DuplicatePayoutTest()
-    {
-      var ps = PaySystemSync;
-
-      var amount = new Amount("USD", 1.0m);
-      var from = new Account("SYSTEM", 111, 222);
-      var to = new Account("USER", 111, 222);
-
-      object id = null;
-      using (var session = ps.StartSession())
-      {
-        session.StoreAccountData(new ActualAccountData(from)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = from.AccountID
-        });
-
-        session.StoreAccountData(new ActualAccountData(to)
-        {
-          Identity = from.Identity,
-          IdentityID = from.IdentityID,
-          AccountID = PaySystemHost.PaypalValidAccount
-        });
-
-        var tran = session.Transfer(from, to, amount);
-        Aver.IsNotNull(tran);
-        Aver.IsNotNull(tran.ID);
-        Aver.IsTrue(tran.Token.AsString().Split(':').Length == 3);
-        id = tran.ID;
-        Aver.IsTrue(TransactionType.Transfer == tran.Type);
-        Aver.AreEqual(amount, tran.Amount);
-        Aver.AreEqual(from, tran.From);
-        Aver.AreEqual(to, tran.To);
-        Aver.IsTrue(TransactionStatus.Success == tran.Status);
-      }
-
-      PaySystemHost.SetNextTransactionID(id);
-
-      using (var session = ps.StartSession())
-        session.Transfer(from, to, amount);
-    }
-
-
-    private IPaySystem m_PaySystemSync;
-    public IPaySystem PaySystemSync
-    {
-      get
-      {
-        if (m_PaySystemSync == null) { m_PaySystemSync = PaySystem.Instances["PayPalSync"]; }
-        return m_PaySystemSync;
-      }
-    }
-
-    private IPaySystem m_PaySystemAsync;
-    public IPaySystem PaySystemAsync
-    {
-      get
-      {
-        if (m_PaySystemAsync == null) { m_PaySystemAsync = PaySystem.Instances["PayPalAsync"]; }
-        return m_PaySystemAsync;
-      }
-    }
-
-    internal FakePaySystemHost PaySystemHost
-    {
-      get
-      {
-        return PaySystem.PaySystemHost as FakePaySystemHost;
+        if (transaction.Refresh()) return;
       }
     }
   }

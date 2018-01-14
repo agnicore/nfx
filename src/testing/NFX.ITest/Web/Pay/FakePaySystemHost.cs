@@ -283,6 +283,9 @@ namespace NFX.ITest.Web.Pay
     #region Properties
     [Config]
     public string PaypalValidAccount { get; set; }
+
+    [Config]
+    public string BraintreePayMethodToken { get; set; }
     #endregion
 
     #region Public

@@ -12,6 +12,7 @@
 *.userprefs
 
 # Template
+.tc/
 *.auto.cs
 
 # Build results

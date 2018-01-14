@@ -54,6 +54,7 @@ namespace NFX.ITest.Web.Pay
             name='FakePaySystemHost'
             type='NFX.ITest.Web.Pay.FakePaySystemHost, NFX.ITest'
             pay-system-prefix='BT'
+            braintree-paymethod-token=$(~BRAINTREE_SANDBOX_PAYMETHOD_TOKEN)
           }
 
           pay-system
@@ -96,9 +97,9 @@ namespace NFX.ITest.Web.Pay
     public void ValidNonce()
     {
       Transaction tran = null;
-      using (var session = PaySystem.StartSession())
+      using (var session = BraintreeSystem.StartSession())
       {
-        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
+        ((BraintreeSystem)BraintreeSystem).GenerateClientToken(session);
 
         var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, FakePaySystemHost.BRAINTREE_NONCE);
         var toAccount = Account.EmptyInstance;
@@ -150,9 +151,9 @@ namespace NFX.ITest.Web.Pay
     public void DeclinedNonce()
     {
       Transaction tran = null;
-      using (var session = PaySystem.StartSession())
+      using (var session = BraintreeSystem.StartSession())
       {
-        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
+        ((BraintreeSystem)BraintreeSystem).GenerateClientToken(session);
 
         var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, FakePaySystemHost.BRAINTREE_PROCESSOR_DECLINED_VISA_NONCE);
         var toAccount = Account.EmptyInstance;
@@ -177,15 +178,13 @@ namespace NFX.ITest.Web.Pay
     [Run]
     public void PaymethodToken()
     {
-      var conf = "nfx { paymethod-token=$(~BRAINTREE_SANDBOX_PAYMETHOD_TOKEN) }".AsLaconicConfig();
-      var token = conf.AttrByIndex(0).ValueAsString();
-
-      if (token.IsNullOrEmpty()) Aver.Fail("System variable BRAINTREE_SANDBOX_PAYMETHOD_TOKEN is not set");
+      if ((PaySystem.PaySystemHost as FakePaySystemHost).BraintreePayMethodToken.IsNullOrEmpty())
+        Aver.Fail("System variable BRAINTREE_SANDBOX_PAYMETHOD_TOKEN is not set");
 
       Transaction tran = null;
-      using (var session = PaySystem.StartSession())
+      using (var session = BraintreeSystem.StartSession())
       {
-        ((BraintreeSystem)PaySystem).GenerateClientToken(session);
+        ((BraintreeSystem)BraintreeSystem).GenerateClientToken(session);
 
         var fromAccount = new Account("user", FakePaySystemHost.BRAINTREE_WEB_TERM, "PaymethodToken");
         var toAccount = Account.EmptyInstance;
@@ -193,7 +192,7 @@ namespace NFX.ITest.Web.Pay
           {
             Identity = fromAccount.Identity,
             IsWebTerminal = false,
-            AccountID = token,
+            AccountID = (PaySystem.PaySystemHost as FakePaySystemHost).BraintreePayMethodToken,
             FirstName = "Stan",
             LastName = "Ulam",
             Phone = "(333) 777-77-77",
@@ -232,7 +231,7 @@ namespace NFX.ITest.Web.Pay
     }
 
     private IPaySystem m_PaySystem;
-    public IPaySystem PaySystem
+    public IPaySystem BraintreeSystem
     {
       get
       {
