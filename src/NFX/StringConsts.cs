@@ -65,18 +65,6 @@ namespace NFX
 
         public const string PAL_ALREADY_SET_ERROR = "Platform abstraction layer is already set. It can only be set once per process at the very entry point";
 
-        public const string PAL_IMPLEMENTATION_INJECTION_ERROR =
-@"Invalid system operation injecting PAL. This method should never be called by application code. 
-  Details: 
-   Platform abstraction layer implementation should only be injected by the
-   class deriving from PALImplementation. This is a system logic and it is 
-   already provided by the runtime module. 
-   Please see the entry point (Program.cs) provided by the NFX framework to
-   see how to initialize runtime properly.
-
-   This is a safeguard message which should never show.
- ";
-
         public const string PAL_ABSTRACTION_IS_NOT_PROVIDED_ERROR = "Platform abstraction layer for '{0}' is not provided";
 
         public const string CANNOT_RETURN_NULL_ERROR = "'next' function cannot return null. ";

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NFX.PAL
+﻿namespace NFX.PAL
 {
   /// <summary>
   /// Internal framework class, business app developers should not use this class directly as it provides a lower-level services
@@ -92,13 +88,6 @@ namespace NFX.PAL
     {
       if (implementation==null)
         throw new PALException(StringConsts.ARGUMENT_ERROR+"{0}.{1}(implementation=null)".Args(nameof(PlatformAbstractionLayer), nameof(____SetImplementation)));
-
-      var caller = new System.Diagnostics.StackFrame(1, false);
-      var mi = caller.GetMethod();
-      var callerClass = mi.DeclaringType;
-      if (!callerClass.IsSubclassOf(typeof(PALImplementation)))
-        throw new PALException(StringConsts.ARGUMENT_ERROR+"{0}.{1}: {2}".Args(nameof(PlatformAbstractionLayer), nameof(____SetImplementation), StringConsts.PAL_IMPLEMENTATION_INJECTION_ERROR));
-
 
       lock(s_Lock)
       {
