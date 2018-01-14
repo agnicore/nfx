@@ -5,6 +5,7 @@ build:
   verbosity: minimal
 
 before_build:
+  - cd .\src
   - nuget restore  
 ##for now disable tests
 test: off
