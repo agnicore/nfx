@@ -29,11 +29,11 @@ namespace NFX.UTest.Media.TagCodes.QR
     [Run]
     public void RenderBMP()
     {
-      QREncoderMatrix matrix = QREncoderMatrix.Encode("ABCDEF", QRCorrectionLevel.H);
+      var matrix = QREncoderMatrix.Encode("ABCDEF", QRCorrectionLevel.H);
 
-      using (System.IO.FileStream stream = new System.IO.FileStream("ABCDEF.bmp", System.IO.FileMode.Create))
+      using (var stream = new System.IO.FileStream("ABCDEF.bmp", System.IO.FileMode.Create))
       {
-        matrix.ToBMP(stream, scale: NFX.Media.TagCodes.QR.QRImageRenderer.ImageScale.Scale4x);
+        matrix.ToBMP(stream, scale: QRImageRenderer.ImageScale.Scale4x);
         stream.Flush();
       }
     }
@@ -41,11 +41,11 @@ namespace NFX.UTest.Media.TagCodes.QR
     [Run]
     public void RenderGIF()
     {
-      QREncoderMatrix matrix = QREncoderMatrix.Encode("www.sl.com/BMW-Z3", QRCorrectionLevel.H);
+      var matrix = QREncoderMatrix.Encode("www.sl.com/BMW-Z3", QRCorrectionLevel.H);
 
-      using (System.IO.FileStream stream = new System.IO.FileStream("BMW-Z3.gif", System.IO.FileMode.Create))
+      using (var stream = new System.IO.FileStream("BMW-Z3.gif", System.IO.FileMode.Create))
       {
-        matrix.ToGIF(stream, scale: NFX.Media.TagCodes.QR.QRImageRenderer.ImageScale.Scale4x);
+        matrix.ToGIF(stream, scale: QRImageRenderer.ImageScale.Scale4x);
         stream.Flush();
       }
     }

@@ -24,9 +24,9 @@ namespace NFX.UTest.Graphics
 
   public abstract class GraphicsTestBase : IRunHook
   {
-    protected Color R = Color.FromArgb(255, 0, 0);
-    protected Color G = Color.FromArgb(0, 255, 0);
-    protected Color B = Color.FromArgb(0, 0, 255);
+    protected Color R  = Color.FromArgb(255,   0,   0);
+    protected Color G  = Color.FromArgb(  0, 255,   0);
+    protected Color B  = Color.FromArgb(  0,   0, 255);
 
     protected Image TestImg1 { get; private set; }
     protected Image TestImg2 { get; private set; }

@@ -16,63 +16,37 @@
 * limitations under the License.
 </FILE_LICENSE>*/
 
-
 /* NFX by ITAdapter
  * Originated: 2006.01
- * Revision: NFX 1.0  2013.12.18
- * Author: Denis Latushkin<dxwizard@gmail.com>
+ * Revision: NFX 5.0  2018.1.15
  * Based on zXing / Apache 2.0; See NOTICE and CHANGES for attribution
  */
-using System.Collections.Generic;
-using System.Linq;
 
 namespace NFX.Media.TagCodes.QR
 {
-  public class QRCorrectionLevel
+  public sealed class QRCorrectionLevel
   {
-    #region Static
+    public static readonly QRCorrectionLevel L = new QRCorrectionLevel("L", 0, 0x01); // up to 7%
+    public static readonly QRCorrectionLevel M = new QRCorrectionLevel("M", 1, 0x00); // up to 15%
+    public static readonly QRCorrectionLevel Q = new QRCorrectionLevel("Q", 2, 0x03); // up to 25%
+    public static readonly QRCorrectionLevel H = new QRCorrectionLevel("H", 3, 0x02); // up to 30%
 
-      public static readonly QRCorrectionLevel L = new QRCorrectionLevel("L", 0, 0x01); // up to 7%
-      public static readonly QRCorrectionLevel M = new QRCorrectionLevel("M", 1, 0x00); // up to 15%
-      public static readonly QRCorrectionLevel Q = new QRCorrectionLevel("Q", 2, 0x03); // up to 25%
-      public static readonly QRCorrectionLevel H = new QRCorrectionLevel("H", 3, 0x02); // up to 30%
+    public static readonly QRCorrectionLevel[] LEVELS = new [] { L, M, Q, H};
 
-      private static readonly QRCorrectionLevel[] LEVELS = new [] { L, M, Q, H};
 
-      public static IEnumerable<QRCorrectionLevel> GetLevels()
-      {
-        return LEVELS.AsEnumerable();
-      }
+    private QRCorrectionLevel (string name, int ordinal, int markerBits)
+    {
+      Name = name;
+      Ordinal = ordinal;
+      MarkerBits = markerBits;
+    }
 
-    #endregion
+    public readonly string Name;
+    public readonly int Ordinal;
+    public readonly int MarkerBits;
 
-    #region .ctor
 
-      public QRCorrectionLevel (string name, int ordinal, int markerBits)
-	    {
-        Name = name;
-        Ordinal = ordinal;
-        MarkerBits = markerBits;
-	    }
-
-    #endregion
-
-    #region Properties
-
-      public readonly string Name;
-      public readonly int Ordinal;
-      public readonly int MarkerBits;
-
-    #endregion
-
-    #region Protected
-
-      public override string ToString()
-      {
-        return Name;
-      }
-
-    #endregion
+    public override string ToString() => $"QRECL({Name})";
   }
 
 }

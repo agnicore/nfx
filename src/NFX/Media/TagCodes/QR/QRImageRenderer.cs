@@ -16,11 +16,9 @@
 * limitations under the License.
 </FILE_LICENSE>*/
 
-
 /* NFX by ITAdapter
  * Originated: 2006.01
- * Revision: NFX 1.0  2013.12.26
- * Author: Denis Latushkin<dxwizard@gmail.com>
+ * Revision: NFX 5.0  2018.01.15
  * Based on zXing / Apache 2.0; See NOTICE and CHANGES for attribution
  */
 
@@ -32,7 +30,6 @@ using NFX.Graphics;
 namespace NFX.Media.TagCodes.QR
 {
 
-  #warning MUST REWRITE!!!! get rid of DrawingOutput etc...
   public static class QRImageRenderer
   {
     #region CONSTS
@@ -56,8 +53,8 @@ namespace NFX.Media.TagCodes.QR
                                Color? falseColor = null,
                                ImageScale? scale = ImageScale.Scale1x)
       {
-        var output = createDrawingOutput(matrix, trueColor, falseColor, scale);
-        output.ToImage(stream, BitmapImageFormat.Monochrome);
+        var output = createOutput(matrix, trueColor, falseColor, scale);
+        output.Save(stream, BitmapImageFormat.Monochrome);
       }
 
       public static void ToPNG(this QRMatrix matrix,
@@ -66,8 +63,8 @@ namespace NFX.Media.TagCodes.QR
                                Color? falseColor = null,
                                ImageScale? scale = ImageScale.Scale1x)
       {
-        var output = createDrawingOutput(matrix, trueColor, falseColor, scale);
-        output.ToImage(stream,  PngImageFormat.Monochrome);
+        var output = createOutput(matrix, trueColor, falseColor, scale);
+        output.Save(stream, PngImageFormat.Monochrome);
       }
 
       public static void ToJPG(this QRMatrix matrix,
@@ -76,8 +73,8 @@ namespace NFX.Media.TagCodes.QR
                                Color? falseColor = null,
                                ImageScale? scale = ImageScale.Scale1x)
       {
-        var output = createDrawingOutput(matrix, trueColor, falseColor, scale);
-        output.ToImage(stream, JpegImageFormat.Standard);
+        var output = createOutput(matrix, trueColor, falseColor, scale);
+        output.Save(stream, JpegImageFormat.Standard);
       }
 
       public static void ToGIF(this QRMatrix matrix,
@@ -86,26 +83,26 @@ namespace NFX.Media.TagCodes.QR
                                Color? falseColor = null,
                                ImageScale? scale = ImageScale.Scale1x)
       {
-        var output = createDrawingOutput(matrix, trueColor, falseColor, scale);
-        output.ToImage(stream, GifImageFormat.Monochrome);
+        var output = createOutput(matrix, trueColor, falseColor, scale);
+        output.Save(stream, GifImageFormat.Monochrome);
       }
 
-      public static DrawingOutput CreateDrawingOutput(this QRMatrix matrix,
-                                                       Color? trueColor = null,
-                                                       Color? falseColor = null,
-                                                       ImageScale? scale = ImageScale.Scale1x)
+      public static Image CreateOutput(this QRMatrix matrix,
+                                       Color? trueColor = null,
+                                       Color? falseColor = null,
+                                       ImageScale? scale = ImageScale.Scale1x)
       {
-        return createDrawingOutput(matrix, trueColor, falseColor, scale);
+        return createOutput(matrix, trueColor, falseColor, scale);
       }
 
     #endregion
 
     #region .pvt. impl.
 
-      private static DrawingOutput createDrawingOutput(QRMatrix matrix,
-                                                        Color? trueColor = null,
-                                                        Color? falseColor = null,
-                                                        ImageScale? scale = ImageScale.Scale1x)
+      private static Image createOutput(QRMatrix matrix,
+                                        Color? trueColor = null,
+                                        Color? falseColor = null,
+                                        ImageScale? scale = ImageScale.Scale1x)
       {
         var black = trueColor ?? Color.Black;
         var white = falseColor ?? Color.White;
@@ -118,26 +115,28 @@ namespace NFX.Media.TagCodes.QR
         int canvasWidth = matrix.Width * scaleFactor;
         int canvasHeight = matrix.Height * scaleFactor;
 
-    #warning Perepisat ubrat etot Drawingutput
-        //using(var drawingOutput = new DrawingOutput(canvasWidth, canvasHeight, black, white))
-        //{
+        var result = Image.Of(canvasWidth, canvasHeight);
 
-        //  for (int yMatrix = 0, yCanvasStart = 0, yCanvasStop = scaleFactor;
-        //    yMatrix < matrix.Height;
-        //    yMatrix++, yCanvasStart+=scaleFactor, yCanvasStop+=scaleFactor)
-        //  {
-        //    for (int xMatrix = 0, xCanvasStart = 0, xCanvasStop = scaleFactor;
-        //      xMatrix < matrix.Width;
-        //      xMatrix++, xCanvasStart+=scaleFactor, xCanvasStop+=scaleFactor)
-        //    {
-        //      if (matrix[xMatrix, yMatrix] == 0)
-        //        drawingOutput.SetPixelScaled(xMatrix, yMatrix, white, scaleFactor);
-        //    }
-        //  }
+        using (var canvas = result.CreateCanvas())
+        using (var blackBrush = canvas.CreateSolidBrush(black))
+        using (var whiteBrush = canvas.CreateSolidBrush(white))
+        {
+          canvas.FillRectangle(blackBrush, 0, 0, canvasWidth, canvasHeight);
 
-        //  return drawingOutput;
-        //}
-        return null;
+          for (int yMatrix=0; yMatrix<matrix.Height; yMatrix++)
+          for (int xMatrix=0; xMatrix<matrix.Width;  xMatrix++)
+          {
+            if (matrix[xMatrix, yMatrix] == 0)
+            {
+               int scaledX = xMatrix * scaleFactor;
+               int scaledY = yMatrix * scaleFactor;
+
+               canvas.FillRectangle(whiteBrush, scaledX, scaledY, scaleFactor, scaleFactor);
+            }
+          }
+
+          return result;
+        }
       }
 
     #endregion

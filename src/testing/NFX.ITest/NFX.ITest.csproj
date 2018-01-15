@@ -33,6 +33,8 @@
     <None Remove="CRUD\UpdatePerzons.mon.json" />
     <None Remove="CRUD\WorldNews.erl.qry" />
     <None Remove="ExternalCfg.laconf" />
+    <None Remove="Graphics\test_mc.jpg" />
+    <None Remove="Graphics\test_mc.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +57,12 @@
     <EmbeddedResource Include="CRUD\UpdatePerzons.mon.json" />
     <EmbeddedResource Include="CRUD\WorldNews.erl.qry" />
     <EmbeddedResource Include="ExternalCfg.laconf" />
+    <EmbeddedResource Include="Graphics\test_mc.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\test_mc.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

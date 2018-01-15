@@ -19,8 +19,7 @@
 
 /* NFX by ITAdapter
  * Originated: 2006.01
- * Revision: NFX 1.0  2013.12.18
- * Author: Denis Latushkin<dxwizard@gmail.com>
+ * Revision: NFX 5.0  2018.1.15
  * Based on zXing / Apache 2.0; See NOTICE and CHANGES for attribution
  */
 using System;

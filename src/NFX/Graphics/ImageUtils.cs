@@ -35,7 +35,7 @@ namespace NFX.Graphics
 
     /// <summary>
     /// Extracts three main colors and background color from source image.
-    /// Does the same as <see cref="ExtractMainColors"/> method but performs the second extraction attempt 
+    /// Does the same as <see cref="ExtractMainColors"/> method but performs the second extraction attempt
     /// if the first attempt returns almost the same colors
     /// </summary>
     /// <param name="srcBmp">Source image</param>
@@ -87,8 +87,6 @@ namespace NFX.Graphics
                                                    int dwnFactor1 = 128, int dwnFactor2 = 24,
                                                    float interiorPct = 0.9F)
     {
-      var height = srcImg.Height;
-      var width  = srcImg.Width;
       var interiorWidth  = interiorPct * resizeWidth;
       var interiorHeight = interiorPct * resizeHeight;
       var mainHist = new Dictionary<Color, int>();
@@ -96,10 +94,10 @@ namespace NFX.Graphics
 
       // STEP 1: resize image
       using (var rszImg = srcImg.ResizeTo(resizeWidth, resizeHeight))
-      using (var dwnImg = Image.Of(width, height, rszImg.XResolution, rszImg.YResolution, rszImg.PixelFormat))
+      using (var maskImg = Image.Of(resizeWidth, resizeHeight, rszImg.XResolution, rszImg.YResolution, rszImg.PixelFormat))
       {
         // STEP 2: extract downgraded (very few colors) - color histogramm (main and background)
-        // IMPORTANT: these colors will be used below not as itself but only AS A MASK 
+        // IMPORTANT: these colors will be used below not as itself but only AS A MASK
         for (int x=0; x<resizeWidth; x++)
         for (int y=0; y<resizeHeight; y++)
         {
@@ -116,14 +114,14 @@ namespace NFX.Graphics
           else mainHist[color] += 1;
 
           // histogramm for a background color
-          if (Math.Abs(2 * x - resizeWidth) >= interiorWidth || 
+          if (Math.Abs(2 * x - resizeWidth) >= interiorWidth ||
               Math.Abs(2 * y - resizeHeight) >= interiorHeight)
           {
             if (!backHist.ContainsKey(color)) backHist[color] = 1;
             else backHist[color] += 1;
           }
 
-          dwnImg.SetPixel(x, y, p);
+          maskImg.SetPixel(x, y, color);
         }
 
         // take background area color and the first three colors (i.e. main image areas) except background
@@ -144,14 +142,14 @@ namespace NFX.Graphics
         for (int y=0; y<resizeHeight; y++)
         {
           // fetch histogramm by a mask
-          var maskP = dwnImg.GetPixel(x, y);
+          var maskP = maskImg.GetPixel(x, y);
           Dictionary<Color, int> h;
           if (maskP == firstArea)       h = ts_FirstHist;
           else if (maskP == secondArea) h = ts_SecondHist;
           else if (maskP == thirdArea)  h = ts_ThirdHist;
           else if (maskP == backArea)   h = ts_BckHist;
           else continue;
-          
+
           var p = rszImg.GetPixel(x, y);
           var a = p.A - p.A%dwnFactor2;
           var r = p.R - p.R%dwnFactor2;
@@ -178,122 +176,6 @@ namespace NFX.Graphics
 
         return topColors;
       }
-
-      #region deprecated, remove after testing
-      //var height = srcBmp.Height;
-      //var width = srcBmp.Width;
-      //var mainHist = new Dictionary<Color, int>();
-      //var backHist = new Dictionary<Color, int>();
-
-      //using (var dwnBmp = new Image(width, height))
-      //{
-      //  BitmapData srcData = null;
-      //  BitmapData dwnData = null;
-
-      //  try
-      //  {
-      //    // extract downgraded (very few colors) color histogramm
-      //    srcData = srcBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, srcBmp.PixelFormat);
-      //    int srcBytesPerPixel = Bitmap.GetPixelFormatSize(srcBmp.PixelFormat) / 8;
-      //    int srcHeightInPixels = srcData.Height;
-      //    int srcWidthInBytes = srcData.Width * srcBytesPerPixel;
-      //    byte* srcFirstPixel = (byte*)srcData.Scan0;
-
-      //    dwnData = dwnBmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, dwnBmp.PixelFormat);
-      //    int dwnBytesPerPixel = Bitmap.GetPixelFormatSize(dwnBmp.PixelFormat) / 8;
-      //    int dwnHeightInPixels = dwnData.Height;
-      //    int dwnWidthInBytes = dwnData.Width * dwnBytesPerPixel;
-      //    byte* dwnFirstPixel = (byte*)dwnData.Scan0;
-
-      //    for (int y = 0; y < height; y++)
-      //    {
-      //      byte* srcLine = srcFirstPixel + (y * srcData.Stride);
-      //      byte* dwnLine = dwnFirstPixel + (y * dwnData.Stride);
-      //      for (int x = 0; x < srcWidthInBytes; x += srcBytesPerPixel)
-      //      {
-      //        var b = dwnFactor1 * (srcLine[x] / dwnFactor1);
-      //        var g = dwnFactor1 * (srcLine[x + 1] / dwnFactor1);
-      //        var r = dwnFactor1 * (srcLine[x + 2] / dwnFactor1);
-      //        var color = Color.FromArgb(r, g, b);
-
-      //        // histogramm for main color
-      //        if (!mainHist.ContainsKey(color)) mainHist[color] = 1;
-      //        else mainHist[color] += 1;
-
-      //        // histogramm for background color
-      //        if (Math.Abs(2 * x - srcWidthInBytes) >= interiorPct * srcWidthInBytes || Math.Abs(2 * y - height) >= interiorPct * height)
-      //        {
-      //          if (!backHist.ContainsKey(color)) backHist[color] = 1;
-      //          else backHist[color] += 1;
-      //        }
-
-      //        dwnLine[x] = (byte)b;
-      //        dwnLine[x + 1] = (byte)g;
-      //        dwnLine[x + 2] = (byte)r;
-      //      }
-      //    }
-
-      //    // take background area color and the first three colors (i.e. main image areas) except background
-      //    var backArea = backHist.OrderByDescending(h => h.Value).First().Key;
-      //    var areas = mainHist.Where(h => h.Key != backArea).OrderByDescending(h => h.Value).Take(3).ToList();
-      //    var firstArea = (areas.Count > 0) ? areas[0].Key : backArea;
-      //    var secondArea = (areas.Count > 1) ? areas[1].Key : firstArea;
-      //    var thirdArea = (areas.Count > 2) ? areas[2].Key : secondArea;
-
-      //    // get histogramm for background area each of three main areas
-      //    if (ts_FirstHist == null) ts_FirstHist = new Dictionary<Color, int>(); else ts_FirstHist.Clear();
-      //    if (ts_SecondHist == null) ts_SecondHist = new Dictionary<Color, int>(); else ts_SecondHist.Clear();
-      //    if (ts_ThirdHist == null) ts_ThirdHist = new Dictionary<Color, int>(); else ts_ThirdHist.Clear();
-      //    if (ts_BckHist == null) ts_BckHist = new Dictionary<Color, int>(); else ts_BckHist.Clear();
-
-      //    for (int y = 0; y < height; y++)
-      //    {
-      //      byte* srcLine = srcFirstPixel + (y * srcData.Stride);
-      //      byte* dwnLine = dwnFirstPixel + (y * dwnData.Stride);
-      //      for (int x = 0; x < srcWidthInBytes; x += srcBytesPerPixel)
-      //      {
-      //        var b = dwnLine[x];
-      //        var g = dwnLine[x + 1];
-      //        var r = dwnLine[x + 2];
-      //        var color = Color.FromArgb(r, g, b);
-      //        Dictionary<Color, int> h;
-      //        if (color == firstArea) h = ts_FirstHist;
-      //        else if (color == secondArea) h = ts_SecondHist;
-      //        else if (color == thirdArea) h = ts_ThirdHist;
-      //        else if (color == backArea) h = ts_BckHist;
-      //        else continue;
-
-      //        b = (byte)(dwnFactor2 * (srcLine[x] / dwnFactor2));
-      //        g = (byte)(dwnFactor2 * (srcLine[x + 1] / dwnFactor2));
-      //        r = (byte)(dwnFactor2 * (srcLine[x + 2] / dwnFactor2));
-      //        color = Color.FromArgb(r, g, b);
-      //        if (!h.ContainsKey(color)) h[color] = 1;
-      //        else h[color] += 1;
-      //      }
-      //    }
-      //  }
-      //  finally
-      //  {
-      //    if (srcData != null) srcBmp.UnlockBits(srcData);
-      //    if (dwnBmp != null) dwnBmp.UnlockBits(dwnData);
-      //  }
-
-      //  // extract color for each histogram
-      //  var firstHist = ts_FirstHist;
-      //  var secondHist = (ts_SecondHist.Count > 0) ? ts_SecondHist : firstHist;
-      //  var thirdHist = (ts_ThirdHist.Count > 0) ? ts_ThirdHist : secondHist;
-      //  var bckHist = (ts_BckHist.Count > 0) ? ts_BckHist : thirdHist;
-      //  var topColors = new[]
-      //  {
-      //    colorFromHist(firstHist),
-      //    colorFromHist(secondHist),
-      //    colorFromHist(thirdHist),
-      //    colorFromHist(bckHist)
-      //  };
-
-      //  return topColors;
-      //}
-      #endregion
     }
 
     /// <summary>
@@ -384,16 +266,6 @@ namespace NFX.Graphics
 
       return result;
     }
-
-    #warning WHo uses this method?
-    //public static Bitmap ModifyBitsPerBixel(Image img, PixelFormat format)
-    //{
-    //  var bmp = new Bitmap(img.Width, img.Height, format);
-    //  using (var gr = Graphics.FromImage(bmp))
-    //    gr.DrawImage(img, new Rectangle(0, 0, img.Width, img.Height));
-
-    //  return bmp;
-    //}
 
     #region .pvt
 

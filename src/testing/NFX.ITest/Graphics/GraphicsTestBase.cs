@@ -1,5 +1,4 @@
-
-/*<FILE_LICENSE>
+﻿/*<FILE_LICENSE>
 * NFX (.NET Framework Extension) Unistack Library
 * Copyright 2003-2018 Agnicore Inc. portions ITAdapter Corp. Inc.
 *
@@ -17,23 +16,22 @@
 </FILE_LICENSE>*/
 
 
-/* NFX by ITAdapter
- * Originated: 2006.01
- * Revision: NFX 5.0  2018.1.15
- * Based on zXing / Apache 2.0; See NOTICE and CHANGES for attribution
- */
+using System;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 
-namespace NFX.Media.TagCodes.QR
+namespace NFX.ITest.Graphics
 {
-  public sealed class QRDataNCorrection
+  public class GraphicsTestBase
   {
-    public QRDataNCorrection(byte[] data, byte[] correction)
+    public Stream GetResource(string name)
     {
-      Data = data;
-      Correction = correction;
-    }
-    public readonly byte[] Data;
-    public readonly byte[] Correction;
-  }
+      var assembly = Assembly.GetExecutingAssembly();
+      var resourceName = "NFX.ITest.Graphics."+name;
 
+      return assembly.GetManifestResourceStream(resourceName);
+    }
+
+  }
 }
