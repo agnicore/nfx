@@ -1,27 +1,21 @@
-#  NFX - .NET Standard Unified Software Stack + Big Memory
-
-## WARNING: REPOSITORY UNDER CONSTRUCTION 
-Use [legacy NFX v3 repository](https://github.com/aumcode/nfx) until this goes away
+#  NFX - .NET Standard Unistack Framework
 
 ### NFXv5 ANNOUNCEMENT
-The current development of NFX **IS MOVING** ~~has moved~~ [to this new repo here](https://github.com/agnicore/nfx) from [legacy repo](https://github.com/aumcode/nfx).
+The current development of NFX **HAS MOVED HERE** ~~is moving~~. This repository contains the current NFX (v5) project which targets .NET 4.7.1 and Net Stadard 2/ Core 2. We have moved from [legacy NFX v3 repository](https://github.com/aumcode/nfx)
 
 **NFX**(v5 and beyond) **is based on .Net Standard 2**,
-having all cli tools targeting both .NET FX 4.7.1+ and .NET Core 2+.
+having all of cli tools targeting both .NET FX 4.7.1+ and .NET Core 2+.
 Future NFX will not officially support targets below .NET 4.7.1 (though possible) and .NET Core 2.
 
-The legacy [NFXv3* repo](https://github.com/aumcode/nfx) will continue to target .NET 4.5/Mono and will be supported for major bug fixes however **all new feature development is going to happen here in NFXv5+**.
+The legacy [NFXv3* repo](https://github.com/aumcode/nfx) will continue to target .NET 4.5/Mono and may be supported for major bug fixes however **all new feature development is going to happen here in NFXv5+**.
 
 <img src="https://github.com/agnicore/nfx/blob/master/elm/logo/New.NFX.Logo.50.png" alt="Logo">
 
-Server UNISTACK *(unified full software stack avoiding 3rd paty libs)* framework. 
+Server **UNISTACK** *(unified full software stack avoiding 3rd paty libs)* framework. 
 
-License: **Apache 2.0**
+License: **Apache 2.0**   Runs:  **.NET 4.7.1+**, **Core 2+** 
 
-Runs/Builds:  **.NET 4.7.1+**, **Core 2+** 
-
-
-[<img src="https://ci.appveyor.com/api/projects/status/6qhr08iclbbfc5f5?svg=true" alt="Project Badge" width="150">](https://ci.appveyor.com/project/itadapter/nfx-29btl/history)
+[<img src="https://ci.appveyor.com/api/projects/status/6qhr08iclbbfc5f5?svg=true" alt="Project Badge" width="200">](https://ci.appveyor.com/project/itadapter/nfx-29btl/history)
 
 Documentation: [http://nfxlib.com](http://nfxlib.com)
 
@@ -36,7 +30,9 @@ NFX supports **cross-platform development** and is tested on:
 * **Linux** Ubuntu 16 LTS using Core 2
 * **Mac** OS 14 using Core 2
 
-     *more details/versions to come*
+NFX Builds on:
+* **Windows** / MSBuild 15 / VS 2017
+* in process - *nix *(need scripts and build process refinements)*
 
 NFX abstacts platform-specific functions via **PAL** *(Platform Abstraction Layer)* which implements features such as: 2D graphics (drawing and image compression), CPU/RAM performance counters acquisition, Security functions (EnsureAccessibleDirectory etc.). PAL is implemented for every runtime differently and gets injected into NFX at process entry point.
 
@@ -77,8 +73,7 @@ good for:
 
 
 ## Guides/Documentation
-NEW 20170617,
- all Guides and Docs/Samples/Tutorials are on the NFXLIB site
+All Guides and Docs/Samples/Tutorials are on the NFXLIB site
 
  [NFXLIB - Documentation/Guides/Tutorials](http://nfxlib.com)
  
@@ -86,9 +81,14 @@ NEW 20170617,
 
  
 ## NUGET
+*UNDER CONSTRUCTION*
+As of 2018-01-14 you can use NFXv5 only if you get it here and build it. We are still working on publishing Nuget packages
+
 
 [NFX Packages TO BE RELEASED for NFXv5 ](https://www.nuget.org/profiles/itadapter)
- 
+
+Older (NFXv3) Package home:
+
 cmd | Description
  -------|------
  `pm> install-package NFX` | NFX Core Package (App, Pile, Glue, Log, Instr etc.)
@@ -179,5 +179,5 @@ NFX uses the very Base-Class-Lib of .NET:
 * Reflection API
 * Drawing 2D (Graphics)
 
-**NFX does not use any 3rd party components.** *(with the exception of MySQL/Postgresql drivers)*
+**NFX does not use any 3rd party components.** *(with the exception of system packages which are not in the CLR/sys "core" yet, such as System.Buffers, ValueTask(T) etc...)*
 
