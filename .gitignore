@@ -24,7 +24,6 @@ Output/
 x64/
 x86/
 build/
-bld/
 [Bb]in/
 [Oo]bj/
 BUILD_INFO.txt
