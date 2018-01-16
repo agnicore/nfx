@@ -44,9 +44,9 @@ namespace NFX.Serialization.BSON
 
         /// <summary>
         /// Maximum size of a byte[] field.
-        /// Large filed (> 1Mbyte) should not be stored as fields in the database
+        /// Large filed (> 12Mbyte) should not be stored as fields in the database
         /// </summary>
-        public const int MAX_BYTE_BUFFER_SIZE = 1/*mb*/ * 1024 * 1024;
+        public const int MAX_BYTE_BUFFER_SIZE = 12/*mb*/ * 1024 * 1024;
 
         protected static Dictionary<Type, Func<string, object, BSONElement>> s_CLRtoBSON = new Dictionary<Type,Func<string, object, BSONElement>>
         {
