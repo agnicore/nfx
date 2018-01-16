@@ -1,0 +1,1 @@
+ db.COLLECTION.find().map( function(doc){ doc._id = doc._id.hex(); return doc; } );

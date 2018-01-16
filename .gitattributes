@@ -9,6 +9,7 @@
 *.less eol=lf
 *.ntc eol=lf
 *.erl eol=lf
+*.hrl eol=lf
 *.csproj eol=lf
 *.sln eol=lf
 *.xml=lf
