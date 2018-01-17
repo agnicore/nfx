@@ -5,7 +5,7 @@ SET LAST=%PROJECT_HOME:~-1%
 IF %LAST% NEQ \ (SET PROJECT_HOME=%PROJECT_HOME%\)
 
 
-set NFX_HOME=%PROJECT_HOME%NFXv5\
+set NFX_HOME=%PROJECT_HOME%NFX\
 
 set DOTNET_FRAMEWORK_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin
 
