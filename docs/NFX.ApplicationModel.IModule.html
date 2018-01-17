@@ -71,7 +71,7 @@
   <h1 id="NFX_ApplicationModel_IModule" data-uid="NFX.ApplicationModel.IModule" class="text-break">Interface IModule
   </h1>
   <div class="markdown level0 summary"><p>Describes application modules - entities that contain business domain logic of the application or
-general system logic (e.g. social network mix-in)</p>
+general system logic (e.g. financial logic, complex image rendering service, social network mix-in etc.)</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritedMembers">
@@ -133,7 +133,7 @@ general system logic (e.g. social network mix-in)</p>
   
   <a id="NFX_ApplicationModel_IModule_IsHardcodedModule_" data-uid="NFX.ApplicationModel.IModule.IsHardcodedModule*"></a>
   <h4 id="NFX_ApplicationModel_IModule_IsHardcodedModule" data-uid="NFX.ApplicationModel.IModule.IsHardcodedModule">IsHardcodedModule</h4>
-  <div class="markdown level1 summary"><p>Returns true when the module is injected in the parent context by the code, not configuration</p>
+  <div class="markdown level1 summary"><p>Returns true when the module is injected in the parent context by the code, not configuration script</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -203,6 +203,244 @@ general system logic (e.g. social network mix-in)</p>
     <tbody>
       <tr>
         <td><a class="xref" href="NFX.ApplicationModel.IModule.html">IModule</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="NFX_ApplicationModel_IModule_Get_" data-uid="NFX.ApplicationModel.IModule.Get*"></a>
+  <h4 id="NFX_ApplicationModel_IModule_Get__1_System_Func___0_System_Boolean__" data-uid="NFX.ApplicationModel.IModule.Get``1(System.Func{``0,System.Boolean})">Get&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Gets a child module of the specified TModule type optionally applying a filter.
+If module is not found then exception is thrown. Contrast with TryGet()</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TModule Get&lt;TModule&gt;(Func&lt;TModule, bool&gt; filter = null)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;TModule, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_IModule_Get_" data-uid="NFX.ApplicationModel.IModule.Get*"></a>
+  <h4 id="NFX_ApplicationModel_IModule_Get__1_System_String_" data-uid="NFX.ApplicationModel.IModule.Get``1(System.String)">Get&lt;TModule&gt;(String)</h4>
+  <div class="markdown level1 summary"><p>Gets a child module of the specified TModule type with the specified name.
+If module is not found then exception is thrown. Contrast with TryGet()</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TModule Get&lt;TModule&gt;(string name)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_IModule_TryGet_" data-uid="NFX.ApplicationModel.IModule.TryGet*"></a>
+  <h4 id="NFX_ApplicationModel_IModule_TryGet__1_System_Func___0_System_Boolean__" data-uid="NFX.ApplicationModel.IModule.TryGet``1(System.Func{``0,System.Boolean})">TryGet&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a child module of the specified TModule type optionally applying a filter.
+If module is not found then returns null. Contrast with Get()</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TModule TryGet&lt;TModule&gt;(Func&lt;TModule, bool&gt; filter = null)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;TModule, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_IModule_TryGet_" data-uid="NFX.ApplicationModel.IModule.TryGet*"></a>
+  <h4 id="NFX_ApplicationModel_IModule_TryGet__1_System_String_" data-uid="NFX.ApplicationModel.IModule.TryGet``1(System.String)">TryGet&lt;TModule&gt;(String)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a child module of the specified TModule type with the specified name.
+If module is not found then returns null. Contrast with Get()</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TModule TryGet&lt;TModule&gt;(string name)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -395,8 +633,8 @@ general system logic (e.g. social network mix-in)</p>
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>

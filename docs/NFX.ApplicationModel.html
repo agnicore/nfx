@@ -93,6 +93,11 @@ All objects may be either application-global or thread-level.
 Effectively ExecutionContext.Application is the central DI/servi e locator facility per process.
 The async code should flow the context by passing it to functors.</p>
 </section>
+      <h4><a class="xref" href="NFX.ApplicationModel.HubModule.html">HubModule</a></h4>
+      <section><p>Defines a module that does nothing else but provides a hub/namespace grouping for child modules that it contains.
+This module is a kin to NOPModule - the difference is only in the intent. NOPModule signifies the absence of any modules,
+whereas HubModule holds child modules</p>
+</section>
       <h4><a class="xref" href="NFX.ApplicationModel.ModuleBase.html">ModuleBase</a></h4>
       <section><p>Provides base for implementation of IModule</p>
 </section>
@@ -136,7 +141,7 @@ This entity must be either invoked directly or declared in config file under &qu
 </section>
       <h4><a class="xref" href="NFX.ApplicationModel.IModule.html">IModule</a></h4>
       <section><p>Describes application modules - entities that contain business domain logic of the application or
-general system logic (e.g. social network mix-in)</p>
+general system logic (e.g. financial logic, complex image rendering service, social network mix-in etc.)</p>
 </section>
       <h4><a class="xref" href="NFX.ApplicationModel.IModuleImplementation.html">IModuleImplementation</a></h4>
       <section><p>Describes module implementation</p>
@@ -174,8 +179,8 @@ general system logic (e.g. social network mix-in)</p>
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>

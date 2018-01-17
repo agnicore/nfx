@@ -79,7 +79,9 @@
     <div class="level1"><a class="xref" href="NFX.DisposableObject.html">DisposableObject</a></div>
     <div class="level2"><a class="xref" href="NFX.ApplicationModel.ApplicationComponent.html">ApplicationComponent</a></div>
     <div class="level3"><span class="xref">ModuleBase</span></div>
+      <div class="level4"><a class="xref" href="NFX.ApplicationModel.HubModule.html">HubModule</a></div>
       <div class="level4"><a class="xref" href="NFX.ApplicationModel.NOPModule.html">NOPModule</a></div>
+      <div class="level4"><a class="xref" href="NFX.PAL.NetFramework.Modules.WidgetRenderer.html">WidgetRenderer</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -172,12 +174,13 @@
   
   
   <a id="NFX_ApplicationModel_ModuleBase__ctor_" data-uid="NFX.ApplicationModel.ModuleBase.#ctor*"></a>
-  <h4 id="NFX_ApplicationModel_ModuleBase__ctor_NFX_ApplicationModel_ModuleBase_" data-uid="NFX.ApplicationModel.ModuleBase.#ctor(NFX.ApplicationModel.ModuleBase)">ModuleBase(ModuleBase)</h4>
-  <div class="markdown level1 summary"></div>
+  <h4 id="NFX_ApplicationModel_ModuleBase__ctor_NFX_ApplicationModel_IModule_" data-uid="NFX.ApplicationModel.ModuleBase.#ctor(NFX.ApplicationModel.IModule)">ModuleBase(IModule)</h4>
+  <div class="markdown level1 summary"><p>Creates a module under a parent module, such as HubModule</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected ModuleBase(ModuleBase parent)</code></pre>
+    <pre><code class="lang-csharp hljs">protected ModuleBase(IModule parent)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -190,8 +193,41 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="NFX.ApplicationModel.ModuleBase.html">ModuleBase</a></td>
+        <td><a class="xref" href="NFX.ApplicationModel.IModule.html">IModule</a></td>
         <td><span class="parametername">parent</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase__ctor_" data-uid="NFX.ApplicationModel.ModuleBase.#ctor*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase__ctor_NFX_ApplicationModel_IModule_System_Int32_" data-uid="NFX.ApplicationModel.ModuleBase.#ctor(NFX.ApplicationModel.IModule,System.Int32)">ModuleBase(IModule, Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a module under a parent module with the specified order, such as HubModule</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected ModuleBase(IModule parent, int order)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IModule.html">IModule</a></td>
+        <td><span class="parametername">parent</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">order</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -438,6 +474,100 @@
   </div>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="NFX.ApplicationModel.ApplicationComponent.html#NFX_ApplicationModel_ApplicationComponent_Destructor">ApplicationComponent.Destructor()</a></div>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_DoApplicationAfterInit_" data-uid="NFX.ApplicationModel.ModuleBase.DoApplicationAfterInit*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_DoApplicationAfterInit_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.ModuleBase.DoApplicationAfterInit(NFX.ApplicationModel.IApplication)">DoApplicationAfterInit(IApplication)</h4>
+  <div class="markdown level1 summary"><p>Override to perform this module-specific actions after app container init.
+Return true only when the system should not continue to call all child modules, false to let the system call all child modules.
+The call is used to perform initialization tasks such as inter-service dependency fixups,
+initial data loads (e.g. initial cache fetch etc..) after everything has loaded in the application container.
+The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool DoApplicationAfterInit(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_DoApplicationBeforeCleanup_" data-uid="NFX.ApplicationModel.ModuleBase.DoApplicationBeforeCleanup*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_DoApplicationBeforeCleanup_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.ModuleBase.DoApplicationBeforeCleanup(NFX.ApplicationModel.IApplication)">DoApplicationBeforeCleanup(IApplication)</h4>
+  <div class="markdown level1 summary"><p>Override to perform this module-specific actions before app container shutdown.
+Return true only when the system should not continue to call all child modules, false let the system call all child modules.
+The call is used to perform finalization tasks such as inter-service dependency tears and flushes before
+everything is about to be shutdown in the application container.
+The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool DoApplicationBeforeCleanup(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="NFX_ApplicationModel_ModuleBase_DoConfigure_" data-uid="NFX.ApplicationModel.ModuleBase.DoConfigure*"></a>
@@ -709,6 +839,120 @@
   </table>
   
   
+  <a id="NFX_ApplicationModel_ModuleBase_Get_" data-uid="NFX.ApplicationModel.ModuleBase.Get*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_Get__1_System_Func___0_System_Boolean__" data-uid="NFX.ApplicationModel.ModuleBase.Get``1(System.Func{``0,System.Boolean})">Get&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TModule Get&lt;TModule&gt;(Func&lt;TModule, bool&gt; filter = null)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;TModule, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_Get_" data-uid="NFX.ApplicationModel.ModuleBase.Get*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_Get__1_System_String_" data-uid="NFX.ApplicationModel.ModuleBase.Get``1(System.String)">Get&lt;TModule&gt;(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TModule Get&lt;TModule&gt;(string name)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
   <a id="NFX_ApplicationModel_ModuleBase_ModuleLog_" data-uid="NFX.ApplicationModel.ModuleBase.ModuleLog*"></a>
   <h4 id="NFX_ApplicationModel_ModuleBase_ModuleLog_NFX_Log_MessageType_System_String_System_String_System_Exception_System_Nullable_System_Guid__System_String_" data-uid="NFX.ApplicationModel.ModuleBase.ModuleLog(NFX.Log.MessageType,System.String,System.String,System.Exception,System.Nullable{System.Guid},System.String)">ModuleLog(MessageType, String, String, Exception, Nullable&lt;Guid&gt;, String)</h4>
   <div class="markdown level1 summary"></div>
@@ -801,8 +1045,176 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.Object.ToString()</span></div>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_TryGet_" data-uid="NFX.ApplicationModel.ModuleBase.TryGet*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_TryGet__1_System_Func___0_System_Boolean__" data-uid="NFX.ApplicationModel.ModuleBase.TryGet``1(System.Func{``0,System.Boolean})">TryGet&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TModule TryGet&lt;TModule&gt;(Func&lt;TModule, bool&gt; filter)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;TModule, <span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_TryGet_" data-uid="NFX.ApplicationModel.ModuleBase.TryGet*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_TryGet__1_System_String_" data-uid="NFX.ApplicationModel.ModuleBase.TryGet``1(System.String)">TryGet&lt;TModule&gt;(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TModule TryGet&lt;TModule&gt;(string name)where TModule : class, IModule</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TModule</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="eii">Explicit Interface Implementations
   </h3>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_NFX_ApplicationModel_IModuleImplementation_ApplicationAfterInit_" data-uid="NFX.ApplicationModel.ModuleBase.NFX#ApplicationModel#IModuleImplementation#ApplicationAfterInit*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_NFX_ApplicationModel_IModuleImplementation_ApplicationAfterInit_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.ModuleBase.NFX#ApplicationModel#IModuleImplementation#ApplicationAfterInit(NFX.ApplicationModel.IApplication)">IModuleImplementation.ApplicationAfterInit(IApplication)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IModuleImplementation.ApplicationAfterInit(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_ModuleBase_NFX_ApplicationModel_IModuleImplementation_ApplicationBeforeCleanup_" data-uid="NFX.ApplicationModel.ModuleBase.NFX#ApplicationModel#IModuleImplementation#ApplicationBeforeCleanup*"></a>
+  <h4 id="NFX_ApplicationModel_ModuleBase_NFX_ApplicationModel_IModuleImplementation_ApplicationBeforeCleanup_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.ModuleBase.NFX#ApplicationModel#IModuleImplementation#ApplicationBeforeCleanup(NFX.ApplicationModel.IApplication)">IModuleImplementation.ApplicationBeforeCleanup(IApplication)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IModuleImplementation.ApplicationBeforeCleanup(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="NFX_ApplicationModel_ModuleBase_NFX_Environment_IConfigurable_Configure_" data-uid="NFX.ApplicationModel.ModuleBase.NFX#Environment#IConfigurable#Configure*"></a>
@@ -1217,8 +1629,8 @@
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>

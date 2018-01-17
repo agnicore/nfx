@@ -85,6 +85,18 @@
       <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_ChildModules">IModule.ChildModules</a>
     </div>
     <div>
+      <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_Get__1_System_Func___0_System_Boolean__">IModule.Get&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_TryGet__1_System_Func___0_System_Boolean__">IModule.TryGet&lt;TModule&gt;(Func&lt;TModule, Boolean&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_Get__1_System_String_">IModule.Get&lt;TModule&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_TryGet__1_System_String_">IModule.TryGet&lt;TModule&gt;(String)</a>
+    </div>
+    <div>
       <a class="xref" href="NFX.ApplicationModel.IModule.html#NFX_ApplicationModel_IModule_ModuleEffectiveLogLevel">IModule.ModuleEffectiveLogLevel</a>
     </div>
     <div>
@@ -161,6 +173,70 @@ via the ModuleEffectiveLogLevel property</p>
   </table>
   <h3 id="methods">Methods
   </h3>
+  
+  
+  <a id="NFX_ApplicationModel_IModuleImplementation_ApplicationAfterInit_" data-uid="NFX.ApplicationModel.IModuleImplementation.ApplicationAfterInit*"></a>
+  <h4 id="NFX_ApplicationModel_IModuleImplementation_ApplicationAfterInit_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.IModuleImplementation.ApplicationAfterInit(NFX.ApplicationModel.IApplication)">ApplicationAfterInit(IApplication)</h4>
+  <div class="markdown level1 summary"><p>Called by the application container after all services have initialized.
+An implementation is expected to notify all subordinate (child) modules.
+The call is used to perform initialization tasks such as inter-service dependency fixups,
+initial data loads (e.g. initial cache fetch etc..) after everything has loaded in the application container.
+The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ApplicationAfterInit(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="NFX_ApplicationModel_IModuleImplementation_ApplicationBeforeCleanup_" data-uid="NFX.ApplicationModel.IModuleImplementation.ApplicationBeforeCleanup*"></a>
+  <h4 id="NFX_ApplicationModel_IModuleImplementation_ApplicationBeforeCleanup_NFX_ApplicationModel_IApplication_" data-uid="NFX.ApplicationModel.IModuleImplementation.ApplicationBeforeCleanup(NFX.ApplicationModel.IApplication)">ApplicationBeforeCleanup(IApplication)</h4>
+  <div class="markdown level1 summary"><p>Called by the application container before services shutdown.
+An implementation is expected to notify all subordinate (child) modules.
+The call is used to perform finalization tasks such as inter-service dependency cleanups,
+buffer flushes etc. before the application container starts to shutdown.
+The implementation is expected to handle internal exceptions gracefully (i.e. use log etc.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ApplicationBeforeCleanup(IApplication application)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.ApplicationModel.IApplication.html">IApplication</a></td>
+        <td><span class="parametername">application</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   
   
   <a id="NFX_ApplicationModel_IModuleImplementation_ModuleLog_" data-uid="NFX.ApplicationModel.IModuleImplementation.ModuleLog*"></a>
@@ -417,8 +493,8 @@ via the ModuleEffectiveLogLevel property</p>
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>

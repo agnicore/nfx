@@ -70,7 +70,7 @@
   
   <h1 id="NFX_Graphics_ImageUtils" data-uid="NFX.Graphics.ImageUtils" class="text-break">Class ImageUtils
   </h1>
-  <div class="markdown level0 summary"><p>Proivdes helpers for centering and fitting images</p>
+  <div class="markdown level0 summary"><p>Provides helpers for centering and fitting images</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -199,7 +199,10 @@ i.e. 0.9 means that 10% part of the image will be used for boundary detection</p
   
   <a id="NFX_Graphics_ImageUtils_ExtractMainColors2Iter_" data-uid="NFX.Graphics.ImageUtils.ExtractMainColors2Iter*"></a>
   <h4 id="NFX_Graphics_ImageUtils_ExtractMainColors2Iter_NFX_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Single_System_Single_" data-uid="NFX.Graphics.ImageUtils.ExtractMainColors2Iter(NFX.Graphics.Image,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single)">ExtractMainColors2Iter(Image, Int32, Int32, Int32, Int32, Single, Single)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Extracts three main colors and background color from source image.
+Does the same as <a class="xref" href="NFX.Graphics.ImageUtils.html#NFX_Graphics_ImageUtils_ExtractMainColors_NFX_Graphics_Image_System_Int32_System_Int32_System_Int32_System_Int32_System_Single_">ExtractMainColors(Image, Int32, Int32, Int32, Int32, Single)</a> method but performs the second extraction attempt
+if the first attempt returns almost the same colors</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -218,37 +221,45 @@ i.e. 0.9 means that 10% part of the image will be used for boundary detection</p
       <tr>
         <td><a class="xref" href="NFX.Graphics.Image.html">Image</a></td>
         <td><span class="parametername">srcBmp</span></td>
-        <td></td>
+        <td><p>Source image</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">resizeWidth</span></td>
-        <td></td>
+        <td><p>Preprocessing image width</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">resizeHeight</span></td>
-        <td></td>
+        <td><p>Preprocessing image height</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">dwnFactor1</span></td>
-        <td></td>
+        <td><p>color per each of RGB channel (2<em>2</em>2=8 base colors used as default))</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">dwnFactor2</span></td>
-        <td></td>
+        <td><p>Secondary downgrade factor for inner-area main color selection</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Single</span></td>
         <td><span class="parametername">interiorPct</span></td>
-        <td></td>
+        <td><p>Value within (0,1) range that indicates portion of image interior,
+i.e. 0.9 means that 10% part of the image will be used for boundary detection</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Single</span></td>
         <td><span class="parametername">imgDistEps</span></td>
-        <td></td>
+        <td><p>Color similarity factor. If less that specified value, then the second extraction attempt will be performed</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -263,7 +274,8 @@ i.e. 0.9 means that 10% part of the image will be used for boundary detection</p
     <tbody>
       <tr>
         <td><span class="xref">System.Drawing.Color</span>[]</td>
-        <td></td>
+        <td><p>Three main colors and background color</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -425,8 +437,8 @@ This function is usable for profile picture size/aspect normalization</p>
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>

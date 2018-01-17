@@ -102,47 +102,8 @@
   <h6><strong>Assembly</strong>: NFX.dll</h6>
   <h5 id="NFX_Media_TagCodes_QR_QRCorrectionLevel_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class QRCorrectionLevel</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class QRCorrectionLevel</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="NFX_Media_TagCodes_QR_QRCorrectionLevel__ctor_" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.#ctor*"></a>
-  <h4 id="NFX_Media_TagCodes_QR_QRCorrectionLevel__ctor_System_String_System_Int32_System_Int32_" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.#ctor(System.String,System.Int32,System.Int32)">QRCorrectionLevel(String, Int32, Int32)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public QRCorrectionLevel(string name, int ordinal, int markerBits)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">ordinal</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">markerBits</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="fields">Fields
   </h3>
   
@@ -189,6 +150,30 @@
     <tbody>
       <tr>
         <td><a class="xref" href="NFX.Media.TagCodes.QR.QRCorrectionLevel.html">QRCorrectionLevel</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <h4 id="NFX_Media_TagCodes_QR_QRCorrectionLevel_LEVELS" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.LEVELS">LEVELS</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly QRCorrectionLevel[] LEVELS</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="NFX.Media.TagCodes.QR.QRCorrectionLevel.html">QRCorrectionLevel</a>[]</td>
         <td></td>
       </tr>
     </tbody>
@@ -315,31 +300,6 @@
   </table>
   <h3 id="methods">Methods
   </h3>
-  
-  
-  <a id="NFX_Media_TagCodes_QR_QRCorrectionLevel_GetLevels_" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.GetLevels*"></a>
-  <h4 id="NFX_Media_TagCodes_QR_QRCorrectionLevel_GetLevels" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.GetLevels">GetLevels()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;QRCorrectionLevel&gt; GetLevels()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="NFX.Media.TagCodes.QR.QRCorrectionLevel.html">QRCorrectionLevel</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   
   
   <a id="NFX_Media_TagCodes_QR_QRCorrectionLevel_ToString_" data-uid="NFX.Media.TagCodes.QR.QRCorrectionLevel.ToString*"></a>
@@ -555,8 +515,8 @@
               <a href="#top">Back to top</a>
             </span>
             
-            <span>Copyright © 2006-2017 
-            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc">
+            <span>Copyright © 2006-2018 
+            <a href="http://agnicore.com/" target="_blank" title="Agnicore Inc.">
               <img id="agnicore-logo-small" src="../images/agniCore.Logo.png" alt="Agnicore Inc">
             </a>
             <br>
