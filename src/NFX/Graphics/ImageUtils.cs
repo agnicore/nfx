@@ -1,6 +1,4 @@
-﻿#warning Implement using PAL
-
-/*<FILE_LICENSE>
+﻿/*<FILE_LICENSE>
 * NFX (.NET Framework Extension) Unistack Library
 * Copyright 2003-2018 Agnicore Inc. portions ITAdapter Corp. Inc.
 *
@@ -24,7 +22,7 @@ using System.Linq;
 namespace NFX.Graphics
 {
   /// <summary>
-  /// Proivdes helpers for centering and fitting images
+  /// Provides helpers for centering and fitting images
   /// </summary>
   public static class ImageUtils
   {
@@ -42,12 +40,11 @@ namespace NFX.Graphics
     /// <param name="imgDistEps">Color similarity factor. If less that specified value, then the second extraction attempt will be performed</param>
     /// <param name="resizeWidth">Preprocessing image width</param>
     /// <param name="resizeHeight">Preprocessing image height</param>
-    /// (source image color quality reduced down to 256/<paramref name="dwnFactor1"/> color per each of RGB channel (2*2*2=8 base colors used as default))</param>
+    /// <param name="dwnFactor1"> color per each of RGB channel (2*2*2=8 base colors used as default))</param>
     /// <param name="dwnFactor2">Secondary downgrade factor for inner-area main color selection</param>
     /// <param name="interiorPct">Value within (0,1) range that indicates portion of image interior,
     /// i.e. 0.9 means that 10% part of the image will be used for boundary detection</param>
-    /// <param name="imgDistEps">Color similarity factor. If less that specified value, then the second extraction attempt will be performed</param>
-    /// <returns>Three main colors and background volor</returns>
+    /// <returns>Three main colors and background color</returns>
     public static Color[] ExtractMainColors2Iter(Image srcBmp,
                                                  int resizeWidth = 64, int resizeHeight = 64,
                                                  int dwnFactor1 = 128, int dwnFactor2 = 24,
@@ -96,7 +93,7 @@ namespace NFX.Graphics
       using (var rszImg = srcImg.ResizeTo(resizeWidth, resizeHeight))
       using (var maskImg = Image.Of(resizeWidth, resizeHeight, rszImg.XResolution, rszImg.YResolution, rszImg.PixelFormat))
       {
-        // STEP 2: extract downgraded (very few colors) - color histogramm (main and background)
+        // STEP 2: extract downgraded (very few colors) - color histogram (main and background)
         // IMPORTANT: these colors will be used below not as itself but only AS A MASK
         for (int x=0; x<resizeWidth; x++)
         for (int y=0; y<resizeHeight; y++)
@@ -109,11 +106,11 @@ namespace NFX.Graphics
           var b = p.B - p.B%dwnFactor1;
           var color = Color.FromArgb(a, r, g, b);
 
-          // histogramm for a main color
+          // histogram for a main color
           if (!mainHist.ContainsKey(color)) mainHist[color] = 1;
           else mainHist[color] += 1;
 
-          // histogramm for a background color
+          // histogram for a background color
           if (Math.Abs(2 * x - resizeWidth) >= interiorWidth ||
               Math.Abs(2 * y - resizeHeight) >= interiorHeight)
           {
@@ -131,17 +128,17 @@ namespace NFX.Graphics
         var secondArea = (areas.Count > 1) ? areas[1].Key : firstArea;
         var thirdArea  = (areas.Count > 2) ? areas[2].Key : secondArea;
 
-        // get histogramm for background area each of three main areas
+        // get histogram for background area each of three main areas
         ts_FirstHist.Clear();
         ts_SecondHist.Clear();
         ts_ThirdHist.Clear();
         ts_BckHist.Clear();
 
-        // STEP 3: fill color (1,2,3+background) histogramms
+        // STEP 3: fill color (1,2,3+background) histograms
         for (int x=0; x<resizeWidth; x++)
         for (int y=0; y<resizeHeight; y++)
         {
-          // fetch histogramm by a mask
+          // fetch histogram by a mask
           var maskP = maskImg.GetPixel(x, y);
           Dictionary<Color, int> h;
           if (maskP == firstArea)       h = ts_FirstHist;

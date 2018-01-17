@@ -28,7 +28,7 @@ namespace NFX.Wave
   public static class PlatformUtils
   {
 
-    #warning Perepisat!
+    //todo: Rewrite with new WAVE server!!!
     public static void SetRequestQueueLimit(HttpListener listener, long len){}
 
 

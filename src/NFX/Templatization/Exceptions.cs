@@ -63,9 +63,9 @@ namespace NFX.Templatization
   }
 
   #warning Implement using PAL
-  /// <summary>
-  /// Thrown by  template code compilers
-  /// </summary>
+  ///// <summary>
+  ///// Thrown by  template code compilers
+  ///// </summary>
   //[Serializable]
   //public class TemplateCodeCompilerException : TemplateCompilerException, IWrappedExceptionDataSource
   //{

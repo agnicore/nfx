@@ -686,6 +686,8 @@ namespace NFX.DataAccess.CRUD
             /// Tries to find a row with the same set of key fields in this table and if found, replaces it and returns its index,
             /// otherwise returns -1
             /// </summary>
+            /// <param name="row">Row</param>
+            /// <param name="key">Primary key</param>
             /// <param name="rowUpgrade">
             ///   When not null, is called with old and new instance of the row to be updated. It returns
             ///   the row to be saved. Note that the returned row must have the same key and schema or else the function will throw.

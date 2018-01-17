@@ -14,9 +14,9 @@ namespace NFX.Wave.CMS
   [Serializable]
   public abstract class Resource : INamed
   {
+    //todo: Need to finish this class
 
-
-
+    #pragma warning disable 0649
     [NonSerialized]
     internal Portal m_Portal;
     private FID m_VersionID;
@@ -30,6 +30,7 @@ namespace NFX.Wave.CMS
     private User m_CreationUser;
     private User m_ModificationUser;
     private User m_ApprovalUser;
+    #pragma warning restore 0649
 
 
     /// <summary>

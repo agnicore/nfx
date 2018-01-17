@@ -92,7 +92,7 @@ namespace NFX
 
     public static void Pass(string message = null, string from = null)
     {
-      #warning Need to tell runner context that everything is OK
+      //todo: Need to tell runner context that everything is OK?
     }
 
     #region AreEqual/AreNotEqual

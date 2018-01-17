@@ -70,7 +70,7 @@ namespace NFX.Web.GeoLookup
               }
               catch
               {
-                #warning TODO: Finish throwing detailed exception
+                //todo: Finish throwing detailed exception
                 throw;
               }
               s_Instance = result;

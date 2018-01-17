@@ -41,8 +41,10 @@ namespace NFX.Security
 
     #region Fields
 
+      #pragma warning disable 0649
       [Config("$default|$is-default")]
       private bool m_IsDefault;
+      #pragma warning restore 0649
 
       [Config(Default = PasswordStrengthLevel.Normal)]
       private PasswordStrengthLevel m_StrengthLevel;

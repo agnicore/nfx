@@ -46,7 +46,7 @@ namespace NFX.Time
 
         public TimeLocation TimeLocation
         {
-          get { return new TimeLocation(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now), "Local Computer", true); }
+          get { return new TimeLocation(TimeZoneInfo.Local.GetUtcOffset(DateTime.Now), "Local Computer", true); }
         }
 
 

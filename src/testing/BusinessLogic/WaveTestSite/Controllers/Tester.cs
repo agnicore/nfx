@@ -24,7 +24,7 @@ using System.Threading;
 using NFX;
 using NFX.Graphics;
 using NFX.Wave.MVC;
-//using NFX.Security.CAPTCHA;
+using NFX.Security.CAPTCHA;
 using NFX.Serialization.JSON;
 using NFX.DataAccess;
 using NFX.DataAccess.CRUD;
@@ -185,28 +185,22 @@ namespace WaveTestSite.Controllers
       [Action]
       public object CAPTCHA(string key=null)
       {
-        //WorkContext.NeedsSession();
-        //WorkContext.Response.SetNoCacheHeaders();
+        WorkContext.NeedsSession();
+        WorkContext.Response.SetNoCacheHeaders();
 
-        //if (key.IsNotNullOrWhiteSpace() && WorkContext.Session!=null)
-        //{
-        //  var pk = WorkContext.Session.Items[key] as PuzzleKeypad;
-        //  if (pk!=null) return pk.DefaultRender();
-        //}
+        if (key.IsNotNullOrWhiteSpace() && WorkContext.Session != null)
+        {
+          var pk = WorkContext.Session.Items[key] as PuzzleKeypad;
+          if (pk != null) return pk.DefaultRender();
+        }
 
-        //return (new PuzzleKeypad("01234")).DefaultRender();
-
-        #warning Implement this after PuzzleKeypad
-        return "";
+        return (new PuzzleKeypad("01234")).DefaultRender();
       }
 
       [Action]
       public object CAPTCHA2(string secret="0123456789", string fn = null)
       {
-       #warning Implement this after PuzzleKeypad
-        //return new Picture((new PuzzleKeypad(secret)).DefaultRender(System.Drawing.Color.Yellow),
-        //                    System.Drawing.Imaging.ImageFormat.Jpeg, fn);
-        return null;
+        return new Picture((new PuzzleKeypad(secret)).DefaultRender(System.Drawing.Color.Yellow), JpegImageFormat.Standard, fn);
       }
 
       [Action("person", 1, "match{methods=GET}")]
@@ -226,37 +220,33 @@ namespace WaveTestSite.Controllers
       [Action("person", 1, "match{methods=POST}")]
       public object PersonPost(Person row)
       {
-        return null;
+        var puzzlePass = false;
+        WorkContext.NeedsSession();
+        if (WorkContext.Session != null && row.Puzzle != null)
+        {
+          var pk = WorkContext.Session["PersonPuzzle"] as PuzzleKeypad;
+          if (pk != null)
+          {
+            var answer = row.Puzzle["Answer"] as JSONDataArray;
+            if (answer != null)
+              puzzlePass = pk.DecipherCoordinates(answer) == pk.Code;
+          }
+        }
 
-        #warning Finish!
+        Exception error = null;
+        if (puzzlePass)
+        {
+          row.YearsInService++;
+          error = row.Validate();
+        }
+        else
+          error = new CRUDFieldValidationException("Person", "Puzzle", "Please answer the question correctly");
 
-        //var puzzlePass = false;
-        //WorkContext.NeedsSession();
-        //if (WorkContext.Session!=null && row.Puzzle!=null)
-        //{
-        //  var pk = WorkContext.Session["PersonPuzzle"] as PuzzleKeypad;
-        //  if (pk!=null)
-        //  {
-        //   var answer = row.Puzzle["Answer"] as JSONDataArray;
-        //   if (answer!=null)
-        //    puzzlePass = pk.DecipherCoordinates(answer)==pk.Code;
-        //  }
-        //}
+        if (row.Puzzle != null)
+          row.Puzzle.Remove("Answer");
 
-        //Exception error = null;
-        //if (puzzlePass)
-        //{
-        //  row.YearsInService++;
-        //  error = row.Validate();
-        //}
-        //else
-        // error= new CRUDFieldValidationException("Person", "Puzzle", "Please answer the question correctly");
-
-        //if (row.Puzzle!=null)
-        //  row.Puzzle.Remove("Answer");
-
-        //makePuzzle();
-        //return new ClientRecord(row, error);
+        makePuzzle();
+        return new ClientRecord(row, error);
       }
 
       [Action]
@@ -312,12 +302,9 @@ namespace WaveTestSite.Controllers
 
       private void makePuzzle()
       {
-        return;
-        #warning Finish!!!
-
-        //var pk = new PuzzleKeypad(DateTime.Now.Year.ToString(), "0123456789?*@abzqw", 8);
-        //WorkContext.NeedsSession();
-        //WorkContext.Session["PersonPuzzle"] = pk;
+        var pk = new PuzzleKeypad(DateTime.Now.Year.ToString(), "0123456789?*@abzqw", 8);
+        WorkContext.NeedsSession();
+        WorkContext.Session["PersonPuzzle"] = pk;
       }
 
       static Tester()

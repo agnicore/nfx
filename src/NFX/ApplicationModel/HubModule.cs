@@ -11,6 +11,7 @@ namespace NFX.ApplicationModel
   {
     public HubModule() : base(){ }
     public HubModule(IModule parent) : base(parent){ }
+    public HubModule(IModule parent, int order) : base(parent, order){ }
     public override bool IsHardcodedModule => false;
   }
 }

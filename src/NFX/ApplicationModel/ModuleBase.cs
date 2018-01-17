@@ -23,6 +23,11 @@ namespace NFX.ApplicationModel
     /// </summary>
     protected ModuleBase(IModule parent) : base(parent) { }
 
+    /// <summary>
+    /// Creates a module under a parent module with the specified order, such as HubModule
+    /// </summary>
+    protected ModuleBase(IModule parent, int order) : base(parent) { m_Order = order; }
+
     protected override void Destructor()
     {
       cleanupChildren(true);
