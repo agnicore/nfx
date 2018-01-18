@@ -121,7 +121,7 @@ namespace NFX.Log
             /// <summary>
             /// Latches last problematic msg
             /// </summary>
-            public Message LastCatastrophy { get {return m_LastCatastrophy;}}
+            public Message LastCatastrophe { get {return m_LastCatastrophy;}}
 
             /// <summary>
             /// Returns registered destinations. This call is thread safe

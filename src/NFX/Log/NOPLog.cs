@@ -58,7 +58,7 @@ namespace NFX.Log
 
             public Message LastError       { get {return null;}}
 
-            public Message LastCatastrophy { get {return null;}}
+            public Message LastCatastrophe { get {return null;}}
 
 
         public void Write(Message msg)

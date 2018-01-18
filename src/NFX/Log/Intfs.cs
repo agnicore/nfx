@@ -39,7 +39,7 @@ namespace NFX.Log
 
          Message LastWarning { get;}
          Message LastError { get;}
-         Message LastCatastrophy { get;}
+         Message LastCatastrophe { get;}
       }
 
 
