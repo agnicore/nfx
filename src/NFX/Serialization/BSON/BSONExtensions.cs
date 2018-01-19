@@ -36,7 +36,7 @@ namespace NFX.Serialization.BSON
             {
               var guid = (Guid)value;
               if (guid == Guid.Empty) return onNullOrEmpty(document, name, skipNull, required);
-              return document.Set(new BSONBinaryElement(name, new BSONBinary(BSONBinaryType.UUID, ((Guid)value).ToByteArray())));
+              return document.Set(new BSONBinaryElement(name, new BSONBinary(BSONBinaryType.UUID, ((Guid)value).ToNetworkByteOrder())));
             }
             else if (value is GDID)
             {

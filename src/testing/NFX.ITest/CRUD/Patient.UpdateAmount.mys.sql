@@ -1,3 +1,3 @@
 ﻿update tbl_patient
-set AMOUNT = 110.99
+set AMOUNT = ?pAmount
 where SSN = ?pSSN

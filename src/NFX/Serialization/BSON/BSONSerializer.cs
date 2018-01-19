@@ -130,7 +130,7 @@ namespace NFX.Serialization.BSON
         var id = BSONSerializableAttribute.GetGuidTypeAttribute<object, BSONSerializableAttribute>(t)
                                           .TypeGuid;
 
-        var telm = new BSONBinaryElement(TypeIDFieldName, new BSONBinary(BSONBinaryType.UUID, id.ToByteArray()));
+        var telm = new BSONBinaryElement(TypeIDFieldName, new BSONBinary(BSONBinaryType.UUID, id.ToNetworkByteOrder()));
         doc.Set( telm );
         return true;
       }
