@@ -11,7 +11,7 @@ The legacy [NFXv3* repo](https://github.com/aumcode/nfx) will continue to target
 
 <img src="https://github.com/agnicore/nfx/blob/master/elm/logo/New.NFX.Logo.50.png" alt="Logo">
 
-Server **UNISTACK** *(unified full software stack avoiding 3rd paty libs)* framework. 
+Server **UNISTACK** *(unified full software stack avoiding dependencies on 3rd paty libs)* framework. 
 
 License: **Apache 2.0**   Runs:  **.NET 4.7.1+**, **Core 2+** 
 
