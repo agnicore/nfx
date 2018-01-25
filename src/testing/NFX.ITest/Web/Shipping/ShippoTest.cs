@@ -25,10 +25,6 @@ using NFX.Web.Shipping;
 
 namespace NFX.ITest.Web.Shipping
 {
-
-  #warning SPOL please manually merge from nfx v3
-
-
   [Runnable]
   public class ShippoTest : IRunnableHook
   {

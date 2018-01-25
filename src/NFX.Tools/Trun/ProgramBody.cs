@@ -47,6 +47,8 @@ namespace NFX.Tools.Trun
           catch(Exception error)
           {
            ConsoleUtils.Error(error.ToMessageWithType());
+           ConsoleUtils.Warning(error.StackTrace);
+           Console.WriteLine();
            System.Environment.ExitCode = -1;
           }
         }

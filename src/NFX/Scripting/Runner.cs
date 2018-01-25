@@ -154,7 +154,18 @@ namespace NFX.Scripting
           if (!App.Active) break;
           var fid = FID.Generate();
           Exception error = null;
-          var runnable = Activator.CreateInstance(run.t);
+          object runnable = null;
+          try
+          {
+            runnable = Activator.CreateInstance(run.t);
+          }
+          catch(Exception ex)
+          {
+            error = new RunnerException($"Run() -> Activator.CreateInstance(`{run.t.FullNameWithExpandedGenericArgs()}`): {ex.ToMessageWithType()}" , ex);
+            Host.EndRunnable(this, fid, null, error);
+            continue;
+          }
+
           try
           {
               Host.BeginRunnable(this, fid, runnable);
@@ -186,7 +197,9 @@ namespace NFX.Scripting
     {
       var allTypes = Assembly.GetTypes();
 
-      foreach(var t in allTypes)
+      var allSuitableClasses = allTypes.Where( t => t.IsClass && !t.IsAbstract);
+
+      foreach(var t in allSuitableClasses)
       {
         var attr = t.GetCustomAttribute<RunnableAttribute>(false);
         if (attr == null) continue;
