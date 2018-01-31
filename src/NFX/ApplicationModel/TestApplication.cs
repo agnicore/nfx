@@ -71,6 +71,8 @@ namespace NFX.ApplicationModel
 
         public virtual bool IsUnitTest { get; set; }
 
+        public virtual string EnvironmentName { get; set; }
+
         public virtual bool ForceInvariantCulture { get; set; }
 
         public virtual Guid InstanceID { get { return m_InstanceID;}}

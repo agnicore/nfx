@@ -196,6 +196,11 @@ namespace NFX
      /// </summary>
      public static string Name { get { return Instance.Name;} }
 
+    /// <summary>
+    /// Returns environment name
+    /// </summary>
+    public static string EnvironmentName { get { return Instance.EnvironmentName; } }
+
 
      /// <summary>
      /// Returns the location

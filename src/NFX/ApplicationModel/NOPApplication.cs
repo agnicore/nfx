@@ -77,6 +77,8 @@ namespace NFX.ApplicationModel
 
         public bool IsUnitTest{ get{ return false; } }
 
+        public string EnvironmentName { get { return string.Empty; } }
+
         public bool ForceInvariantCulture { get { return false; } }
 
         public Guid InstanceID
