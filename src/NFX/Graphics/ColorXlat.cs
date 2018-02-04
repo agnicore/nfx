@@ -62,7 +62,7 @@ namespace NFX.Graphics
 
     private static int readH1(string s, ref int i)
     {
-      int c = s[i++];
+      int c = s[++i];
       c = c < ':' ? c - '0' : 10 + (c > 'F' ? c - 'a' : c - 'A');
       return c;
     }
