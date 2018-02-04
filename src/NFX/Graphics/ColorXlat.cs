@@ -18,6 +18,7 @@ namespace NFX.Graphics
 
       var i = html.IndexOf('#');
       if (i<0) return Color.FromName(html);
+      i++;
 
       if (html.Length-i>=6)
       {
@@ -62,7 +63,7 @@ namespace NFX.Graphics
 
     private static int readH1(string s, ref int i)
     {
-      int c = s[++i];
+      int c = s[i++];
       c = c < ':' ? c - '0' : 10 + (c > 'F' ? c - 'a' : c - 'A');
       return c;
     }
