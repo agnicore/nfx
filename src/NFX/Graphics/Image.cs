@@ -92,6 +92,12 @@ namespace NFX.Graphics
       }
     }
 
+    /// <summary>
+    /// Returns the format which this image was loaded from (FromBytes(),FromStream()...) or null if this image was not loaded
+    /// by a call to any of the From*() methods (e.g. FromBytes(),FromStream()...)
+    /// </summary>
+    public ImageFormat LoadFormat { get {  EnsureObjectNotDisposed(); return m_Handle.LoadFormat; } }
+
     public ImagePixelFormat PixelFormat { get {  EnsureObjectNotDisposed(); return m_Handle.PixelFormat; } }
 
     public Size Size { get{  EnsureObjectNotDisposed(); return m_Handle.GetSize(); } }
@@ -115,8 +121,6 @@ namespace NFX.Graphics
       EnsureObjectNotDisposed();
       m_Handle.MakeTransparent(dflt);
     }
-
-    //todo: Lock bits
 
     public Color GetPixel(int x, int y) => GetPixel(new Point(x, y));
     public Color GetPixel(Point p)

@@ -30,6 +30,8 @@ namespace NFX.PAL.NetFramework.Graphics
       if (bmp==null)
         throw new NetFrameworkPALException(StringConsts.ARGUMENT_ERROR + $"{nameof(NetImage)}.ctor(img!bitmap)");
       m_Bitmap = bmp;
+
+      m_LoadFormat = xlator.xlat( img.RawFormat );
     }
 
     protected override void Destructor()
@@ -39,10 +41,13 @@ namespace NFX.PAL.NetFramework.Graphics
     }
 
     private Bitmap m_Bitmap;
+    private NFX.Graphics.ImageFormat m_LoadFormat;
 
     internal Bitmap Bitmap => m_Bitmap;
 
     public ImagePixelFormat PixelFormat => xlator.xlat(m_Bitmap.PixelFormat);
+
+    public NFX.Graphics.ImageFormat LoadFormat => m_LoadFormat;
 
     public Color GetPixel(Point p) => m_Bitmap.GetPixel(p.X, p.Y);
     public void SetPixel(Point p, Color color) => m_Bitmap.SetPixel(p.X, p.Y, color);

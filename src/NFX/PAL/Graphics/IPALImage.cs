@@ -11,6 +11,7 @@ namespace NFX.PAL.Graphics
     Size GetSize();
 
     ImagePixelFormat PixelFormat { get; }
+    ImageFormat LoadFormat{ get; }
 
     /// <summary>
     /// PPI resolution

@@ -26,6 +26,12 @@ namespace NFX.Graphics
   {
     public static readonly BitmapImageFormat Monochrome = new BitmapImageFormat(2);
 
+    public static readonly BitmapImageFormat Standard = new BitmapImageFormat();
+
+    public BitmapImageFormat() : base(Int32.MaxValue) //create full resolution
+    {
+    }
+
     public BitmapImageFormat(int colors) : base(colors)
     {
     }
@@ -61,6 +67,12 @@ namespace NFX.Graphics
   public sealed class GifImageFormat : ImageFormat
   {
     public static readonly GifImageFormat Monochrome = new GifImageFormat(2);
+    public static readonly GifImageFormat Standard = new GifImageFormat();
+
+    public GifImageFormat() : base(0xff)
+    {
+
+    }
 
     public GifImageFormat(int colors) : base(colors)
     {

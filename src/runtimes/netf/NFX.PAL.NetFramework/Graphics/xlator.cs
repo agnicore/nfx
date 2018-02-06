@@ -153,5 +153,16 @@ namespace NFX.PAL.NetFramework.Graphics
         default: return System.Drawing.GraphicsUnit.World;
       }
     }
+
+    internal static ImageFormat xlat(System.Drawing.Imaging.ImageFormat format)
+    {
+      if      (format==System.Drawing.Imaging.ImageFormat.Png)   return PngImageFormat.Standard;
+      else if (format==System.Drawing.Imaging.ImageFormat.Gif)   return GifImageFormat.Standard;
+      else if (format==System.Drawing.Imaging.ImageFormat.Jpeg)  return JpegImageFormat.Standard;
+      else if (format==System.Drawing.Imaging.ImageFormat.Bmp)   return BitmapImageFormat.Standard;
+
+      return null;
+    }
+
   }
 }

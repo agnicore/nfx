@@ -40,5 +40,6 @@ namespace NFX.PAL.NetFramework.Graphics
     {
       return new NetImage(size, resolution, pixFormat);
     }
+
   }
 }
