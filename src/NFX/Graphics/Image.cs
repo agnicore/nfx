@@ -83,7 +83,7 @@ namespace NFX.Graphics
 
     private IPALImage m_Handle;
 
-    internal IPALImage Handle
+    public IPALImage Handle
     {
       get
       {

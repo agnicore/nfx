@@ -24,7 +24,7 @@ namespace NFX.PAL.NetFramework.Graphics
       m_Bitmap.SetResolution(resolution.Width, resolution.Height);
     }
 
-    internal NetImage(System.Drawing.Image img)
+    public NetImage(System.Drawing.Image img)
     {
       var bmp = img as Bitmap;
       if (bmp==null)
@@ -43,7 +43,7 @@ namespace NFX.PAL.NetFramework.Graphics
     private Bitmap m_Bitmap;
     private NFX.Graphics.ImageFormat m_LoadFormat;
 
-    internal Bitmap Bitmap => m_Bitmap;
+    public Bitmap Bitmap => m_Bitmap;
 
     public ImagePixelFormat PixelFormat => xlator.xlat(m_Bitmap.PixelFormat);
 
