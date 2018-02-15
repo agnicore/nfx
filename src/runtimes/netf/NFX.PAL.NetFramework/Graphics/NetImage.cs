@@ -79,13 +79,17 @@ namespace NFX.PAL.NetFramework.Graphics
     public void Save(string fileName, NFXImageFormat format)
     {
       var (codec, pars) = getEncoder(format);
-      m_Bitmap.Save(fileName, codec, pars);
+
+      using (var copy = makeSaveCopy())
+        copy.Save(fileName, codec, pars);
     }
 
     public void Save(Stream stream, NFXImageFormat format)
     {
       var (codec, pars) = getEncoder(format);
-      m_Bitmap.Save(stream, codec, pars);
+
+      using (var copy = makeSaveCopy())
+        copy.Save(stream, codec, pars);
     }
 
     public byte[] Save(NFXImageFormat format)
@@ -95,6 +99,16 @@ namespace NFX.PAL.NetFramework.Graphics
         this.Save(ms, format);
         return ms.ToArray();
       }
+    }
+
+    // This method is needed as a workaround MS GDI+ bug / inefficient behavior:
+    // one can not save GDI image that was just loaded from somewhere else
+    private Bitmap makeSaveCopy()
+    {
+      // https://social.msdn.microsoft.com/Forums/vstudio/en-US/b15357f1-ad9d-4c80-9ec1-92c786cca4e6/bitmapsave-a-generic-error-occurred-in-gdi?forum=netfxbcl
+      // http://blog.vishalon.net/bitmapsave-a-generic-error-occurred-in-gdi
+
+      return new Bitmap(m_Bitmap);
     }
 
     private (ImageCodecInfo codec, EncoderParameters pars) getEncoder(NFXImageFormat format)
@@ -124,7 +138,7 @@ namespace NFX.PAL.NetFramework.Graphics
       }
 
 
-      return ( codec: codec, pars: null );
+      return ( codec: codec, pars: pars );
     }
   }
 }

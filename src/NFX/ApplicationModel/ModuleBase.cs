@@ -206,7 +206,7 @@ namespace NFX.ApplicationModel
     {
       if (node==null || !node.Exists) return Enumerable.Empty<IConfigSectionNode>();
 
-      node = node[CommonApplicationLogic.CONFIG_MODULES_SECTION];
+      node = node[CommonApplicationLogic.CONFIG_MODULES_SECTION];// module{.. props...... modules{ ....... } }
 
       return node.Children.Where(c => c.IsSameName(CommonApplicationLogic.CONFIG_MODULE_SECTION));
     }

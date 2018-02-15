@@ -26,10 +26,10 @@ namespace NFX.Graphics
   /// </summary>
   public static class ImageUtils
   {
-    [ThreadStatic] private static Dictionary<Color, int> ts_FirstHist  = new Dictionary<Color, int>();
-    [ThreadStatic] private static Dictionary<Color, int> ts_SecondHist = new Dictionary<Color, int>();
-    [ThreadStatic] private static Dictionary<Color, int> ts_ThirdHist  = new Dictionary<Color, int>();
-    [ThreadStatic] private static Dictionary<Color, int> ts_BckHist    = new Dictionary<Color, int>();
+    [ThreadStatic] private static Dictionary<Color, int> ts_FirstHist;
+    [ThreadStatic] private static Dictionary<Color, int> ts_SecondHist;
+    [ThreadStatic] private static Dictionary<Color, int> ts_ThirdHist;
+    [ThreadStatic] private static Dictionary<Color, int> ts_BckHist;
 
     /// <summary>
     /// Extracts three main colors and background color from source image.
@@ -129,10 +129,10 @@ namespace NFX.Graphics
         var thirdArea  = (areas.Count > 2) ? areas[2].Key : secondArea;
 
         // get histogram for background area each of three main areas
-        ts_FirstHist.Clear();
-        ts_SecondHist.Clear();
-        ts_ThirdHist.Clear();
-        ts_BckHist.Clear();
+        if (ts_FirstHist==null)  ts_FirstHist=new Dictionary<Color, int>();  else ts_FirstHist.Clear();
+        if (ts_SecondHist==null) ts_SecondHist=new Dictionary<Color, int>(); else ts_SecondHist.Clear();
+        if (ts_ThirdHist==null)  ts_ThirdHist=new Dictionary<Color, int>();  else ts_ThirdHist.Clear();
+        if (ts_BckHist==null)    ts_BckHist=new Dictionary<Color, int>();    else ts_BckHist.Clear();
 
         // STEP 3: fill color (1,2,3+background) histograms
         for (int x=0; x<resizeWidth; x++)
