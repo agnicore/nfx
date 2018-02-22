@@ -206,7 +206,7 @@ namespace NFX.Glue.Native
 
             /// <summary>
             /// Imposes a limit on how many memory chunks can be stored in free chunk pool.
-            /// The chunks can be resued for making new connections.
+            /// The chunks can be reused for making new connections.
             /// This setting is common for both server and client as they share the same pool
             /// </summary>
             [Config(null, DEFAULT_MAX_CHUNK_POOL_COUNT)]

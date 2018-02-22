@@ -651,6 +651,93 @@ CREATE TABLE `tbl_employee` (
       }
     }
 
+    [Run]
+    public void UpdateEmployeeRowsAffected()
+    {
+      var row = makeEmployee(new GDID(0, 0, 1));
+      using(var ds = makeDataStore())
+      {
+        var affected = ds.Insert(row);
+        Aver.AreEqual(1, affected, "Insert"); // notice: insert new row - affected=1
+
+        affected = ds.Update(row);
+        Aver.AreEqual(0, affected, "UpdateSame"); // updating that has not changed - affected=0
+
+        row.Name = "Pupkin";
+        affected = ds.Update(row);
+        Aver.AreEqual(1, affected, "UpdateDifferent"); // affected=1 because we changed Name and updated
+      }
+    }
+
+    [Run]
+    public void UpsertEmployeeRowsAffected()
+    {
+      var row = makeEmployee(new GDID(0, 0, 2));
+      using(var ds = makeDataStore())
+      {
+        var affected = ds.Upsert(row);
+        Aver.AreEqual(1, affected, "InitUpsert"); // note: upserted noneexistent row - 1 inserted
+
+        affected = ds.Upsert(row);
+        Aver.AreEqual(0, affected, "UpsertSame"); // nothing affected as row has not changed
+
+        row.Name = "Pupkin";
+        affected = ds.Upsert(row);
+        Aver.AreEqual(2, affected, "UpsertDifferent");  // checked existing and updated MySQL returns 2 on row merge
+      }
+    }
+
+    [Run]
+    public void UpdateUnknownRowsAffected()
+    {
+      var row = makeEmployee(new GDID(0, 0, 1));
+      using(var ds = makeDataStore())
+      {
+        var affected = ds.Insert(row);
+        Aver.AreEqual(1, affected, "Insert");
+
+        row.GDID = new GDID(0, 0, 2);
+        affected = ds.Update(row);
+        Aver.AreEqual(0, affected, "UpdateUnknown");
+
+        affected = ds.Upsert(row);
+        Aver.AreEqual(1, affected, "Upsert");
+
+        affected = ds.Delete(row);
+        Aver.AreEqual(1, affected, "Delete");
+
+        affected = ds.Update(row);
+        Aver.AreEqual(0, affected, "UpdateDeleted");
+
+        affected = ds.Delete(row);
+        Aver.AreEqual(0, affected, "DeleteDeleted");
+      }
+    }
+
+    [Run]
+    public void UpdateUnknownWithoutFetchRowsAffected()
+    {
+      var row = makeEmployee(new GDID(0, 0, 1));
+      using(var ds = makeDataStore())
+      {
+        var affected = ds.Insert(row);
+        Aver.AreEqual(1, affected, "Insert");
+
+        var qry = new Query("CRUD.Queries.Employee.UpdateByGDID")
+        {
+          new Query.Param("pGDID", new GDID(0, 0, 2))
+        };
+        affected = ds.ExecuteWithoutFetch(qry);
+        Aver.AreEqual(0, affected, "UpdateUnknown");
+
+        qry = new Query("CRUD.Queries.Employee.UpdateByGDID")
+        {
+          new Query.Param("pGDID", new GDID(0, 0, 1))
+        };
+        affected = ds.ExecuteWithoutFetch(qry);
+        Aver.AreEqual(1, affected, "UpdateExisting");
+      }
+    }
 
     #region .pvt
 

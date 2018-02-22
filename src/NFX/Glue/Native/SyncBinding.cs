@@ -175,7 +175,7 @@ namespace NFX.Glue.Native
 
         #region Protected
 
-            internal static IPEndPoint ToIPEndPoint(Node node)
+            protected internal static IPEndPoint ToIPEndPoint(Node node)
             {
                 return (node.Host + ':' + node.Service).ToIPEndPoint(DEFAULT_PORT);
             }

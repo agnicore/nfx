@@ -42,14 +42,22 @@ published.removeChildren = function(el) {
 published.addClass = function(elem, className) {
   if (typeof(elem) === tUNDEFINED || elem === null || published.strEmpty(className)) return;
 
-  published.removeClass(elem, className);
-  elem.className += (" " + className);
+  if (elem.classList && elem.classList.toggle) {
+    elem.classList.toggle(className, true);
+  } else {
+    published.removeClass(elem, className);
+    elem.className += (" " + className);
+  }
 };
 
 published.removeClass = function(elem, className) {
   if (typeof(elem) === tUNDEFINED || elem === null || published.strEmpty(className) || typeof(elem.className) === tUNDEFINED) return;
 
-  elem.className = elem.className.replace(new RegExp('(?:^|\\s)' + className + '(?!\\S)', "g") , '' );
+  if (elem.classList && elem.classList.toggle) {
+    elem.classList.toggle(className, false);
+  } else {
+    elem.className = elem.className.replace(new RegExp('(?:^|\\s)' + className + '(?!\\S)', "g") , '' );
+  }
 };
 
 published.fullHieght = function(elem) {

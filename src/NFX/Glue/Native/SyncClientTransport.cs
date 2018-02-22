@@ -212,7 +212,7 @@ namespace NFX.Glue.Native
                {
                   Instrumentation.ClientSerializedOverMaxMsgSizeErrorEvent.Happened(Node);
                   //do not tear the socket, however we may have added extra types to Serializer typereg that server never received
-                  //so in thatcase we do close the channel
+                  //so in that case we do close the channel
                   throw new MessageSizeException(size, Binding.MaxMsgSize, "putRequest("+request.RequestID+")", m_Serializer.BatchTypesAdded);
                }
 
