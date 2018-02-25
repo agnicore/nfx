@@ -67,36 +67,62 @@ namespace NFX.Glue.Native
         #endregion
 
 
-        #region Public
+        #region Protected
 
-                protected override CallSlot DoSendRequest(ClientEndPoint endpoint, RequestMsg request, CallOptions options)
-                {
-                  try
-                  {
-                    ensureClient();
-                    return doRequest(endpoint, request, options);
-                  }
-                  catch(Exception error)
-                  {
-                    var commError = error is SocketException ||
-                                    error is System.IO.IOException ||
-                                    (typeof(ProtocolException).IsAssignableFrom(error.GetType()) && ((ProtocolException)error).CloseChannel)||
-                                    (error is SlimSerializationException && m_Serializer.BatchTypesAdded) ||
-                                    (error is SlimDeserializationException);
+            protected override CallSlot DoSendRequest(ClientEndPoint endpoint, RequestMsg request, CallOptions options)
+            {
+              try
+              {
+                ensureClient();
+                return doRequest(endpoint, request, options);
+              }
+              catch(Exception error)
+              {
+                var commError = error is SocketException ||
+                                error is System.IO.IOException ||
+                                (typeof(ProtocolException).IsAssignableFrom(error.GetType()) && ((ProtocolException)error).CloseChannel)||
+                                (error is SlimSerializationException && m_Serializer.BatchTypesAdded) ||
+                                (error is SlimDeserializationException);
 
-                    Binding.WriteLog( LogSrc.Client,
-                                      Log.MessageType.Error,
-                                      StringConsts.GLUE_CLIENT_CALL_ERROR + (commError ? "Socket error." : string.Empty)  + error.Message,
-                                      from: "SyncClientTransport.SendRequest",
-                                      exception: error);
+                Binding.WriteLog( LogSrc.Client,
+                                  Log.MessageType.Error,
+                                  StringConsts.GLUE_CLIENT_CALL_ERROR + (commError ? "Socket error." : string.Empty)  + error.Message,
+                                  from: "SyncClientTransport.SendRequest",
+                                  exception: error);
 
-                    stat_Errors();
-                    if (commError) finClient();
-                    throw error;
-                  }
-                }
+                stat_Errors();
+                if (commError) finClient();
+                throw error;
+              }
+            }
 
 
+            /// <summary>
+            /// Encode the RequestMsg per FrameFormat, ms.Position is set after frame
+            /// </summary>
+            protected virtual void DoEncodeRequest(MemoryStream ms, RequestMsg msg)
+            {
+              m_Serializer.Serialize(ms, msg);
+            }
+
+            /// <summary>
+            /// Decode the ResponseMsg per fame.Format, ms.Position is set after frame
+            /// </summary>
+            protected virtual ResponseMsg DoDecodeResponse(WireFrame frame, MemoryStream ms)
+            {
+               var recv = m_Serializer.Deserialize(ms);
+
+               if (recv==null)
+                  throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "ResponseMsg. Got <null>");
+
+               var result = recv as ResponseMsg;
+
+
+               if (result==null)
+                    throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "ResponseMsg");
+
+               return result;
+            }
 
             protected override void DoStart()
             {
@@ -194,12 +220,12 @@ namespace NFX.Glue.Native
 
                ms.Position = dataBegin;
 
-               var frame = new WireFrame(WireFrame.SLIM_FORMAT, request.OneWay, request.RequestID);
+               var frame = new WireFrame(Binding.FrameFormat, request.OneWay, request.RequestID);
 
                // Write the frame
                var frameSize = frame.Serialize(ms);
                // Write the message
-               m_Serializer.Serialize(ms, request);
+               DoEncodeRequest(ms, request);
 
                var size = (int)ms.Position - dataBegin;
 
@@ -221,6 +247,7 @@ namespace NFX.Glue.Native
                stat_MsgSent();
                stat_BytesSent(size);
             }
+
 
             private ResponseMsg getResponse()
             {
@@ -251,32 +278,22 @@ namespace NFX.Glue.Native
               ResponseMsg result = null;
               WireFrame frame;
 
-              object received = null;
               try
               {
-                      try
-                      {
-                        frame = new WireFrame(ms);
-                        received = m_Serializer.Deserialize(ms);
-                      }
-                      catch
-                      {
-                        Instrumentation.ClientDeserializationErrorEvent.Happened(Node);
-                        throw;
-                      }
-
-                      if (received==null)
-                        throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "ResponseMsg. Got <null>");
-
-                      result = received as ResponseMsg;
-
-                      if (result==null)
-                        throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "ResponseMsg");
-
+                  try
+                  {
+                    frame = new WireFrame(ms);
+                    result = DoDecodeResponse(frame, ms);
+                  }
+                  catch
+                  {
+                    Instrumentation.ClientDeserializationErrorEvent.Happened(Node);
+                    throw;
+                  }
               }
               finally
               {
-                 Binding.DumpMsg(false, received as Msg, ms.GetBuffer(), 0, size+Consts.PACKET_DELIMITER_LENGTH);
+                 Binding.DumpMsg(false, result, ms.GetBuffer(), 0, size+Consts.PACKET_DELIMITER_LENGTH);
               }
 
 

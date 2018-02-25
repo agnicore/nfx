@@ -96,6 +96,14 @@ namespace NFX.Glue.Native
             }
 
             /// <summary>
+            /// Override in conjunction with DoEncodeRequest/DoDecodeRsponse
+            /// </summary>
+            public virtual int FrameFormat
+            {
+              get{ return WireFrame.SLIM_FORMAT; }
+            }
+
+            /// <summary>
             /// Imposes a limit on maximum message size in bytes
             /// </summary>
             [Config("$" + Consts.CONFIG_MAX_MSG_SIZE_ATTR, Consts.DEFAULT_MAX_MSG_SIZE)]

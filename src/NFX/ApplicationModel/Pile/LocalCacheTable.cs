@@ -141,6 +141,8 @@ namespace NFX.ApplicationModel.Pile
                    [Serializable]
                    private struct _entry
                    {
+                     const int CHAIN_FLAG = int.MinValue + 3600;//time overflow protection 10 minutes
+
                      public TKey Key;
                      public int AgeSec;
                      public int Priority;
@@ -151,14 +153,14 @@ namespace NFX.ApplicationModel.Pile
                      public _entry(PilePointer ppChain)
                      {
                        Key = default(TKey);
-                       AgeSec = -1;//flag that this entry is a pointer to chain
+                       AgeSec = CHAIN_FLAG;//flag that this entry is a pointer to chain
                        Priority = 0;
                        MaxAgeSec= 0;
                        ExpirationUTC = new DateTime(0);
                        DataPointer = ppChain;
                      }
 
-                     public bool IsChain{ get{ return AgeSec < 0;}}
+                     public bool IsChain{ get{ return AgeSec == CHAIN_FLAG;}}
 
                      public static readonly _entry Empty = new _entry{DataPointer = PilePointer.Invalid};
                    }

@@ -293,33 +293,27 @@ CREATE TABLE `tbl_employee` (
     [Run]
     public void PartialUpdate()
     {
-      var patient1 = makePatient();
-      patient1.City = "Stambul";
-
-      var patient2 = new Patient
-      {
-        COUNTER = 1,
-        First_Name = "Alex",
-        Last_Name = "Ivanov",
-        DOB = new DateTime(1980, 8, 29),
-        SSN = "345678",
-        Amount = 10.23M,
-        Address1 = "22, Lenina str",
-        City = "Salem"
-      };
+      var patient = makePatient("Petrov");
+      patient.City = "Stambul";
+      patient.COUNTER = 1;
 
       using (var ds = makeDataStore())
       {
-        ds.Insert(patient1);
+        ds.Insert(patient);
 
-        ds.Update(patient2, filter: "SSN,Address1".OnlyTheseFields());
+        patient.Last_Name = "Ivanov";
+        patient.SSN = "345678";
+        patient.City = "Salem";
+        patient.Address1 = "22, Lenin str";
+
+        ds.Update(patient, filter: "SSN,Address1".OnlyTheseFields());
         var qry = new Query<Patient>("CRUD.Patient.List") { new Query.Param("LN", "%") };
         var result = ds.LoadRow(qry);
 
-        Aver.AreEqual(patient1.City, result.City);
-        Aver.AreEqual(patient1.First_Name, result.First_Name);
-        Aver.AreEqual(patient2.SSN, result.SSN);
-        Aver.AreEqual(patient2.Address1, result.Address1);
+        Aver.AreEqual("Stambul", result.City);
+        Aver.AreEqual("Petrov", result.Last_Name);
+        Aver.AreEqual("345678", result.SSN);
+        Aver.AreEqual("22, Lenin str", result.Address1);
       }
     }
 

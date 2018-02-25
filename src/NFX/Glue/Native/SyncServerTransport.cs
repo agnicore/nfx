@@ -86,6 +86,32 @@ namespace NFX.Glue.Native
             }
 
 
+            /// <summary>
+            /// Encode the ResponseMsg per FrameFormat, ms.Position is set after frame
+            /// </summary>
+            protected virtual void DoEncodeResponse(MemoryStream ms, ResponseMsg msg, ISerializer serializer)
+            {
+              serializer.Serialize(ms, msg);
+            }
+
+            /// <summary>
+            /// Decode the ResponseMsg per fame.Format, ms.Position is set after frame
+            /// </summary>
+            protected virtual RequestMsg DoDecodeRequest(WireFrame frame, MemoryStream ms, ISerializer serializer)
+            {
+               var recv = serializer.Deserialize(ms);
+
+               if (recv==null)
+                  throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "RequestMsg. Got <null>");
+
+               var result = recv as RequestMsg;
+
+
+               if (result==null)
+                    throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "RequestMsg");
+
+               return result;
+            }
 
             protected override void DoStart()
             {
@@ -343,33 +369,22 @@ namespace NFX.Glue.Native
 
 
               WireFrame frame;
-              object received = null;
               try
               {
-                  try
-                  {
-                      frame = new WireFrame(ms);
-                      //todo Skip frames that are not GLUE type
-                      received = serializer.Deserialize(ms);
-                  }
-                  catch
-                  {
-                    Instrumentation.ServerDeserializationErrorEvent.Happened(Node);
-                    throw;
-                  }
-
-                  if (received==null)
-                    throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "RequestMsg. Got <null>");
-
-                  result = received as RequestMsg;
-
-                  if (result==null)
-                    throw new ProtocolException(StringConsts.GLUE_UNEXPECTED_MSG_ERROR + "RequestMsg");
-
+                try
+                {
+                    frame = new WireFrame(ms);
+                    result = DoDecodeRequest(frame, ms, serializer);
+                }
+                catch
+                {
+                  Instrumentation.ServerDeserializationErrorEvent.Happened(Node);
+                  throw;
+                }
               }
               finally
               {
-                  Binding.DumpMsg(true, received as Msg, ms.GetBuffer(), 0, size+Consts.PACKET_DELIMITER_LENGTH);
+                  Binding.DumpMsg(true, result, ms.GetBuffer(), 0, size+Consts.PACKET_DELIMITER_LENGTH);
               }
 
               result.__SetArrivalTimeStampTicks(arrivalTime);
@@ -385,12 +400,12 @@ namespace NFX.Glue.Native
              var frameBegin = Consts.PACKET_DELIMITER_LENGTH;
              ms.Position = frameBegin;
 
-             var frame = new WireFrame(WireFrame.SLIM_FORMAT, true, response.RequestID);
+             var frame = new WireFrame(Binding.FrameFormat, true, response.RequestID);
 
              // Write the frame
              var frameSize = frame.Serialize(ms);
              // Write the message
-             serializer.Serialize(ms, response);
+             DoEncodeResponse(ms, response, serializer);
 
              var size = (int)ms.Position - frameBegin;
 
