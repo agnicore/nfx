@@ -221,7 +221,7 @@ namespace NFX.DataAccess.CRUD
 
         /// <summary>
         /// Invoked to allow the entity (such as a row) to transform its state into AmorphousData bag.
-        /// For example, this may be usefull to store extra data that is not a part of established business schema.
+        /// For example, this may be useful to store extra data that is not a part of established business schema.
         /// The operation is performed per particular targetName (name of physical backend). Simply put, this method allows
         ///  business code to "specify what to do before object gets saved in THE PARTICULAR TARGET backend store"
         /// </summary>

@@ -122,7 +122,7 @@ namespace NFX
 
   /// <summary>
   /// Provides textual portable data about this exception which will be used in wrapped exception.
-  /// Wrapped exceptions are used to marshall non serializable exceptions
+  /// Wrapped exceptions are used to marshal non serializable exceptions
   /// </summary>
   public interface IWrappedExceptionDataSource
   {
@@ -133,12 +133,27 @@ namespace NFX
   }
 
   /// <summary>
-  /// Marshalls exception details
+  /// Marshals exception details
   /// </summary>
   [Serializable]
   [BSONSerializable("A339F46F-6637-4396-B148-094BAFFB4BE6")]
   public sealed class WrappedExceptionData : IBSONSerializable, IBSONDeserializable
   {
+
+    /// <summary>
+    /// Creates an instance of WrappedExceptionData saturating it from base64-encoded BSON data.
+    /// This method complements .ToBase64()
+    /// </summary>
+    public static WrappedExceptionData FromBase64(string base64)
+    {
+      var bin = Convert.FromBase64String(base64);
+      var doc = BSONDocument.FromArray(bin);
+      var ser = new BSONSerializer();
+      var result = new WrappedExceptionData();
+      object ctx = null;
+      result.DeserializeFromBSON(ser, doc, ref ctx);
+      return result;
+    }
 
     internal WrappedExceptionData(){}
 
@@ -262,6 +277,17 @@ namespace NFX
 
       m_InnerException = new WrappedExceptionData();
       serializer.Deserialize(iv.Value, m_InnerException);
+    }
+
+    /// <summary>
+    /// Serializes the instance as base64-encoded BSON data. This method complements .FromBase64(string)
+    /// </summary>
+    public string ToBase64()
+    {
+      var ser = new BSONSerializer();
+      var doc = ser.Serialize(this);
+      var bin = doc.WriteAsBSONToNewArray();
+      return Convert.ToBase64String(bin, Base64FormattingOptions.None);
     }
   }
 

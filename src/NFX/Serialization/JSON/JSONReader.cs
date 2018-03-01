@@ -34,7 +34,7 @@ namespace NFX.Serialization.JSON
     {
 
         /// <summary>
-        /// Specifies how reader should mathc JSON to row field property member or backend names
+        /// Specifies how reader should match JSON to row field property member or backend names
         /// </summary>
         public struct NameBinding
         {
