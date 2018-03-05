@@ -15,16 +15,13 @@
 * limitations under the License.
 </FILE_LICENSE>*/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NFX.Security
 {
     /// <summary>
     /// Represents security provider-internal ID that SecurityManager assigns into User object on authentication.
-    /// These tokens can be used in place of Credentials to re-authenticate users or to requery user rights.
-    /// External parties should never be supplied with this struct as it is backend-internal
+    /// These tokens can be used in place of Credentials to re-authenticate users or to re-query user rights (e.g. upon re/authorization).
+    /// External parties should never be supplied with this struct as it is system backend internal token used inside the system
     /// </summary>
     [Serializable]
     public struct AuthenticationToken
@@ -39,7 +36,7 @@ namespace NFX.Security
       private object m_Data;
 
       /// <summary>
-      /// Provides information about back-end security source (realm) that perfomed authentication, i.e. LDAP instance, Database name etc...
+      /// Provides information about back-end security source (realm) that performed authentication, i.e. LDAP instance, Database name etc...
       /// </summary>
       public string Realm
       {
@@ -52,6 +49,14 @@ namespace NFX.Security
       public object Data
       {
         get { return m_Data; }
+      }
+
+      /// <summary>
+      /// Returns true when the structure contains data
+      /// </summary>
+      public bool Assigned
+      {
+        get { return m_Realm.IsNotNullOrWhiteSpace() || m_Data!=null;}
       }
 
       public override string ToString()

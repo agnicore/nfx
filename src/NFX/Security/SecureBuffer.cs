@@ -96,7 +96,7 @@ namespace NFX.Security
     }
 
     /// <summary>
-    /// Seals the buffer to prevent modifications. The buffer must not be sealed
+    /// Seals the buffer to prevent modifications. The buffer must not be sealed before this call
     /// </summary>
     public void Seal()
     {

@@ -21,11 +21,9 @@
  * Revision: NFX 0.3  2009.10.12
  */
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 using NFX.Environment;
-using NFX.Serialization.JSON;
 
 namespace NFX.Security
 {
@@ -37,7 +35,7 @@ namespace NFX.Security
   public class IDPasswordCredentials : Credentials, IStringRepresentableCredentials
   {
     /// <summary>
-    /// Obtains an unsecure string password as SecureBuffer.
+    /// Obtains an unsecured string password as SecureBuffer.
     /// Note: The IDPasswordCredentials class is purposely designed to store password as plain text.
     /// This is needed for simple cases and HTTP application where login credentials are posted via plain text anyway
     /// </summary>
@@ -106,7 +104,7 @@ namespace NFX.Security
     public string Password { get { return m_Password ?? string.Empty; } }
 
     /// <summary>
-    /// Obtains an unsecure string password as SecureBuffer.
+    /// Obtains an unsecured string password as SecureBuffer.
     /// Note: The IDPasswordCredentials class is purposely designed to store password as plain text.
     /// This is needed for simple cases and HTTP application where login credentials are posted via plain text anyway
     /// </summary>
@@ -126,6 +124,10 @@ namespace NFX.Security
       base.Forget();
     }
 
+    /// <summary>
+    /// Converts plain credentials to basic auth using base64
+    /// </summary>
+    /// <returns></returns>
     public string RepresentAsString()
     {
       if (Forgotten)

@@ -92,7 +92,7 @@ namespace NFX.Glue.Native
 
                 stat_Errors();
                 if (commError) finClient();
-                throw error;
+                throw;
               }
             }
 
