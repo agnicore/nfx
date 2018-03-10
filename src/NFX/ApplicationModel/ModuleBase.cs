@@ -83,7 +83,7 @@ namespace NFX.ApplicationModel
       return result;
     }
 
-    public TModule TryGet<TModule>(Func<TModule, bool> filter) where TModule : class, IModule
+    public virtual TModule TryGet<TModule>(Func<TModule, bool> filter) where TModule : class, IModule
     {
       foreach(var module in m_Children.OrderedValues)
       {

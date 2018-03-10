@@ -58,8 +58,8 @@ namespace NFX
 
        /// <summary>
        /// Returns the memory utilization model for the application.
-       /// This property is NOT configurable. It may be set at process entrypoint via a call to
-       /// App.SetMemoryModel() before the app contrainer spawns.
+       /// This property is NOT configurable. It may be set at process entry point via a call to
+       /// App.SetMemoryModel() before the app container spawns.
        /// Typical applications should not change the defaults.
        /// Some system service providers examine this property to allocate less cache and temp buffers
        /// in the memory-constrained environments
