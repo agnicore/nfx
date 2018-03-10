@@ -69,7 +69,7 @@ namespace NFX.Security
     IRegistry<PasswordHashingAlgorithm> Algorithms { get; }
   }
 
-  public interface IPasswordManagerImplementation : IPasswordManager, IConfigurable, IInstrumentable, IService
+  public interface IPasswordManagerImplementation : IPasswordManager, IDisposable, IConfigurable, IInstrumentable, IService
   {
     bool Register(PasswordHashingAlgorithm algo);
     bool Unregister(PasswordHashingAlgorithm algo);

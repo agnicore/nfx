@@ -59,6 +59,8 @@ namespace NFX.ApplicationModel
       }
     }
 
+    public override string ComponentCommonName => m_Name.IsNotNullOrWhiteSpace() ? m_Name : GetType().FullName;
+
     public IModule ParentModule { get{ return ComponentDirector as IModule;} }
 
     public IOrderedRegistry<IModule> ChildModules { get{ return m_Children;} }

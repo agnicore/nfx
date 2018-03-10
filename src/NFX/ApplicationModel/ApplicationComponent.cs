@@ -28,15 +28,11 @@ using System.Text;
 
 namespace NFX.ApplicationModel
 {
-
-
-
-
     /// <summary>
     /// Provides marker contract requirement for an ApplicationComponent.
     /// This interface must be implemented only by ApplicationComponent class
     /// </summary>
-    public interface IApplicationComponent : IDisposable
+    public interface IApplicationComponent
     {
         /// <summary>
         /// Returns process/instance unique app component system id

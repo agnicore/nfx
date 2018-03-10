@@ -152,6 +152,7 @@ namespace NFX.DataAccess.CRUD
         Month,
         Number,
         Range,
+        Money,
         Search,
         Telephone,
         Time,

@@ -19,7 +19,7 @@ namespace NFX.ApplicationModel.Pile
     public const string MMF_PREFIX = "pile-";
 
     /// <summary>
-    /// Returns file names in the order of segment idex
+    /// Returns file names in the order of segment index
     /// </summary>
     public static KeyValuePair<string, int>[] GetSegmentFileNames(string path)
     {

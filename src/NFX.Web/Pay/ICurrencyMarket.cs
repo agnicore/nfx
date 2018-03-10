@@ -40,7 +40,7 @@ namespace NFX.Web.Pay
      Amount ConvertCurrency(string rateTable, Amount from, string targetCurrencyISO);
   }
 
-  public interface ICurrencyMarketImplementation : ICurrencyMarket, IApplicationComponent, IConfigurable
+  public interface ICurrencyMarketImplementation : ICurrencyMarket, IApplicationComponent, IDisposable, IConfigurable
   {
 
   }
