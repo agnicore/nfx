@@ -51,11 +51,15 @@ namespace NFX.DataAccess.MySQL
 
     #region .ctor/.dctor
 
-      protected MySQLDataStoreBase():base()
+      protected MySQLDataStoreBase() : base()
       {
       }
 
-      protected MySQLDataStoreBase(string connectString):base()
+      protected MySQLDataStoreBase(object director) : base(director)
+      {
+      }
+
+      protected MySQLDataStoreBase(string connectString) : base()
       {
         ConnectString = connectString;
       }

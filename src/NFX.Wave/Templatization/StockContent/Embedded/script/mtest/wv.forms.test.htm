@@ -14,6 +14,7 @@
    <h1>WAVE Form Test</h1>
 
     <form data-wv-rid="V1">
+        <div class="fView" data-wv-fname="Money"></div>
         <div class="fView" data-wv-fname="FirstName"></div>
         <div class="fView" data-wv-fname="MiddleName"></div>
         <div class="fView" data-wv-fname="LastName"></div>
@@ -98,6 +99,7 @@
          REC =  new WAVE.RecordModel.Record(
                                             {ID: 'R1',
                                              fields: [
+                                              {def: {Name: 'Money', Type: 'real', Kind: WAVE.RecordModel.KIND_MONEY}, val: 0},
                                               {def: {Name: 'FirstName', Type: 'string', Required: true, Size:12, DefaultValue: 'Bob', Placeholder: 'Your First Name', Case: WAVE.RecordModel.CASE_CAPS}, val: 'Sunil'},
                                               {def: {Name: 'MiddleName', Type: 'string', Required: false, Placeholder: 'Your Middle Name', Case: WAVE.RecordModel.CASE_CAPS}, val: 'Borman'},
                                               {def: {Name: 'LastName', Type: 'string', Required: true, DefaultValue: 'Dole', Case: WAVE.RecordModel.CASE_CAPS}, val: 'Buchan'},
@@ -352,6 +354,9 @@
       border: 1px solid #808080;
     }
 
+    .wvMoney {
+      text-align: right;
+    }
 
     .wvPuzzle {
       max-width: 360px;

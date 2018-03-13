@@ -141,11 +141,11 @@ namespace NFX.Web.Shipping
 
     #region .ctor
 
-      public ShippingSystem(string name, IConfigSectionNode node) : this(name, node, null)
+      protected ShippingSystem(string name, IConfigSectionNode node) : this(name, node, null)
       {
       }
 
-      public ShippingSystem(string name, IConfigSectionNode node, object director) : base(director)
+      protected ShippingSystem(string name, IConfigSectionNode node, object director) : base(director)
       {
         LogLevel = DEFAULT_LOG_LEVEL;
         KeepAlive = true;

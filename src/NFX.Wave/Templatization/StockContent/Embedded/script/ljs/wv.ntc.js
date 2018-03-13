@@ -148,6 +148,7 @@ WAVE.RecordModel = (function(){
         KIND_TIME:   'time',
         KIND_URL:    'url',
         KIND_WEEK:   'week',
+        KIND_MONEY:  'money',
 
         CASE_ASIS:  'asis',
         CASE_UPPER: 'upper',

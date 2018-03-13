@@ -51,12 +51,11 @@ namespace NFX.DataAccess.MySQL
 
     #region .ctor/.dctor
 
-      public MySQLDataStore() : base()
-      {
-        m_QueryResolver = new QueryResolver(this);
-      }
+      public MySQLDataStore() : base() => ctor();
+      public MySQLDataStore(object director) : base(director) => ctor();
+      public MySQLDataStore(string connectString) : base(connectString) => ctor();
 
-      public MySQLDataStore(string connectString) : base(connectString)
+      private void ctor()
       {
         m_QueryResolver = new QueryResolver(this);
       }

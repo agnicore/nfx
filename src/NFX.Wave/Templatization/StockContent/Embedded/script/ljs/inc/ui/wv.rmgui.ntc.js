@@ -7,6 +7,7 @@ WAVE.RecordModel.GUI = (function () {
         CLS_REQ: 'wvRequired',
         CLS_MOD: 'wvModified',
         CLS_PUZZLE: 'wvPuzzle',
+        CLS_MONEY: 'wvMoney',
         CLS_COMBO_ARROW: 'wvComboArrow',
         CLS_COMBO_WRAP: 'wvComboWrap'
     };
@@ -78,6 +79,7 @@ WAVE.RecordModel.GUI = (function () {
                 required=?ctx.required
                 __fieldView=?ctx.fw
                 on-change=ctx.handler
+                class="? ctx.kind === WAVE.RecordModel.KIND_MONEY ? published.CLS_MONEY : ''"
               }
             }
           ***/
@@ -90,7 +92,7 @@ WAVE.RecordModel.GUI = (function () {
               idInput = "tb"+ids,
               ve = field.validationError(),
               fk = field.kind(),
-              itp = field.password() ? "password" : fk===WAVE.RecordModel.KIND_SCREENNAME ? "text" : fk;
+              itp = field.password() ? "password" : (fk===WAVE.RecordModel.KIND_SCREENNAME || fk===WAVE.RecordModel.KIND_MONEY) ? "text" : fk;
 
           WAVE.removeChildren(divRoot);
           renderTextBox(divRoot, {
@@ -111,7 +113,8 @@ WAVE.RecordModel.GUI = (function () {
             placeholder: WAVE.strEmpty(field.placeholder()) ? "" : field.placeholder(),
             required: field.required() ? "required" : "",
             handler: textChangeHandler,
-            fw: fldView
+            fw: fldView,
+            kind: fk
           });
         }
 

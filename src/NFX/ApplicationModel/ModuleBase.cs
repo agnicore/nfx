@@ -122,7 +122,7 @@ namespace NFX.ApplicationModel
     {
       var handled = DoApplicationBeforeCleanup(application);
       if (!handled)
-        m_Children.OrderedValues.ForEach( c => ((IModuleImplementation)c).ApplicationBeforeCleanup(application));
+        m_Children.OrderedValues.Reverse().ForEach( c => ((IModuleImplementation)c).ApplicationBeforeCleanup(application));
     }
 
     void IConfigurable.Configure(IConfigSectionNode node)

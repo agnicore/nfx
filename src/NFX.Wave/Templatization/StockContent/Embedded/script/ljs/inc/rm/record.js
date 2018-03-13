@@ -555,6 +555,9 @@ published.Record = function(init, fieldFunc)
         if (fDef.Kind===published.KIND_DATE) return WAVE.toUSDateString(fValue);
         return WAVE.toUSDateTimeString(fValue);
       }
+      if (WAVE.RecordModel.KIND_MONEY === fDef.Kind)
+        return WAVE.formatMoney(fValue);
+
       return fValue.toString();
     };
 

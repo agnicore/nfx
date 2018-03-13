@@ -63,17 +63,17 @@ namespace NFX.DataAccess.MongoDB
 
     #region .ctor/.dctor
 
-    public MongoDBDataStore() : base()
-      {
-        m_QueryResolver = new QueryResolver(this);
-        m_Converter = new RowConverter();
-      }
+    public MongoDBDataStore() : base() => ctor();
 
-      public MongoDBDataStore(string connectString, string dbName) : base(connectString, dbName)
-      {
-        m_QueryResolver = new QueryResolver(this);
-        m_Converter = new RowConverter();
-      }
+    public MongoDBDataStore(object director) : base(director) => ctor();
+
+    public MongoDBDataStore(string connectString, string dbName) : base(connectString, dbName) => ctor();
+
+    private void ctor()
+    {
+      m_QueryResolver = new QueryResolver(this);
+      m_Converter = new RowConverter();
+    }
 
     #endregion
 
@@ -381,7 +381,7 @@ namespace NFX.DataAccess.MongoDB
         {
           var doc = convertRowToBSONDocumentWith_ID(row, "update", filter);
           var _id = doc[Connector.Protocol._ID];
-          
+
           doc.Delete(Connector.Protocol._ID);
           if (doc.Count == 0) return 0; // nothing to update
 

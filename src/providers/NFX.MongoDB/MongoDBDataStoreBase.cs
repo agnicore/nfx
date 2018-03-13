@@ -51,7 +51,11 @@ namespace NFX.DataAccess.MongoDB
 
     #region .ctor/.dctor
 
-      protected MongoDBDataStoreBase():base()
+      protected MongoDBDataStoreBase() : base()
+      {
+      }
+
+      protected MongoDBDataStoreBase(object director) : base(director)
       {
       }
 
