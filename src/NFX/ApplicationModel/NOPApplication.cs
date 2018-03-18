@@ -52,6 +52,7 @@ namespace NFX.ApplicationModel
         m_CommandArgsConfiguration.Create();
 
         m_StartTime = DateTime.Now;
+        m_Realm = new ApplicationRealmBase();
      }
 
 
@@ -69,6 +70,7 @@ namespace NFX.ApplicationModel
     private DateTime m_StartTime;
     protected MemoryConfiguration m_Configuration;
     protected MemoryConfiguration m_CommandArgsConfiguration;
+    protected IApplicationRealmImplementation m_Realm;
 
 
 
@@ -99,6 +101,12 @@ namespace NFX.ApplicationModel
         public bool Active
         {
           get { return false;}//20140128 DKh was true before
+        }
+
+
+        public IApplicationRealm Realm
+        {
+          get { return m_Realm;}
         }
 
         public bool Stopping

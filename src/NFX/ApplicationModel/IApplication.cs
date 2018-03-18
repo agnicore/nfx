@@ -39,7 +39,7 @@ namespace NFX.ApplicationModel
   /// </summary>
   /// <remarks>
   /// This pattern is used on purpose based on careful evaluation of various DI frameworks use-cases in various projects,
-  /// both server and client-side. The central service/locator hub per process as faciliatetd by the IApplication is the most intuitive and simple
+  /// both server and client-side. The central service/locator hub per process as facilitated by the IApplication is the most intuitive and simple
   /// dependency resolution facility for 90+% of various business applications - it significantly simplifies development and debugging as
   /// Application provides a common root for all ApplicationComponents regardless of the app types
   /// </remarks>
@@ -73,7 +73,7 @@ namespace NFX.ApplicationModel
      bool AllowNesting{ get; }
 
      /// <summary>
-     /// Returns timestamp when application started as localized app time
+     /// Returns time stamp when application started as localized app time
      /// </summary>
      DateTime StartTime { get; }
 
@@ -99,6 +99,16 @@ namespace NFX.ApplicationModel
      /// </summary>
      void Stop();
 
+     /// <summary>
+     /// References an accessor to the application surrounding environment (realm) in which app gets executed.
+     /// This realm is sub-divided into uniquely-named areas each reporting their status.
+     /// This is used by various app components and services to assess the environment status in which they execute, for example:
+     /// a logger may suppress error messages from network in a cluster when the area is about to be upgraded to new software.
+     /// One may consider this status as a "message board" where services/system check/report the planned or unexpected outages and
+     /// adjust their behavior accordingly. NFX provides only the base implementation of such classes delegating the specifics to more
+     /// concrete app containers.
+     /// </summary>
+     IApplicationRealm Realm { get; }
 
      /// <summary>
      /// References app log
@@ -186,7 +196,7 @@ namespace NFX.ApplicationModel
 
      /// <summary>
      /// Registers an instance of IApplicationFinishNotifiable with application container to receive a call when
-     ///  underlying application instance will finish its lifecycle.
+     ///  underlying application instance will finish its life cycle.
      /// </summary>
      /// <returns>True if notifiable instance was not found and was added</returns>
      bool RegisterAppFinishNotifiable(IApplicationFinishNotifiable notifiable);

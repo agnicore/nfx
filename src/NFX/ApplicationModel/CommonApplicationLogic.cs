@@ -84,11 +84,13 @@ namespace NFX.ApplicationModel
         m_AllowNesting = allowNesting;
         m_CommandArgs = (cmdLineArgs ?? new MemoryConfiguration()).Root;
         m_ConfigRoot  = rootConfig ?? GetConfiguration().Root;
+        m_Realm = new ApplicationRealmBase();
       }
 
       protected override void Destructor()
       {
         m_ShutdownStarted = true;
+        DisposeAndNull(ref m_Realm);
         base.Destructor();
       }
 
@@ -106,6 +108,8 @@ namespace NFX.ApplicationModel
 
       private volatile bool m_ShutdownStarted;
       private volatile bool m_Stopping;
+
+      protected IApplicationRealmImplementation m_Realm;
 
       protected List<IConfigSettings> m_ConfigSettings = new List<IConfigSettings>();
       protected List<IApplicationFinishNotifiable> m_FinishNotifiables = new List<IApplicationFinishNotifiable>();
@@ -226,6 +230,15 @@ namespace NFX.ApplicationModel
         public bool ShutdownStarted
         {
           get { return m_ShutdownStarted; }
+        }
+
+        /// <summary>
+        /// References an accessor to the application surrounding environment (realm) in which app gets executed.
+        /// This realm is sub-divided into uniquely-named areas each reporting their status
+        /// </summary>
+        public IApplicationRealm Realm
+        {
+          get { return m_Realm;}
         }
 
         /// <summary>

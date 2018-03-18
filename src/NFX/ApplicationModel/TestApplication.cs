@@ -61,6 +61,8 @@ namespace NFX.ApplicationModel
             TimeLocation = new Time.TimeLocation();
             EventTimer = NFX.Time.NOPEventTimer.Instance;
 
+            Realm = new ApplicationRealmBase();
+
             ApplicationModel.ExecutionContext.__BindApplication(this);
         }
 
@@ -72,6 +74,8 @@ namespace NFX.ApplicationModel
         public virtual bool IsUnitTest { get; set; }
 
         public virtual string EnvironmentName { get; set; }
+
+        public virtual IApplicationRealm Realm{ get; set;}
 
         public virtual bool ForceInvariantCulture { get; set; }
 
