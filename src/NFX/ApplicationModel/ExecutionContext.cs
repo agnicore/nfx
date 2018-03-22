@@ -22,12 +22,12 @@ namespace NFX.ApplicationModel
     /// <summary>
     /// Provides access to execution context - that groups Application, Request, Response and Session objects.
     /// All objects may be either application-global or thread-level.
-    /// Effectively ExecutionContext.Application is the central DI/servi e locator facility per process.
+    /// Effectively ExecutionContext.Application is the central DI/service locator facility per process.
     /// The async code should flow the context by passing it to functors.
     /// </summary>
     /// <remarks>
     /// This pattern is used on purpose based on careful evaluation of various DI frameworks use-cases in various projects,
-    /// both server and client-side. The central service/locator hub per process as faciliatetd by the IApplication is the most intuitive ans simple
+    /// both server and client-side. The central service/locator hub per process as facilitated by the IApplication is the most intuitive and simple
     /// dependency resolution facility for 90+% of various business applications.
     /// </remarks>
     public static class ExecutionContext

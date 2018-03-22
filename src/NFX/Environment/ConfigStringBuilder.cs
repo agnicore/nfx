@@ -64,11 +64,11 @@ namespace NFX.Environment
 
     /// <summary>
     /// Builds the string based on the configured state supplied as a config vector, or
-    /// passes the supplied string through if it is not a loaconic vector with CONFIG_BUILDER_ROOT
+    /// passes the supplied string through if it is not a laconic vector with CONFIG_BUILDER_ROOT
     /// </summary>
     /// <param name="level">The configuration section level</param>
     /// <param name="sectionOrAttributeName">The name of section or attribute at the specified level</param>
-    /// <returns>The original attribute string value or the string returnd by IConfigStringBuilder.BuildString() method if IConfigStringBuilder was specified</returns>
+    /// <returns>The original attribute string value or the string returned by IConfigStringBuilder.BuildString() method if IConfigStringBuilder was specified</returns>
     public static string Build(IConfigSectionNode level, string sectionOrAttributeName)
     {
       if (level == null || !level.Exists) return string.Empty;

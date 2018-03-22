@@ -1,6 +1,6 @@
 ﻿/*<FILE_LICENSE>
 * NFX (.NET Framework Extension) Unistack Library
-* Copyright 2003-2014 IT Adapter Inc / 2015 Aum Code LLC
+* Copyright 2003-2018 ITAdapter Corp Inc / 2018 Agnicore Inc
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 </FILE_LICENSE>*/
 /* NFX by ITAdapter
  * Originated: 2006.01
- * Revision: NFX 1.0  2013.12.10
+ * Revision: NFX 5.0  2018
  */
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ namespace NFX.*
   /// <summary>
   /// PLEASE PROVIDE DESCRIPTION
   /// </summary>
-  public class CLASS_NAME  
+  public class CLASS_NAME
   {
     #region CONSTS
 
@@ -62,9 +62,9 @@ namespace NFX.*
       public const int MIN_some_timeout_bound_MS = 1000;
 
       public const string CONFIG_section_name_SECT = "section-name";
-	  
-	  public const string CONFIG_attr_name_ATTR = "attribute-name";
-    
+
+      public const string CONFIG_attr_name_ATTR = "attribute-name";
+
     #endregion
 
                 #region Inner Types
@@ -74,17 +74,17 @@ namespace NFX.*
                 #endregion
 
 
-	  #region Static
+    #region Static
 
 
-	  #endregion
+    #endregion
 
     #region .ctor
 
-      public CLASS_NAME() 
+      public CLASS_NAME()
       {
       }
-      
+
       override void Destructor()
       {
        //.dctor also goes here
@@ -116,11 +116,10 @@ namespace NFX.*
     #endregion
 
 
-    #region .pvt. impl.
+    #region .pvt
 
     #endregion
 
   }//class
-
 
 }

@@ -36,7 +36,7 @@ namespace NFX.ApplicationModel
         }
 
         /// <summary>
-        /// Returns a singlelton instance of the NOPSession
+        /// Returns a singleton instance of the NOPSession
         /// </summary>
         public static NOPSession Instance
         {

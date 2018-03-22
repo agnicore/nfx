@@ -21,7 +21,7 @@ namespace NFX
   /// <summary>
   /// Represents a special value that signifies the absence of any entity/state/value/data.
   /// The instances may be stored in a cache to indicate that the key exists, but points to a non-existing "absent" entity.
-  /// This is usefull for DB lookups, not to touch the backend for values that dont exist.
+  /// This is useful for DB lookups, not to touch the backend for values that don't exist.
   /// Use AbsentValue.Instance singleton
   /// </summary>
   [Serializable]

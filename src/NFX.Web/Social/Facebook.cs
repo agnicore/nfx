@@ -32,11 +32,14 @@ namespace NFX.Web.Social
       #region CONSTS
         //do not localize
 
+        public const string DEFAULT_API_OAUTH_VERSION = "v2.12";
+        public const string DEFAULT_API_GRAPH_VERSION = "v2.11";
+
         public const string FACEBOOK_PUB_SERVICE_URL = "https://www.facebook.com";
 
-        private const string LOGIN_LINK_TEMPLATE = "https://www.facebook.com/dialog/oauth?client_id={0}&redirect_uri={1}&response_type=code&scope={2}";
+        private const string LOGIN_LINK_TEMPLATE = "https://www.facebook.com/{0}/dialog/oauth?client_id={1}&redirect_uri={2}&state={3}&response_type=code&scope={4}";
 
-        private const string ACCESSTOKEN_BASEURL = "https://graph.facebook.com/v2.8/oauth/access_token";
+        private const string ACCESSTOKEN_BASEURL = "https://graph.facebook.com/{0}/oauth/access_token";
         private const string ACCESSTOKEN_CODE_PARAMNAME = "code";
         private const string ACCESSTOKEN_CLIENTID_PARAMNAME = "client_id";
         private const string ACCESSTOKEN_CLIENTSECRET_PARAMNAME = "client_secret";
@@ -46,7 +49,7 @@ namespace NFX.Web.Social
         private const string GRANTTYPE_PARAMNAME = "grant_type";
         private const string GRANTTYPE_FBEXCHANGETOKEN_PARAMVALUE = FBEXCHANGETOKEN_PARAMNAME;
 
-        private const string GETUSERINFO_BASEURL = "https://graph.facebook.com/v2.8/me";
+        private const string GETUSERINFO_BASEURL = "https://graph.facebook.com/{0}/me";
 
         private const string GETUSERINFO_FIELDS_PARAMNAME = "fields";
 
@@ -66,8 +69,8 @@ namespace NFX.Web.Social
           private const string USER_PICTURE_DATA_PARAMNAME = "data";
           private const string USER_PICTURE_URL_PARAMNAME = "url";
 
-        private const string PUBLISH_BASEURL_PATTERN = "https://graph.facebook.com/v2.8/{0}/feed";
-        private const string GET_USER_PICTURE_URL_PATTERN = "https://graph.facebook.com/v2.8/{0}/picture?type=large&redirect=false";
+        private const string PUBLISH_BASEURL_PATTERN = "https://graph.facebook.com/{0}/{1}/feed";
+        private const string GET_USER_PICTURE_URL_PATTERN = "https://graph.facebook.com/{0}/{1}/picture?type=large&redirect=false";
 
         private const string MESSAGE_PARAMNAME = "message";
 
@@ -94,12 +97,58 @@ namespace NFX.Web.Social
           }
         }
 
-        private Facebook(string name = null, IConfigSectionNode cfg = null) : base(name, cfg) { }
+        public static string EncodeState(string query)
+        {
+          var result = Convert.ToBase64String(Encoding.UTF8.GetBytes(query ?? string.Empty));
+          result.TrimEnd('=').Replace('/', '_').Replace('+', '-');
+          return result;
+        }
+
+        public static JSONDataMap DecodeState(string state)
+        {
+          try
+          {
+            var str = state.Replace('_', '/').Replace('-', '+');
+            switch(state.Length % 4)
+            {
+              case 2: str += "=="; break;
+              case 3: str += "="; break;
+            }
+            var url = Encoding.UTF8.GetString(Convert.FromBase64String(str));
+            return JSONDataMap.FromURLEncodedString(url);
+          }
+          catch (Exception)
+          {
+            return new JSONDataMap();
+          }
+        }
+
+    #endregion
+
+    private Facebook(string name = null, IConfigSectionNode cfg = null) : base(name, cfg) { }
+
+      #region Fields
+
+      private string m_APIOAuthVersion = DEFAULT_API_OAUTH_VERSION;
+      private string m_APIGraphVersion = DEFAULT_API_GRAPH_VERSION;
 
       #endregion
 
-
       #region Properties
+
+        [Config]
+        public string APIOAuthVersion
+        {
+          get { return m_APIOAuthVersion ?? DEFAULT_API_OAUTH_VERSION; }
+          set { m_APIOAuthVersion = value; }
+        }
+
+        [Config]
+        public string APIGraphVersion
+        {
+          get { return m_APIGraphVersion ?? DEFAULT_API_GRAPH_VERSION; }
+          set { m_APIGraphVersion = value; }
+        }
 
         /// <summary>
         /// Globally uniquelly identifies social network architype
@@ -128,7 +177,13 @@ namespace NFX.Web.Social
           if (GrantPost)          sb.Append("publish_actions+");
           if (GrantAccessProfile) sb.Append("public_profile+");
           if (GrantAccessFriends) sb.Append("user_friends+");
-          return LOGIN_LINK_TEMPLATE.Args(AppID, PrepareReturnURLParameter(returnURL), sb.Length > 0 ? sb.ToString(0, sb.Length - 1) : string.Empty);
+
+          returnURL = PrepareReturnURLParameter(returnURL, false);
+          var uri = new Uri(returnURL);
+          var redirectURL = Uri.EscapeDataString(uri.GetLeftPart(UriPartial.Path));
+          var state = EncodeState(uri.Query.Substring(1));
+
+          return LOGIN_LINK_TEMPLATE.Args(APIOAuthVersion, AppID, redirectURL, state, sb.Length > 0 ? sb.ToString(0, sb.Length - 1) : string.Empty);
         }
 
         protected override void DoObtainTokens(SocialUserInfo userInfo, JSONDataMap request, string returnPageURL)
@@ -140,9 +195,8 @@ namespace NFX.Web.Social
 
           FacebookSocialUserInfo fbUserInfo = userInfo as FacebookSocialUserInfo;
 
-          string returnURL = PrepareReturnURLParameter(returnPageURL);
-
-          fbUserInfo.AccessToken = getAccessToken( code, returnURL);
+          var uri = new Uri(returnPageURL);
+          fbUserInfo.AccessToken = getAccessToken(code, Uri.EscapeDataString(uri.GetLeftPart(UriPartial.Path)));
         }
 
         protected override void DoRetrieveLongTermTokens(SocialUserInfo userInfo)
@@ -190,7 +244,7 @@ namespace NFX.Web.Social
 
         private string getAccessToken(string code, string redirectURI)
         {
-          var response = WebClient.GetJson(ACCESSTOKEN_BASEURL, new WebClient.RequestParams(this)
+          var response = WebClient.GetJson(ACCESSTOKEN_BASEURL.Args(APIGraphVersion), new WebClient.RequestParams(this)
           {
             Method = HTTPRequestMethod.GET,
             QueryParameters = new Dictionary<string, string>() {
@@ -210,7 +264,7 @@ namespace NFX.Web.Social
             USER_LASTNAME_PARAMNAME, USER_MIDDLENAME_PARAMNAME, USER_GENDER_PARAMNAME, USER_BIRTHDAY_PARAMNAME,
             USER_LOCALE_PARAMNAME, USER_TIMEZONE_PARAMNAME, USER_PICTURE_PARAMNAME);
 
-          dynamic responseObj = WebClient.GetJsonAsDynamic(GETUSERINFO_BASEURL, new WebClient.RequestParams(this)
+          dynamic responseObj = WebClient.GetJsonAsDynamic(GETUSERINFO_BASEURL.Args(APIGraphVersion), new WebClient.RequestParams(this)
           {
             Method = HTTPRequestMethod.GET,
             QueryParameters = new Dictionary<string, string>() {
@@ -242,13 +296,13 @@ namespace NFX.Web.Social
           userInfo.Locale = responseObj[USER_LOCALE_PARAMNAME];
           userInfo.TimezoneOffset = ((int)responseObj[USER_TIMEZONE_PARAMNAME]) * 60 * 60;
 
-          dynamic picObj = WebClient.GetJsonAsDynamic(GET_USER_PICTURE_URL_PATTERN.Args(userInfo.ID), new WebClient.RequestParams(this));
+          dynamic picObj = WebClient.GetJsonAsDynamic(GET_USER_PICTURE_URL_PATTERN.Args(APIGraphVersion, userInfo.ID), new WebClient.RequestParams(this));
           userInfo.PictureLink = picObj[USER_PICTURE_DATA_PARAMNAME][USER_PICTURE_URL_PARAMNAME];
         }
 
         private string getLongTermAccessToken(string accessToken)
         {
-          var response = WebClient.GetJson(ACCESSTOKEN_BASEURL, new WebClient.RequestParams(this)
+          var response = WebClient.GetJson(ACCESSTOKEN_BASEURL.Args(APIGraphVersion), new WebClient.RequestParams(this)
           {
             QueryParameters = new Dictionary<string, string>() {
               {GRANTTYPE_PARAMNAME, GRANTTYPE_FBEXCHANGETOKEN_PARAMVALUE},
@@ -264,7 +318,7 @@ namespace NFX.Web.Social
         // you can post a new wall post on current user's wall by issuing a POST request to https://graph.facebook.com/[USER_ID]/feed:
         private void publish(string userId, string accessToken, string message)
         {
-          string url = PUBLISH_BASEURL_PATTERN.Args(userId);
+          string url = PUBLISH_BASEURL_PATTERN.Args(APIGraphVersion, userId);
 
           dynamic responseObj = WebClient.GetJsonAsDynamic(url, new WebClient.RequestParams(this)
           {
