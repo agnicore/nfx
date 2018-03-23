@@ -110,7 +110,7 @@ namespace NFX.Serialization.BSON
         {
           get
           {
-            if (s_DefaultInstance==null) //does not have to be thread-safe as the instance is stateless and lighweight 2nd copy is ok
+            if (s_DefaultInstance==null) //does not have to be thread-safe as the instance is stateless and lightweight 2nd copy is OK
               s_DefaultInstance = new RowConverter();
 
             return s_DefaultInstance;

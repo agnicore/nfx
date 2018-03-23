@@ -66,12 +66,12 @@ namespace NFX.DataAccess.MongoDB.Connector
         return database;
       }
 
-      #region .ctor/Lifecycle
+      #region .ctor/Life cycle
           private static object s_InstanceLock = new object();
           private static volatile MongoClient s_Instance;
 
           /// <summary>
-          /// Retrurns the default instance of the Client, lazily crating it on the first access
+          /// Returns the default instance of the Client, lazily crating it on the first access
           /// </summary>
           public static MongoClient Instance
           {

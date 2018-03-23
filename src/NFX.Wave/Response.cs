@@ -302,7 +302,7 @@ namespace NFX.Wave
 
 
       /// <summary>
-      /// Returns output stream for direct output and marks response as beeing written into
+      /// Returns output stream for direct output and marks response as being written into
       /// </summary>
       public Stream GetDirectOutputStreamForWriting()
       {
