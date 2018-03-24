@@ -16,6 +16,7 @@
 *.auto.cs
 
 # Build results
+CLOSURE_ERROR_OUT.txt
 Output/
 [Dd]ebug/
 [Dd]ebugPublic/
