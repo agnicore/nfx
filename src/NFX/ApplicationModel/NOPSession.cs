@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 
 namespace NFX.ApplicationModel
@@ -96,6 +97,7 @@ namespace NFX.ApplicationModel
             get { return new Dictionary<object, object>(); } //new instance is needed for thread safety
         }
 
+
         public object this[object key]
         {
            get { return null;}
@@ -127,5 +129,7 @@ namespace NFX.ApplicationModel
 
         }
 
-    }
+        IIdentity IPrincipal.Identity => User;
+        bool IPrincipal.IsInRole(string role) => User.IsInRole(role);
+  }
 }
