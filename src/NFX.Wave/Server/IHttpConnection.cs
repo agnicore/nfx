@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NFX.Wave.Server
 {
-    interface IHttpConnection
+    public interface IHttpConnection
     {
       string ID { get;}
       IPAddress RemoteIP { get; }

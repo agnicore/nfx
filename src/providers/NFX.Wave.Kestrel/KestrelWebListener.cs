@@ -15,6 +15,7 @@ namespace NFX.Wave.Kestrel
     public KestrelWebListener(WaveServer waveServer) : base(waveServer)
     {
        m_Kestrel = new KestrelServer(null, null, null);
+
     }
 
     private KestrelServer m_Kestrel;

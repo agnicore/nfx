@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NFX.Wave.Server
 {
-    interface IHttpResponse
+    public interface IHttpResponse
     {
     }
 }
