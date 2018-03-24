@@ -260,7 +260,7 @@ namespace NFX.Environment
             bool IsSameNameAttr(IConfigSectionNode other);
 
             /// <summary>
-            /// Returns true when this node has an attribute called "name" and its value is euqal to the supplied value per case-insensitive culture-neutral comparison
+            /// Returns true when this node has an attribute called "name" and its value is equal to the supplied value per case-insensitive culture-neutral comparison
             /// </summary>
             bool IsSameNameAttr(string other);
 
@@ -271,7 +271,7 @@ namespace NFX.Environment
 
             /// <summary>
             /// Converts this ConfigSectionNode to JSONDataMap. Contrast with ToConfigurationJSONDataMap
-            /// Be carefull: that this operation can "loose" data from ConfigSectionNode.
+            /// Be careful: that this operation can "loose" data from ConfigSectionNode.
             /// In other words some ConfigSectionNode information can not be reflected in corresponding JSONDataMap, for example
             ///  this method overwrites duplicate key names and does not support section values
             /// </summary>

@@ -26,7 +26,7 @@ namespace NFX.Wave
 {
   /// <summary>
   /// Represents a portal theme. Theme groups various resources (such as css, scripts etc..)
-  /// whitin a portal. Do not inherit your themes from this class directly, instead use Theme(TPortal)
+  /// within a portal. Do not inherit your themes from this class directly, instead use Theme(TPortal)
   /// </summary>
   public abstract class Theme : INamed
   {

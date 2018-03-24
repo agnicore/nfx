@@ -17,8 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
+using System.Security.Principal;
 
 using NFX.Security;
 
@@ -221,7 +220,7 @@ namespace NFX.ApplicationModel
             /// <summary>
             /// Generates new GUID and stores it in ID storing old ID value in OldID property which is not serializable.
             /// The implementations may elect to re-stow the existing session under the new ID.
-            /// This method is usefull for security, i.e. when user logs-in we may want to re-generate ID
+            /// This method is useful for security, i.e. when user logs-in we may want to re-generate ID
             /// </summary>
             public void RegenerateID()
             {
@@ -244,6 +243,9 @@ namespace NFX.ApplicationModel
            {
              m_IsEnded = true;
            }
+
+           IIdentity IPrincipal.Identity => User;
+           bool IPrincipal.IsInRole(string role) => User.IsInRole(role);
 
         #endregion
     }

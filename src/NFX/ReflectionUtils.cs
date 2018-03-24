@@ -21,22 +21,8 @@
  * Revision: NFX 1.0  2011.01.31
  */
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel;
-using System.Text;
-using System.Net;
-using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Data.Common;
-using System.Text.RegularExpressions;
-using System.Linq.Expressions;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-
-using NFX.Environment;
-using NFX.DataAccess.CRUD;
 
 namespace NFX
 {
@@ -45,17 +31,23 @@ namespace NFX
   /// </summary>
   public static class ReflectionUtils
   {
+    /// <summary>
+    /// Returns true when the method has the specified signature
+    /// </summary>
     public static bool OfSignature(this MethodInfo method, params Type[] args)
     {
       if (method==null) return false;
 
       var pars = method.GetParameters();
 
-      return (args==null || args.Length==0) ? 
+      return (args==null || args.Length==0) ?
               pars.Length==0 :
               pars.Select(i => i.ParameterType).SequenceEqual(args);
     }
 
+    /// <summary>
+    /// Returns the index of a named typed method argument
+    /// </summary>
     public static int IndexOfArg(this MethodInfo method, Type type, string name)
     {
       if (method==null || type==null) return -1;

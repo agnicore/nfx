@@ -16,35 +16,29 @@
 </FILE_LICENSE>*/
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace NFX.ApplicationModel
 {
     /// <summary>
     /// Provides access to execution context - that groups Application, Request, Response and Session objects.
     /// All objects may be either application-global or thread-level.
-    /// Effectively ExecutionContext.Application is the central DI/servi e locator facility per process.
+    /// Effectively ExecutionContext.Application is the central DI/service locator facility per process.
     /// The async code should flow the context by passing it to functors.
     /// </summary>
     /// <remarks>
     /// This pattern is used on purpose based on careful evaluation of various DI frameworks use-cases in various projects,
-    /// both server and client-side. The central service/locator hub per process as faciliatetd by the IApplication is the most intuitive ans simple
+    /// both server and client-side. The central service/locator hub per process as facilitated by the IApplication is the most intuitive and simple
     /// dependency resolution facility for 90+% of various business applications.
     /// </remarks>
     public static class ExecutionContext
     {
-        [ThreadStatic]
-        private static object ts_Request;
-
-        [ThreadStatic]
-        private static object ts_Response;
-
-        [ThreadStatic]
-        private static ISession ts_Session;
+        //20180324 DKh: use Thread.CurrentPrincipal instead as it auto-flows via ExecutionCOntext for async/await and other TAP
+        //[ThreadStatic]
+        //private static ISession ts_Session;
 
         private static Stack<IApplication> s_AppStack = new Stack<IApplication>();
         private static volatile IApplication s_Application;
-        private static volatile object s_Request;
-        private static volatile object s_Response;
         private static volatile ISession s_Session;
 
 
@@ -57,35 +51,29 @@ namespace NFX.ApplicationModel
         }
 
         /// <summary>
-        /// Returns Request object for current thread, or if it is null, app-global-level object is returned
-        /// </summary>
-        public static object Request
-        {
-          get { return ts_Request ?? s_Request; }
-        }
-
-        /// <summary>
-        /// Returns Response object for current thread, or if it is null, app-global-level object is returned
-        /// </summary>
-        public static object Response
-        {
-          get { return ts_Response ?? s_Response; }
-        }
-
-        /// <summary>
-        /// Returns Session object for current thread, or if it is null, app-global-level object is returned
+        /// Returns Session object for current thread or async flow context, or if it is null, app-global-level object is returned
         /// </summary>
         public static ISession Session
         {
-          get { return ts_Session ?? s_Session ?? NOPSession.Instance; }
+          get
+          {
+            var threadSession = Thread.CurrentPrincipal as ISession;
+            return threadSession ?? s_Session ?? NOPSession.Instance;
+          }
+          //get { return ts_Session ?? s_Session ?? NOPSession.Instance; }
         }
 
         /// <summary>
-        /// Returns true when thread-level session object is available and not a NOPSession instance
+        /// Returns true when thread-level or async call context session object is available and not a NOPSession instance
         /// </summary>
         public static bool HasThreadContextSession
         {
-          get { return ts_Session != null && ts_Session.GetType()!=typeof(NOPSession); }
+          get
+          {
+            var threadSession = Thread.CurrentPrincipal as ISession;
+            return threadSession != null  &&  threadSession.GetType() != typeof(NOPSession);
+          }
+          //get { return ts_Session != null && ts_Session.GetType()!=typeof(NOPSession); }
         }
 
         /// <summary>
@@ -126,33 +114,12 @@ namespace NFX.ApplicationModel
         }
 
         /// <summary>
-        /// Internal framework-only method to bind application-level context
-        /// </summary>
-        public static void __SetApplicationLevelContext(object request, object response, ISession session)
-        {
-          s_Request = request;
-          s_Response = response;
-          s_Session = session;
-        }
-
-        /// <summary>
-        /// Internal framework-only method to bind thread-level context
-        /// </summary>
-        public static void __SetThreadLevelContext(object request, object response, ISession session)
-        {
-          ts_Request = request;
-          ts_Response = response;
-          ts_Session = session;
-        }
-
-        /// <summary>
-        /// Internal framework-only method to bind thread-level context
+        /// Internal framework-only method to bind thread-level/async flow context
         /// </summary>
         public static void __SetThreadLevelSessionContext(ISession session)
         {
-          ts_Session = session;
+          Thread.CurrentPrincipal = session;
+          //ts_Session = session;
         }
-
     }
-
 }

@@ -27,7 +27,7 @@ namespace NFX
   /// The string can not be changed or deleted. Once created it stays as-is until the process is terminated.
   /// This structure is used to store much dictionary data (100s of millions of strings) in the process without causing GC overload.
   /// Note: The default .ctor DOES NOT check whether the same string is already present in memory. Use SealedString.Scope to
-  ///  store unique strings only (do not store the repetitions).
+  ///  store unique strings only (avoid the repetitions).
   /// This struct is THREAD SAFE and NOT SERIALIZABLE.
   /// </summary>
   [NFX.Serialization.Slim.SlimSerializationProhibited]

@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 
 using NFX.Security;
@@ -53,7 +54,7 @@ namespace NFX.ApplicationModel
   /// <summary>
   /// Describes user session
   /// </summary>
-  public interface ISession : IEndableInstance
+  public interface ISession : IEndableInstance, IPrincipal
   {
      /// <summary>
      /// Gets unique session identifier

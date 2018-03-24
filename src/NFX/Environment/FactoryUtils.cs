@@ -200,7 +200,5 @@ namespace NFX.Environment
         }
 
     #endregion
-
-
   }
 }

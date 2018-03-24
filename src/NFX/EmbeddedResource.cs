@@ -23,10 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Threading;
-using System.Reflection;
 
 namespace NFX
 {
@@ -34,7 +31,7 @@ namespace NFX
   /// <summary>
   ///  Fetches resources such as script statement text by scriptName from assembly resource stream.
   ///  Mostly used for SQL and JavaScript but maybe used for any text retrieval.
-  ///  This class is 100% safe for multithreading operations.
+  ///  This class is 100% safe for multi-threading operations.
   ///  Script texts are cached in ram for faster subsequent access.
   /// </summary>
   public static class EmbeddedResource

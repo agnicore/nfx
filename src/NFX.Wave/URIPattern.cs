@@ -27,10 +27,10 @@ using NFX.Serialization.JSON;
 namespace NFX.Wave
 {
   /// <summary>
-  /// Represents a URI pattern that can get matched against URI requests.
+  /// Represents a URI pattern that gets matched against URI requests.
   /// The pattern is formed using regular URL grammar and captures segments denoted by "{}".
   /// Example: '/profiles/{controller}/{action="dflt value"}/{*params}'
-  /// The class uses CSharp lexer, so it allows to use string escapes and unicode chars like CSharp
+  /// The class uses CSharp lexer, so it allows to use string escapes and Unicode chars like CSharp
   /// </summary>
   public sealed class URIPattern
   {

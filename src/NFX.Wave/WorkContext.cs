@@ -41,6 +41,13 @@ namespace NFX.Wave
   public class WorkContext : DisposableObject
   {
     #region .ctor/.dctor
+      private static AsyncLocal<WorkContext> ats_Current = new AsyncLocal<WorkContext>();
+
+      /// <summary>
+      /// Returns the current call context/thread/async flow instance
+      /// </summary>
+      public static WorkContext Current => ats_Current.Value;
+
       internal WorkContext(WaveServer server, HttpListenerContext listenerContext)
       {
         m_ID = Guid.NewGuid();
@@ -48,7 +55,7 @@ namespace NFX.Wave
         m_ListenerContext = listenerContext;
         m_Response = new Response(this, listenerContext.Response);
 
-        ApplicationModel.ExecutionContext.__SetThreadLevelContext(this, m_Response, null);
+        ats_Current.Value = this;
         Interlocked.Increment(ref m_Server.m_stat_WorkContextCtor);
       }
 
@@ -65,7 +72,7 @@ namespace NFX.Wave
           if (m_NoDefaultAutoClose) Interlocked.Increment(ref m_Server.m_stat_WorkContextNoDefaultClose);
         }
 
-        ApplicationModel.ExecutionContext.__SetThreadLevelContext(null, null, null);
+        ats_Current.Value = null;
         ReleaseWorkSemaphore();
         m_Response.Dispose();
       }
@@ -253,7 +260,7 @@ namespace NFX.Wave
 
 
       /// <summary>
-      /// Fetches request body: multipart content, url encoded content, or JSON body into one JSONDataMap bag,
+      /// Fetches request body: multi-part content, URL encoded content, or JSON body into one JSONDataMap bag,
       /// or null if there is no body.
       /// The property does caching
       /// </summary>
@@ -271,7 +278,7 @@ namespace NFX.Wave
       }
 
       /// <summary>
-      /// Fetches matched vars, multipart content, url encoded content, or JSON body into one JSONDataMap bag.
+      /// Fetches matched vars, multi-part content, URL encoded content, or JSON body into one JSONDataMap bag.
       /// The property does caching
       /// </summary>
       public JSONDataMap WholeRequestAsJSONDataMap
@@ -427,7 +434,7 @@ namespace NFX.Wave
       /// Releases work semaphore that throttles the processing of WorkContext instances.
       /// The WorkContext is released automatically in destructor, however there are cases when the semaphore release
       /// may be needed sooner, i.e. in a HTTP streaming application where work context instances are kept open indefinitely
-      /// it may not be desirable to consider long-living work context instances as a throtteling factor.
+      /// it may not be desirable to consider long-living work context instances as a throttling factor.
       /// Returns true if semaphore was released, false if it was not released during this call as it was already released before
       /// </summary>
       public bool ReleaseWorkSemaphore()
@@ -450,7 +457,7 @@ namespace NFX.Wave
       /// <summary>
       /// Ensures that session is injected if session filter is present in processing chain.
       /// If session is already available (Session!=null) then does nothing, otherwise
-      /// fills Session poroperty with either NEW session (if onlyExisting=false(default)) if user supplied no session token,
+      /// fills Session property with either NEW session (if onlyExisting=false(default)) if user supplied no session token,
       /// OR gets session from session store as defined by the first SessionFilter in the chain
       /// </summary>
       public WaveSession NeedsSession(bool onlyExisting = false)
@@ -547,7 +554,7 @@ namespace NFX.Wave
 
         var ctp = Request.ContentType;
 
-        //Multipart
+        //Multi-part
         if (ctp.IndexOf(ContentType.FORM_MULTIPART_ENCODED)>=0)
         {
           var boundary = Multipart.ParseContentType(ctp);

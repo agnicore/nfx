@@ -373,7 +373,7 @@ namespace NFX.Wave
         string lang = null;
 
         if (work==null)
-          work = ExecutionContext.Request as WorkContext;
+          work = WorkContext.Current;
 
         if (work==null)
         {

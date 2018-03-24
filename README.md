@@ -11,7 +11,7 @@ The legacy [NFXv3* repo](https://github.com/aumcode/nfx) will continue to target
 
 <img src="https://github.com/agnicore/nfx/blob/master/elm/logo/New.NFX.Logo.50.png" alt="Logo">
 
-Server **UNISTACK** *(unified full software stack avoiding dependencies on 3rd paty libs)* framework. 
+Server **UNISTACK** *(unified full software stack avoiding dependencies on 3rd party libs)* framework. 
 
 License: **Apache 2.0**   Runs:  **.NET 4.7.1+**, **Core 2+** 
 
@@ -37,7 +37,7 @@ NFX Builds on:
 NFX abstacts platform-specific functions via **PAL** *(Platform Abstraction Layer)* which implements features such as: 2D graphics (drawing and image compression), CPU/RAM performance counters acquisition, Security functions (EnsureAccessibleDirectory etc.). PAL is implemented for every runtime differently and gets injected into NFX at process entry point.
 
 All tools get compiled in .NET Core *(out/{Config}/run-core)* and .NET Framework
-*(out/{Config}/run-netf)* variants all targeting the same NFX.dll which is linked against .NET Stadard 2. 
+*(out/{Config}/run-netf)* variants all targeting the same NFX.dll which is linked against .NET Standard 2. 
 
 ## About NFX
 

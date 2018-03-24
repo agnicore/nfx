@@ -276,7 +276,7 @@ namespace NFX.Wave
       }
 
       /// <summary>
-      /// Shortcut to AcceptTypes contaioning application/json
+      /// Shortcut to AcceptTypes containing application/json
       /// </summary>
       [Config]
       public bool AcceptJson

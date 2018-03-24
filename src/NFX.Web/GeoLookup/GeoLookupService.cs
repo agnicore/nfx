@@ -32,8 +32,8 @@ using NFX.ServiceModel;
 namespace NFX.Web.GeoLookup
 {
   /// <summary>
-  /// Represents a service that can lookup country/city names by  domainnames/ip addresses.
-  /// Thehis implementatuion uses free data from: http://dev.maxmind.com/geoip/geoip2/geolite2/.
+  /// Represents a service that can lookup country/city names by  domain names/ip addresses.
+  /// This implementation uses free data from: http://dev.maxmind.com/geoip/geoip2/geolite2/.
   /// Must include MaxMind attribution on the public site that uses this data (see License section on maxmind.com)
   /// </summary>
   public class GeoLookupService : Service, IGeoLookup
