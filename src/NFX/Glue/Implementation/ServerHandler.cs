@@ -162,7 +162,7 @@ namespace NFX.Glue.Implementation
               }
               finally
               {
-                 NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(null, null, null);
+                 NFX.ApplicationModel.ExecutionContext.__SetThreadLevelSessionContext(null);
               }
         }
 
@@ -368,8 +368,6 @@ namespace NFX.Glue.Implementation
 
                 private ResponseMsg inspectAndHandleRequest(RequestMsg request)
                 {
-                        NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, null, request.Session);
-
                         //Glue level inspectors
                         var inspectors = Glue.ServerMsgInspectors;
                         for(var i=0; i<inspectors.Count; i++)
@@ -377,7 +375,6 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             request = insp.ServerDispatchRequest(request.ServerTransport.ServerEndpoint, request);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, null, request.Session);
                         }
 
                         //Binding level inspectors
@@ -387,7 +384,6 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             request = insp.ServerDispatchRequest(request.ServerTransport.ServerEndpoint, request);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, null, request.Session);
                         }
 
                         //Endpoint level inspectors
@@ -397,12 +393,10 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             request = insp.ServerDispatchRequest(request.ServerTransport.ServerEndpoint, request);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, null, request.Session);
                         }
 
                       var response = handleRequest(request);
 
-                      NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, response, request.Session);
 
                       if (!request.OneWay && response!=null)
                       {
@@ -414,7 +408,6 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             response = insp.ServerReturnResponse(request.ServerTransport.ServerEndpoint, request, response);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, response, request.Session);
                         }
 
                         //Binding level inspectors
@@ -424,7 +417,6 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             response = insp.ServerReturnResponse(request.ServerTransport.ServerEndpoint, request, response);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, response, request.Session);
                         }
 
                         //Endpoint level inspectors
@@ -434,7 +426,6 @@ namespace NFX.Glue.Implementation
                             var insp = inspectors[i];
                             if (insp==null) continue;
                             response = insp.ServerReturnResponse(request.ServerTransport.ServerEndpoint, request, response);
-                            NFX.ApplicationModel.ExecutionContext.__SetThreadLevelContext(request, response, request.Session);
                         }
 
                         return response;

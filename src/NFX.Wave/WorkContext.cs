@@ -41,6 +41,13 @@ namespace NFX.Wave
   public class WorkContext : DisposableObject
   {
     #region .ctor/.dctor
+      private static AsyncLocal<WorkContext> ats_Current = new AsyncLocal<WorkContext>();
+
+      /// <summary>
+      /// Returns the current call context/thread/async flow instance
+      /// </summary>
+      public static WorkContext Current => ats_Current.Value;
+
       internal WorkContext(WaveServer server, HttpListenerContext listenerContext)
       {
         m_ID = Guid.NewGuid();
@@ -48,7 +55,7 @@ namespace NFX.Wave
         m_ListenerContext = listenerContext;
         m_Response = new Response(this, listenerContext.Response);
 
-        ApplicationModel.ExecutionContext.__SetThreadLevelContext(this, m_Response, null);
+        ats_Current.Value = this;
         Interlocked.Increment(ref m_Server.m_stat_WorkContextCtor);
       }
 
@@ -65,7 +72,7 @@ namespace NFX.Wave
           if (m_NoDefaultAutoClose) Interlocked.Increment(ref m_Server.m_stat_WorkContextNoDefaultClose);
         }
 
-        ApplicationModel.ExecutionContext.__SetThreadLevelContext(null, null, null);
+        ats_Current.Value = null;
         ReleaseWorkSemaphore();
         m_Response.Dispose();
       }
