@@ -226,8 +226,7 @@ namespace NFX.Wave.HttpListener
          // m_Dispatcher.Dispatch(workContext);
 
          IHttpContext ctx = new HttpListenerWaveHttpContext(listenerContext);
-         var task = Task.FromResult(ctx);
-         this.ComponentDirector.ProcessRequest(task);
+         this.ComponentDirector.ProcessRequest(ctx, onThisThread: true);
        }
      }
 

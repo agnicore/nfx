@@ -21,6 +21,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 
 using NFX.Log;
 using NFX.Collections;
@@ -31,7 +32,7 @@ namespace NFX.Wave
 {
   /// <summary>
   /// Represents a default dispatcher that dispatches WorkContext calls on the same thread that calls Dispatch(work).
-  /// May extend this class to implement custom dispatchers, i.e. the once that maintain their won work queue/worker threads
+  /// May extend this class to implement custom dispatchers, i.e. the once that maintain their own work queue/worker threads
   /// </summary>
   public class WorkDispatcher : Service<WaveServer>
   {
@@ -130,9 +131,9 @@ namespace NFX.Wave
 
         /// <summary>
         /// Dispatches work into appropriate handler passing through filters.
-        /// The default implementation processes requests on the calling thread and disposes WorkContext deterministically
+        /// The default implementation is synchronous request processing on the calling thread and disposes WorkContext deterministically
         /// </summary>
-        public virtual void Dispatch(WorkContext work)
+        public virtual Task Dispatch(WorkContext work)
         {
           WorkFilter filter = null;
           WorkHandler handler = null;
@@ -162,6 +163,8 @@ namespace NFX.Wave
                 HandleException(null, null, null, error);
             }
           }
+
+          return Task.CompletedTask;
         }
 
         /// <summary>
