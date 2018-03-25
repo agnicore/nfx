@@ -305,7 +305,7 @@ namespace NFX.Wave.HttpListener
 
         try
         {
-          IHttpContext ctx = new HttpListenerWaveHttpContext(listenerContext);
+          IHttpContext ctx = new HttpContext(listenerContext);
           accessor.AcceptRequest(ctx, onThisThread: true);
         }
         catch(Exception error)

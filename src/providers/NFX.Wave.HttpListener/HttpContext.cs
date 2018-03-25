@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
-
+using System.Threading;
+using System.Threading.Tasks;
 using NFX.Wave.Server;
 
 namespace NFX.Wave.HttpListener
 {
-  public sealed class HttpContext : DisposableObject, IHttpContext
+  public sealed class HttpContext : DisposableObject, IHttpContext, IHttpConnection, IHttpRequest, IHttpResponse
   {
 
     internal HttpContext(HttpListenerContext target)
     {
       Target = target;
-      m_Connection = new HttpConnection(this);
-      m_Request    = new HttpRequest   (this);
-      m_Response   = new HttpResponse  (this);
     }
 
     protected override void Destructor()
@@ -27,14 +26,10 @@ namespace NFX.Wave.HttpListener
     internal readonly HttpListenerContext Target;
 
 
-    private HttpConnection m_Connection;
-    private HttpRequest    m_Request;
-    private HttpResponse   m_Response;
-
-    public IHttpConnection Connection => m_Connection;
-    public IHttpRequest    Request    => m_Request;
-    public IHttpResponse   Response   => m_Response;
-    public IPrincipal      Principal  => Target.User;
+    IHttpConnection IHttpContext.Connection => this;
+    IHttpRequest    IHttpContext.Request    => this;
+    IHttpResponse   IHttpContext.Response   => this;
+    IPrincipal      IHttpContext.Principal  => Target.User;
 
     public bool IsAborted => throw new NotImplementedException();
 
@@ -42,5 +37,19 @@ namespace NFX.Wave.HttpListener
     {
       Target.Response.Abort();
     }
+
+
+    string IHttpConnection.ID             => throw new NotImplementedException();
+    IPAddress IHttpConnection.RemoteIP    => Target.Request.RemoteEndPoint.Address;
+    int       IHttpConnection.RemotePort  => Target.Request.RemoteEndPoint.Port;
+
+    IPAddress IHttpConnection.LocalIP     => Target.Request.LocalEndPoint.Address;
+    int       IHttpConnection.LocalPort   => Target.Request.LocalEndPoint.Port;
+
+    X509Certificate2 IHttpConnection.GetClientCertificate() => Target.Request.GetClientCertificate();
+
+    Task<X509Certificate2> IHttpConnection.GetClientCertificateAsync(CancellationToken cancellationToken = default(CancellationToken))
+       => Target.Request.GetClientCertificateAsync();
+
   }
 }

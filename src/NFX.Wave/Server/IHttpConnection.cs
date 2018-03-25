@@ -16,7 +16,7 @@ namespace NFX.Wave.Server
       IPAddress LocalIP  { get; }
       int LocalPort      { get; }
 
-      X509Certificate GetClientCertificate();
+      X509Certificate2 GetClientCertificate();
       Task<X509Certificate2> GetClientCertificateAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
