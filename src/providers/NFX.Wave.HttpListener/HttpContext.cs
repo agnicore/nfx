@@ -15,6 +15,7 @@ namespace NFX.Wave.HttpListener
 
     internal HttpContext(HttpListenerContext target)
     {
+      ID = FID.Generate();
       Target = target;
     }
 
@@ -23,6 +24,7 @@ namespace NFX.Wave.HttpListener
       base.Destructor();
     }
 
+    internal readonly FID ID;
     internal readonly HttpListenerContext Target;
 
 
@@ -39,12 +41,12 @@ namespace NFX.Wave.HttpListener
     }
 
 
-    string IHttpConnection.ID             => throw new NotImplementedException();
+    string    IHttpConnection.ID          => ID.ToString();
     IPAddress IHttpConnection.RemoteIP    => Target.Request.RemoteEndPoint.Address;
     int       IHttpConnection.RemotePort  => Target.Request.RemoteEndPoint.Port;
-
     IPAddress IHttpConnection.LocalIP     => Target.Request.LocalEndPoint.Address;
     int       IHttpConnection.LocalPort   => Target.Request.LocalEndPoint.Port;
+
 
     X509Certificate2 IHttpConnection.GetClientCertificate() => Target.Request.GetClientCertificate();
 

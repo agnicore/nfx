@@ -12,7 +12,7 @@ namespace NFX.Wave.Server
     IHttpResponse Response   { get; }
     IPrincipal    Principal  { get; }
 
-    bool IAborted{ get;}
+    bool IsAborted{ get;}
 
     /// <summary>
     /// Aborts the connection
