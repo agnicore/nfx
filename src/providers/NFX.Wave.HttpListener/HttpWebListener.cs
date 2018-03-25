@@ -10,6 +10,8 @@ using NFX;
 using NFX.Environment;
 using NFX.Wave;
 using NFX.Wave.Server;
+using NFX.IO.Net.Gate;
+using NFX.Log;
 
 namespace NFX.Wave.HttpListener
 {
@@ -28,11 +30,14 @@ namespace NFX.Wave.HttpListener
       public const int MIN_PARALLEL_ACCEPTS = 1;
       public const int MAX_PARALLEL_ACCEPTS = 1024;
 
-      public const int DEFAULT_PARALLEL_WORKS = 256;
-      public const int MIN_PARALLEL_WORKS = 1;
-      public const int MAX_PARALLEL_WORKS = 1024*1024;
-
       public const int ACCEPT_THREAD_GRANULARITY_MS = 250;
+
+      public const ushort DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC = 120;
+      public const ushort DEFAULT_ENTITY_BODY_TIMEOUT_SEC = 120;
+      public const ushort DEFAULT_HEADER_WAIT_TIMEOUT_SEC = 120;
+      public const ushort DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC = 120;
+      public const ushort DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC = 120;
+      public const uint   DEFAULT_MIN_SEND_BYTES_PER_SECOND = 150;
 
     #endregion
 
@@ -45,12 +50,18 @@ namespace NFX.Wave.HttpListener
     #region fields
       private int m_KernelHttpQueueLimit = DEFAULT_KERNEL_HTTP_QUEUE_LIMIT;
       private int m_ParallelAccepts = DEFAULT_PARALLEL_ACCEPTS;
-      private int m_ParallelWorks = DEFAULT_PARALLEL_WORKS;
+
+      private ushort m_DrainEntityBodyTimeoutSec = DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC;
+      private ushort m_EntityBodyTimeoutSec      = DEFAULT_ENTITY_BODY_TIMEOUT_SEC;
+      private ushort m_HeaderWaitTimeoutSec      = DEFAULT_HEADER_WAIT_TIMEOUT_SEC;
+      private ushort m_IdleConnectionTimeoutSec  = DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC;
+      private ushort m_RequestQueueTimeoutSec    = DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC;
+      private uint   m_MinSendBytesPerSecond     = DEFAULT_MIN_SEND_BYTES_PER_SECOND;
 
 
       private SYSHL m_Listener;
       private bool m_IgnoreClientWriteErrors = true;
-      private bool m_LogHandleExceptionErrors;
+      //private bool m_LogHandleExceptionErrors;
 
       private Thread m_AcceptThread;
       private Semaphore m_AcceptSemaphore;
@@ -69,17 +80,6 @@ namespace NFX.Wave.HttpListener
           CheckServiceInactive();
           m_IgnoreClientWriteErrors = value;
         }
-      }
-
-      /// <summary>
-      /// When true writes errors that get thrown in server catch-all HandleException methods
-      /// </summary>
-      [Config]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB, CoreConsts.EXT_PARAM_GROUP_INSTRUMENTATION)]
-      public bool LogHandleExceptionErrors
-      {
-        get { return m_LogHandleExceptionErrors;}
-        set { m_LogHandleExceptionErrors = value;}
       }
 
       /// <summary>
@@ -115,6 +115,81 @@ namespace NFX.Wave.HttpListener
           m_ParallelAccepts = value;
         }
       }
+
+
+      [Config(Default=DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public ushort DrainEntityBodyTimeoutSec
+      {
+        get { return m_DrainEntityBodyTimeoutSec; }
+        set
+        {
+          m_DrainEntityBodyTimeoutSec = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.DrainEntityBody = TimeSpan.FromSeconds(m_DrainEntityBodyTimeoutSec);
+        }
+      }
+      [Config(Default=DEFAULT_ENTITY_BODY_TIMEOUT_SEC)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public ushort EntityBodyTimeoutSec
+      {
+        get { return m_EntityBodyTimeoutSec; }
+        set
+        {
+          m_EntityBodyTimeoutSec = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.EntityBody = TimeSpan.FromSeconds(m_EntityBodyTimeoutSec);
+        }
+      }
+      [Config(Default=DEFAULT_HEADER_WAIT_TIMEOUT_SEC)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public ushort HeaderWaitTimeoutSec
+      {
+        get { return m_HeaderWaitTimeoutSec; }
+        set
+        {
+          m_HeaderWaitTimeoutSec = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.HeaderWait = TimeSpan.FromSeconds(m_HeaderWaitTimeoutSec);
+        }
+      }
+      [Config(Default=DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public ushort IdleConnectionTimeoutSec
+      {
+        get { return m_IdleConnectionTimeoutSec; }
+        set
+        {
+          m_IdleConnectionTimeoutSec = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.IdleConnection = TimeSpan.FromSeconds(m_IdleConnectionTimeoutSec);
+        }
+      }
+      [Config(Default=DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public ushort RequestQueueTimeoutSec
+      {
+        get { return m_RequestQueueTimeoutSec; }
+        set
+        {
+          m_RequestQueueTimeoutSec = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.RequestQueue = TimeSpan.FromSeconds(m_RequestQueueTimeoutSec);
+        }
+      }
+      [Config(Default=DEFAULT_MIN_SEND_BYTES_PER_SECOND)]
+      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
+      public uint MinSendBytesPerSecond
+      {
+        get { return m_MinSendBytesPerSecond; }
+        set
+        {
+          m_MinSendBytesPerSecond = value;
+          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
+            m_Listener.TimeoutManager.MinSendBytesPerSecond = m_MinSendBytesPerSecond;
+        }
+      }
+
     #endregion
 
     #region Protected
@@ -142,40 +217,47 @@ namespace NFX.Wave.HttpListener
     #endregion
 
     #region .pvt
-     private void acceptThreadSpin()
-     {
-        var semaphores = new Semaphore[]{m_AcceptSemaphore, m_WorkSemaphore};
+      private void acceptThreadSpin()
+      {
+        var accessor = ComponentDirector.___InternalAccessor;
+        var semaphores = new Semaphore[]{m_AcceptSemaphore, accessor.WorkSemaphore};
+
         while(Running)
         {
           //Both semaphores get acquired here
           if (!WaitHandle.WaitAll(semaphores, ACCEPT_THREAD_GRANULARITY_MS)) continue;
 
-          if (m_Listener.IsListening)
-               m_Listener.BeginGetContext(callback, null);//the BeginGetContext/EndGetContext is called on a different thread (pool IO background)
-                                                          // whereas GetContext() is called on the caller thread
+          if (!m_Listener.IsListening) continue;
+
+          m_Listener.BeginGetContext(callback, null);//the BeginGetContext/EndGetContext is called on a different thread (pool IO background)
+                                                     // whereas GetContext() is called on the caller thread
         }
-     }
+      }
 
 
-     private void callback(IAsyncResult result)
-     {
-       if (m_Listener==null) return;//callback sometime happens when listener is null on shutdown
-       if (!m_Listener.IsListening) return;
+      private void callback(IAsyncResult result)
+      {
+        SYSHL listener = m_Listener;//capture local copy
+        if (listener==null) return;//callback sometime happens when listener is null on shutdown
+        if (!listener.IsListening) return;
 
-       //This is called on its own pool thread by HttpListener
-       bool gateAccessDenied = false;
-       HttpListenerContext listenerContext;
-       try
-       {
-         listenerContext = m_Listener.EndGetContext(result);
+        var accessor = ComponentDirector.___InternalAccessor;
+        var gate = ComponentDirector.Gate;
 
-         if (m_InstrumentationEnabled) Interlocked.Increment(ref m_stat_ServerRequest);
+        //This is called on its own pool thread by HttpListener
+        bool gateAccessDenied = false;
+        HttpListenerContext listenerContext;
+        try
+        {
+          listenerContext = m_Listener.EndGetContext(result);
 
+          accessor.Stat_IncServerRequest();
 
-         if (m_Gate!=null)
+          if (gate!=null)
+          {
             try
             {
-              var action = m_Gate.CheckTraffic(new HTTPIncomingTraffic(listenerContext.Request, GateCallerRealIpAddressHeader));
+              var action = gate.CheckTraffic(new HTTPIncomingTraffic(listenerContext.Request, ComponentDirector.GateCallerRealIpAddressHeader));
               if (action!=GateAction.Allow)
               {
                 //access denied
@@ -184,54 +266,53 @@ namespace NFX.Wave.HttpListener
                 listenerContext.Response.StatusDescription = Web.WebConsts.STATUS_403_DESCRIPTION;
                 listenerContext.Response.Close();
 
-                if (m_InstrumentationEnabled) Interlocked.Increment(ref m_stat_ServerGateDenial);
+                accessor.Stat_IncServerGateDenial();
                 return;
               }
             }
             catch(Exception denyError)
             {
-              Log(MessageType.Error, denyError.ToMessageWithType(), "callback(deny request)", denyError);
+              ComponentDirector.Log(MessageType.Error, denyError.ToMessageWithType(), "callback(deny request)", denyError);
             }
-       }
-       catch(Exception error)
-       {
+          }
+        }
+        catch(Exception error)
+        {
           if (error is HttpListenerException)
-           if ((error as HttpListenerException).ErrorCode==995) return;//Aborted
+            if ((error as HttpListenerException).ErrorCode==995) return;//Aborted
 
-          Log(MessageType.Error, error.ToMessageWithType(), "callback(endGetContext())", error);
+          ComponentDirector.Log(MessageType.Error, error.ToMessageWithType(), "callback(endGetContext())", error);
           return;
-       }
-       finally
-       {
+        }
+        finally
+        {
           if (Running)
           {
-             var acceptCount = m_AcceptSemaphore.Release();
+              var acceptCount = m_AcceptSemaphore.Release();
 
-             if (m_InstrumentationEnabled)
-              Thread.VolatileWrite(ref m_stat_ServerAcceptSemaphoreCount, acceptCount);
+              accessor.Stat_ServerAcceptSemaphoreCount(acceptCount);
 
-             if (gateAccessDenied)//if access was denied then no work will be done either
-             {
-                var workCount = m_WorkSemaphore.Release();
-                if (m_InstrumentationEnabled)
-                  Thread.VolatileWrite(ref m_stat_ServerWorkSemaphoreCount, workCount);
-             }
+              if (gateAccessDenied)//if access was denied then no work will be done either
+              {
+                var workCount = accessor.WorkSemaphore.Release();
+                accessor.Stat_ServerWorkSemaphoreCount(workCount);
+              }
           }
-       }
+        }
 
-       //no need to call process() asynchronously because this whole method is on its own thread already
-       if (Running)
-       {
-         // var workContext = MakeContext(listenerContext);
-         // m_Dispatcher.Dispatch(workContext);
+        //this whole method is on its own thread already for HttpListener
+        if (!Running) return;
 
-         IHttpContext ctx = new HttpListenerWaveHttpContext(listenerContext);
-         this.ComponentDirector.ProcessRequest(ctx, onThisThread: true);
-       }
-     }
-
-
+        try
+        {
+          IHttpContext ctx = new HttpListenerWaveHttpContext(listenerContext);
+          accessor.AcceptRequest(ctx, onThisThread: true);
+        }
+        catch(Exception error)
+        {
+          ComponentDirector.Log(MessageType.Error, error.ToMessageWithType(), "callback(endGetContext(AcceptRequest()))", error);
+        }
+      }
     #endregion
-
   }
 }

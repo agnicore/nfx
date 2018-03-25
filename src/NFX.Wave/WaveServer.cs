@@ -31,6 +31,7 @@ using NFX.Instrumentation;
 using NFX.Serialization.JSON;
 
 using NFX.Wave.Filters;
+using System.Threading.Tasks;
 
 namespace NFX.Wave
 {
@@ -56,45 +57,25 @@ namespace NFX.Wave
   ///   (a) much increased implementation/maintenance complexity
   ///   (b) many additional task/thread context switches and extra objects that facilitate the event loops/messages/tasks etc...
   /// </remarks>
-  public class WaveServer : ServiceWithInstrumentationBase<object>
+  public partial class WaveServer : ServiceWithInstrumentationBase<object>
   {
     #region CONSTS
 
       public const string CONFIG_SERVER_SECTION = "server";
-
       public const string CONFIG_PREFIX_SECTION = "prefix";
-
       public const string CONFIG_GATE_SECTION = "gate";
-
       public const string CONFIG_DISPATCHER_SECTION = "dispatcher";
-
       public const string CONFIG_DEFAULT_ERROR_HANDLER_SECTION = "default-error-handler";
+      public const string CONFIG_LISTENER_SECTION = "listener";
 
-
-      public const int DEFAULT_KERNEL_HTTP_QUEUE_LIMIT = 1000;
-      public const int MIN_KERNEL_HTTP_QUEUE_LIMIT = 16;
-      public const int MAX_KERNEL_HTTP_QUEUE_LIMIT = 512 * 1024;
-
-      public const int DEFAULT_PARALLEL_ACCEPTS = 64;
-      public const int MIN_PARALLEL_ACCEPTS = 1;
-      public const int MAX_PARALLEL_ACCEPTS = 1024;
 
       public const int DEFAULT_PARALLEL_WORKS = 256;
       public const int MIN_PARALLEL_WORKS = 1;
       public const int MAX_PARALLEL_WORKS = 1024*1024;
 
       public const string DEFAULT_CLIENT_VARS_COOKIE_NAME = "WV.CV";
-
-      public const int ACCEPT_THREAD_GRANULARITY_MS = 250;
-
       public const int INSTRUMENTATION_DUMP_PERIOD_MS = 3377;
 
-      public const ushort DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC = 120;
-      public const ushort DEFAULT_ENTITY_BODY_TIMEOUT_SEC = 120;
-      public const ushort DEFAULT_HEADER_WAIT_TIMEOUT_SEC = 120;
-      public const ushort DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC = 120;
-      public const ushort DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC = 120;
-      public const uint   DEFAULT_MIN_SEND_BYTES_PER_SECOND = 150;
     #endregion
 
     #region Static
@@ -130,27 +111,15 @@ namespace NFX.Wave
 
       private string m_EnvironmentName;
 
-      private int m_KernelHttpQueueLimit = DEFAULT_KERNEL_HTTP_QUEUE_LIMIT;
-      private int m_ParallelAccepts = DEFAULT_PARALLEL_ACCEPTS;
       private int m_ParallelWorks = DEFAULT_PARALLEL_WORKS;
 
-      private ushort m_DrainEntityBodyTimeoutSec = DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC;
-      private ushort m_EntityBodyTimeoutSec      = DEFAULT_ENTITY_BODY_TIMEOUT_SEC;
-      private ushort m_HeaderWaitTimeoutSec      = DEFAULT_HEADER_WAIT_TIMEOUT_SEC;
-      private ushort m_IdleConnectionTimeoutSec  = DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC;
-      private ushort m_RequestQueueTimeoutSec    = DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC;
-      private uint   m_MinSendBytesPerSecond     = DEFAULT_MIN_SEND_BYTES_PER_SECOND;
-
-      private HttpListener m_Listener;
-      private bool m_IgnoreClientWriteErrors = true;
-      private bool m_LogHandleExceptionErrors;
+      private Server.WebListener m_Listener;
       private EventedList<string, WaveServer> m_Prefixes;
+      private bool m_LogHandleExceptionErrors;
 
-      private Thread m_AcceptThread;
       private Thread m_InstrumentationThread;
       private AutoResetEvent m_InstrumentationThreadWaiter;
 
-      private Semaphore m_AcceptSemaphore;
       internal Semaphore m_WorkSemaphore;
 
       private INetGate m_Gate;
@@ -202,7 +171,7 @@ namespace NFX.Wave
     #region Properties
 
 
-       public override string ComponentCommonName { get { return "ws-"+Name; }}
+      public override string ComponentCommonName { get { return "ws-"+Name; }}
 
 
 
@@ -243,20 +212,6 @@ namespace NFX.Wave
       }
 
       /// <summary>
-      /// When true does not throw exceptions on client channel write
-      /// </summary>
-      [Config(Default=true)]
-      public bool IgnoreClientWriteErrors
-      {
-        get { return m_IgnoreClientWriteErrors;}
-        set
-        {
-          CheckServiceInactive();
-          m_IgnoreClientWriteErrors = value;
-        }
-      }
-
-      /// <summary>
       /// When true writes errors that get thrown in server cathc-all HandleException methods
       /// </summary>
       [Config]
@@ -265,41 +220,6 @@ namespace NFX.Wave
       {
         get { return m_LogHandleExceptionErrors;}
         set { m_LogHandleExceptionErrors = value;}
-      }
-
-
-      /// <summary>
-      /// Establishes HTTP.sys kernel queue limit
-      /// </summary>
-      [Config]
-      public int KernelHttpQueueLimit
-      {
-        get { return m_KernelHttpQueueLimit;}
-        set
-        {
-          CheckServiceInactive();
-          if (value < MIN_KERNEL_HTTP_QUEUE_LIMIT) value = MIN_KERNEL_HTTP_QUEUE_LIMIT;
-           else
-            if (value > MAX_KERNEL_HTTP_QUEUE_LIMIT) value = MAX_KERNEL_HTTP_QUEUE_LIMIT;
-          m_KernelHttpQueueLimit = value;
-        }
-      }
-
-      /// <summary>
-      /// Specifies how many requests can get accepted from kernel queue in parallel
-      /// </summary>
-      [Config(Default=DEFAULT_PARALLEL_ACCEPTS)]
-      public int ParallelAccepts
-      {
-        get { return m_ParallelAccepts;}
-        set
-        {
-          CheckServiceInactive();
-          if (value < MIN_PARALLEL_ACCEPTS) value = MIN_PARALLEL_ACCEPTS;
-           else
-            if (value > MAX_PARALLEL_ACCEPTS) value = MAX_PARALLEL_ACCEPTS;
-          m_ParallelAccepts = value;
-        }
       }
 
 
@@ -320,84 +240,10 @@ namespace NFX.Wave
         }
       }
 
-      [Config(Default=DEFAULT_DRAIN_ENTITY_BODY_TIMEOUT_SEC)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public ushort DrainEntityBodyTimeoutSec
-      {
-        get { return m_DrainEntityBodyTimeoutSec; }
-        set
-        {
-          m_DrainEntityBodyTimeoutSec = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.DrainEntityBody = TimeSpan.FromSeconds(m_DrainEntityBodyTimeoutSec);
-        }
-      }
-      [Config(Default=DEFAULT_ENTITY_BODY_TIMEOUT_SEC)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public ushort EntityBodyTimeoutSec
-      {
-        get { return m_EntityBodyTimeoutSec; }
-        set
-        {
-          m_EntityBodyTimeoutSec = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.EntityBody = TimeSpan.FromSeconds(m_EntityBodyTimeoutSec);
-        }
-      }
-      [Config(Default=DEFAULT_HEADER_WAIT_TIMEOUT_SEC)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public ushort HeaderWaitTimeoutSec
-      {
-        get { return m_HeaderWaitTimeoutSec; }
-        set
-        {
-          m_HeaderWaitTimeoutSec = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.HeaderWait = TimeSpan.FromSeconds(m_HeaderWaitTimeoutSec);
-        }
-      }
-      [Config(Default=DEFAULT_IDLE_CONNECTION_TIMEOUT_SEC)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public ushort IdleConnectionTimeoutSec
-      {
-        get { return m_IdleConnectionTimeoutSec; }
-        set
-        {
-          m_IdleConnectionTimeoutSec = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.IdleConnection = TimeSpan.FromSeconds(m_IdleConnectionTimeoutSec);
-        }
-      }
-      [Config(Default=DEFAULT_REQUEST_QUEUE_TIMEOUT_SEC)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public ushort RequestQueueTimeoutSec
-      {
-        get { return m_RequestQueueTimeoutSec; }
-        set
-        {
-          m_RequestQueueTimeoutSec = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.RequestQueue = TimeSpan.FromSeconds(m_RequestQueueTimeoutSec);
-        }
-      }
-      [Config(Default=DEFAULT_MIN_SEND_BYTES_PER_SECOND)]
-      [ExternalParameter(CoreConsts.EXT_PARAM_GROUP_WEB)]
-      public uint MinSendBytesPerSecond
-      {
-        get { return m_MinSendBytesPerSecond; }
-        set
-        {
-          m_MinSendBytesPerSecond = value;
-          if (m_Listener != null && m_Listener.IsListening && !OS.Computer.IsMono)
-            m_Listener.TimeoutManager.MinSendBytesPerSecond = m_MinSendBytesPerSecond;
-        }
-      }
-
       /// <summary>
       /// Returns HttpListener prefixes such as "http://+:8080/"
       /// </summary>
       public IList<string> Prefixes { get { return m_Prefixes;}}
-
 
       /// <summary>
       /// Gets/sets network gate
@@ -417,7 +263,6 @@ namespace NFX.Wave
       {
         get; set;
       }
-
 
       /// <summary>
       /// Gets/sets work dispatcher
@@ -443,6 +288,14 @@ namespace NFX.Wave
       /// Returns matches used by the server's default error handler to determine whether exception details should be logged
       /// </summary>
       public OrderedRegistry<WorkMatch> LogMatches { get{ return m_ErrorLogMatches;}}
+
+
+      /// <summary>
+      /// Framework method not intended to be used by app developers.
+      /// Provides access to server internals for low-level components such as
+      /// listener plugins which are implemented in external asssemblies.
+      /// </summary>
+      public serverAccessor ___InternalAccessor => new serverAccessor(this);
 
     #endregion
 
@@ -675,9 +528,26 @@ namespace NFX.Wave
       /// <summary>
       /// Factory method that makes new WorkContext instances. Override to make a WorkContext-derivative
       /// </summary>
-      protected virtual WorkContext MakeContext(HttpListenerContext listenerContext)
+      protected virtual WorkContext MakeContext(Server.IHttpContext listenerContext)
       {
         return new WorkContext(this, listenerContext);
+      }
+
+      /// <summary>
+      /// Returns the task which completes upon the request processing completion.
+      /// Synchronous dispatcher pipeline implementations return the completed task if onThisThread=true,
+      /// in which case this method does not return until request is finished processing.
+      /// When onThisThread=false, the listener indicates to dispatcher that dispatcher needs to use
+      /// its own thread for request processing and returns a pending tasks similar to async pipeline.
+      /// To contrast, asynchronous dispatcher pipelines return right away the task which will complete in future.
+      /// The processing mode depends on both listener and dispatcher. The best practice is to use both
+      /// listener and dispatcher that support asynchronous modes.
+      /// </summary>
+      protected virtual Task AcceptRequest(Server.IHttpContext context, bool onThisThread)
+      {
+        var work = MakeContext(context);
+        var dispatched = m_Dispatcher.Dispatch(work, onThisThread);
+        return dispatched;
       }
 
       /// <summary>

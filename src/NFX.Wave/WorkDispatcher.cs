@@ -69,6 +69,11 @@ namespace NFX.Wave
         /// </summary>
         public IRegistry<WorkHandler> Handlers { get { return m_Handlers;}}
 
+        /// <summary>
+        /// True if the dispatcher supports true async work processing pipeline
+        /// </summary>
+        public virtual bool IsAsync => false;
+
       #endregion
 
       #region Public
@@ -131,9 +136,25 @@ namespace NFX.Wave
 
         /// <summary>
         /// Dispatches work into appropriate handler passing through filters.
-        /// The default implementation is synchronous request processing on the calling thread and disposes WorkContext deterministically
+        /// The default implementation is synchronous work processing on the calling thread and disposes WorkContext deterministically
         /// </summary>
-        public virtual Task Dispatch(WorkContext work)
+        /// <param name="work">WorkContext to be dispatched into pipeline</param>
+        /// <param name="onThisThread">
+        /// Has effect only for synchronous listeners, if TRUE indicates that dispatcher may process the request
+        /// right in the calling thread, if false - dispatcher needs to return a task ASAP which will complete on dispatcher-provided thread
+        /// </param>
+        public virtual Task Dispatch(WorkContext work, bool onThisThread)
+        {
+          if (onThisThread)
+          {
+            blockingDispatch(work);
+            return Task.CompletedTask;
+          }
+
+          return  Task.Factory.StartNew(() => blockingDispatch(work), TaskCreationOptions.PreferFairness );
+        }
+
+        private void blockingDispatch(WorkContext work)
         {
           WorkFilter filter = null;
           WorkHandler handler = null;
