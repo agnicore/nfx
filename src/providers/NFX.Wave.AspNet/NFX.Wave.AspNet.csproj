@@ -5,7 +5,7 @@
     <Version>5.0.0</Version>
     <Authors>Agnicore Inc., DKh aka ITADAPTER</Authors>
     <Company>Agnicore Inc.</Company>
-    <Description>NFX - .NET Unistack Kestrel WAVE Assembly</Description>
+    <Description>NFX - .NET Unistack AspNet hosting (e.g. Kestrel) WAVE Assembly</Description>
     <Copyright>2003-2018 Agnicore Inc; ITAdapter Corp. Inc.</Copyright>
     <PackageProjectUrl>http://nfxlib.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/agnicore/nfx</RepositoryUrl>
@@ -18,13 +18,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\..\out\Debug\</OutputPath>
-    <DocumentationFile>..\..\..\out\Debug\NFX.Wave.Kestrel.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\out\Debug\NFX.Wave.AspNet.xml</DocumentationFile>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\..\out\Release\</OutputPath>
-    <DocumentationFile>..\..\..\out\Release\NFX.Wave.Kestrel.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\out\Release\NFX.Wave.AspNet.xml</DocumentationFile>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 

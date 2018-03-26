@@ -94,9 +94,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFX.Wave.Kestrel", "providers\NFX.Wave.Kestrel\NFX.Wave.Kestrel.csproj", "{2A86C16B-3994-4E8F-84A9-D2AC095C1D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFX.Wave.AspNet", "providers\NFX.Wave.Kestrel\NFX.Wave.AspNet.csproj", "{2A86C16B-3994-4E8F-84A9-D2AC095C1D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFX.Wave.HttpListener", "providers\NFX.Wave.HttpListener\NFX.Wave.HttpListener.csproj", "{C8931DDE-CC3D-4334-B50E-0ADF42C21D1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NFX.Wave.HttpListener", "providers\NFX.Wave.HttpListener\NFX.Wave.HttpListener.csproj", "{C8931DDE-CC3D-4334-B50E-0ADF42C21D1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
