@@ -21,7 +21,6 @@ namespace NFX.Wave.AspNet
 
     internal HttpContext(AspHttpContext target)
     {
-      ID = FID.Generate();
       Target = target;
     }
 
@@ -30,7 +29,6 @@ namespace NFX.Wave.AspNet
       base.Destructor();
     }
 
-    internal readonly FID ID;
     internal readonly AspHttpContext Target;
 
 
@@ -39,7 +37,7 @@ namespace NFX.Wave.AspNet
     IHttpResponse   IHttpContext.Response   => this;
     IPrincipal      IHttpContext.Principal  => Target.User;
 
-    public bool IsAborted => Target.RequestAborted;
+    public bool IsAborted => Target.RequestAborted.IsCancellationRequested;
 
     public void Abort()
     {
@@ -47,17 +45,17 @@ namespace NFX.Wave.AspNet
     }
 
     #region IHttpConnection
-      string    IHttpConnection.ID          => ID.ToString();
-      IPAddress IHttpConnection.RemoteIP    => Target.Request.RemoteEndPoint.Address;
-      int       IHttpConnection.RemotePort  => Target.Request.RemoteEndPoint.Port;
-      IPAddress IHttpConnection.LocalIP     => Target.Request.LocalEndPoint.Address;
-      int       IHttpConnection.LocalPort   => Target.Request.LocalEndPoint.Port;
+      string    IHttpConnection.ID          => Target.Connection.Id;
+      IPAddress IHttpConnection.RemoteIP    => Target.Connection.RemoteIpAddress;
+      int       IHttpConnection.RemotePort  => Target.Connection.RemotePort;
+      IPAddress IHttpConnection.LocalIP     => Target.Connection.LocalIpAddress;
+      int       IHttpConnection.LocalPort   => Target.Connection.LocalPort;
 
 
-      X509Certificate2 IHttpConnection.GetClientCertificate() => Target.Request.GetClientCertificate();
+      X509Certificate2 IHttpConnection.GetClientCertificate() => Target.Connection.ClientCertificate;
 
-      Task<X509Certificate2> IHttpConnection.GetClientCertificateAsync(CancellationToken cancellationToken = default(CancellationToken))
-         => Target.Request.GetClientCertificateAsync();
+      Task<X509Certificate2> IHttpConnection.GetClientCertificateAsync(CancellationToken cancellationToken)
+         => Target.Connection.GetClientCertificateAsync(cancellationToken);
     #endregion
 
     #region IHttpRequest
