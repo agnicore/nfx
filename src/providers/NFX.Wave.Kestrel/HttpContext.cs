@@ -7,17 +7,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+using AspHttpContext = Microsoft.AspNetCore.Http.HttpContext;
+
 using NFX.Wave.Server;
 
-namespace NFX.Wave.HttpListener
+namespace NFX.Wave.AspNet
 {
   /// <summary>
-  /// Provides IHttpContext implementation based on a .NET classic HttpListenerContext
+  /// Provides IHttpContext implementation based on AspNet middleware context
   /// </summary>
   public sealed class HttpContext : DisposableObject, IHttpContext, IHttpConnection, IHttpRequest, IHttpResponse
   {
 
-    internal HttpContext(HttpListenerContext target)
+    internal HttpContext(AspHttpContext target)
     {
       ID = FID.Generate();
       Target = target;
@@ -29,7 +31,7 @@ namespace NFX.Wave.HttpListener
     }
 
     internal readonly FID ID;
-    internal readonly HttpListenerContext Target;
+    internal readonly AspHttpContext Target;
 
 
     IHttpConnection IHttpContext.Connection => this;
@@ -37,11 +39,11 @@ namespace NFX.Wave.HttpListener
     IHttpResponse   IHttpContext.Response   => this;
     IPrincipal      IHttpContext.Principal  => Target.User;
 
-    public bool IsAborted => throw new NotImplementedException();
+    public bool IsAborted => Target.RequestAborted;
 
     public void Abort()
     {
-      Target.Response.Abort();
+      Target.Abort();
     }
 
     #region IHttpConnection
