@@ -9,9 +9,9 @@ namespace NFX.Wave.Server
   /// <summary>
   /// Provides base abstraction for web servers
   /// </summary>
-  public abstract class WebListener : Service<WaveServer>
+  public abstract class WaveListener : Service<WaveServer>
   {
-    protected WebListener(WaveServer director) : base(director)
+    protected WaveListener(WaveServer director) : base(director)
     {
 
     }

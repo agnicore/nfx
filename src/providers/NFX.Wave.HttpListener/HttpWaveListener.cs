@@ -16,9 +16,9 @@ using NFX.Log;
 namespace NFX.Wave.HttpListener
 {
   /// <summary>
-  /// Provides implementation of WebLsitener based on a classic System.Net.HttpListener
+  /// Provides implementation of WaveListener based on a classic System.Net.HttpListener
   /// </summary>
-  public sealed class HttpWebListener : WebListener
+  public sealed class HttpWaveListener : WaveListener
   {
     #region CONSTS
 
@@ -42,7 +42,7 @@ namespace NFX.Wave.HttpListener
     #endregion
 
     #region .ctor
-      public HttpWebListener(WaveServer waveServer) : base(waveServer)
+      public HttpWaveListener(WaveServer waveServer) : base(waveServer)
       {
       }
     #endregion
