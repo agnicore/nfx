@@ -1,0 +1,183 @@
+/*<FILE_LICENSE>
+* NFX (.NET Framework Extension) Unistack Library
+* Copyright 2003-2018 Agnicore Inc. portions ITAdapter Corp. Inc.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+</FILE_LICENSE>*/
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using NFX.Environment;
+using NFX.CodeAnalysis.Source;
+
+namespace NFX.CodeAnalysis.Laconfig
+{
+    public sealed partial class LJSParser
+    {
+
+      private class abortException: Exception {}
+
+
+      private IEnumerator<LaconfigToken> tokens;
+      private LaconfigToken token;
+
+      private void abort() { throw new abortException(); }
+
+      private void errorAndAbort(LaconfigMsgCode code)
+      {
+          EmitMessage(MessageType.Error, (int)code, Lexer.SourceCodeReference,token: token);
+          throw new abortException();
+      }
+
+      private void fetch()
+      {
+          if (!tokens.MoveNext())
+              errorAndAbort(LaconfigMsgCode.ePrematureEOF);
+
+          token = tokens.Current;
+      }
+
+      private void fetchPrimary()
+      {
+          do fetch();
+          while(!token.IsPrimary);
+      }
+
+      private void fetchPrimaryOrEOF()
+      {
+          do fetch();
+          while(!token.IsPrimary && token.Type!=LaconfigTokenType.tEOF);
+      }
+
+
+      private void doRoot(LJSTree tree)
+      {
+          if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
+            errorAndAbort(LaconfigMsgCode.eSectionNameExpected);
+
+
+          var node = new LJSSectionNode();
+          tree.Root = node;
+
+          node.StartToken = token;
+          node.Name = token.Text;
+
+          fetchPrimary();
+          if (token.Type==LaconfigTokenType.tEQ)
+          {
+              fetchPrimary();
+              if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
+                    errorAndAbort(LaconfigMsgCode.eSectionOrAttributeValueExpected);
+              node.GeneratorPragma = token.Text;
+              fetchPrimary();
+          }
+
+          populateSection(node);
+
+          if (token.Type!=LaconfigTokenType.tEOF)
+            errorAndAbort(LaconfigMsgCode.eContentPastRootSection);
+      }
+
+
+      private void populateSection(LJSSectionNode section)
+      {
+          if (token.Type!=LaconfigTokenType.tBraceOpen)
+                errorAndAbort(LaconfigMsgCode.eSectionOpenBraceExpected);
+
+          var children = new List<LJSNode>();
+
+          fetchPrimary();//skip {  section started
+
+          LJSContentNode content = null;
+
+          while(true)
+          {
+              if (token.Type==LaconfigTokenType.tBraceClose)
+              {
+                fetchPrimaryOrEOF();//skip }  section ended
+                break;
+              }
+
+              if (token.Type==LaconfigTokenType.tDirective)
+              {
+               //nakaplivaem java script
+              }
+
+
+              if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
+                errorAndAbort(LaconfigMsgCode.eSectionOrAttributeNameExpected);
+
+              var name = token.Text;
+              var startToken = token;
+              fetchPrimary();
+
+              if (token.Type==LaconfigTokenType.tBraceOpen)//section w/o value
+              {
+                  var subsection = new LJSSectionNode();
+                  subsection.Parent = section;
+                  subsection.Name = name;
+                  subsection.StartToken = startToken;
+                  populateSection(subsection);
+                  children.Add(subsection);
+              }else if (token.Type==LaconfigTokenType.tEQ)//section with value or attribute
+              {
+                  fetchPrimary();
+                  if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
+                    errorAndAbort(LaconfigMsgCode.eSectionOrAttributeValueExpected);
+
+                  var value = token.Text;
+                  fetchPrimary();//skip value
+
+                  if (token.Type==LaconfigTokenType.tBraceOpen)//section with pragma
+                  {
+                    var subsection = new LJSSectionNode();
+                    subsection.Parent = section;
+                    subsection.Name = name;
+                    subsection.StartToken = startToken;
+                    populateSection(subsection);
+                    children.Add(subsection);
+                  }
+                  else
+                  {
+                    var attr = new LJSAttributeNode();//attribute
+                    attr.Parent = section;
+                    attr.Name = name;
+                    attr.Value = value;
+                    attr.StartToken = startToken;
+                    children.Add(attr);
+                  }
+
+              }else if (token.Type==LaconfigTokenType.tIdentifier || token.Type==LaconfigTokenType.tStringLiteral)
+              {
+                if (content==null)
+                {
+                  content = new LJSContentNode();//content
+                  content.Parent = section;
+                  content.Name = "CONTENT";
+                  content.Content = name;
+                  content.StartToken = startToken;
+                  children.Add(content);
+                }
+                content.Content += (' '+ token.Text); //add to existing content
+
+              }
+               else errorAndAbort(LaconfigMsgCode.eSyntaxError);
+          }
+
+          section.Children = children.ToArray();
+      }
+
+    }
+}
