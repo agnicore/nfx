@@ -29,9 +29,9 @@ namespace NFX.CodeAnalysis.Laconfig
   public sealed class LJSData : ObjectResultAnalysisContext<LJSTree>
   {
 
-      public LJSData(LJSTree dom) : base(null)
+      public LJSData() : base(null)
       {
-          m_ResultObject = dom;
+        m_ResultObject = new LJSTree();
       }
 
 
@@ -71,12 +71,21 @@ namespace NFX.CodeAnalysis.Laconfig
 
     /// <summary> Attaches arbitrary data, such as the one used by the generator </summary>
     public object Data { get; set; }
+
+    /// <summary> Prints tree into string builder </summary>
+    public abstract void Print(StringBuilder builder, int indent);
   }
 
   public sealed class LJSAttributeNode : LJSNode
   {
     /// <summary>The value of attribute node</summary>
     public string Value { get; internal set; }
+
+    public override void Print(StringBuilder builder, int indent)
+    {
+      builder.Append(new string(' ',indent *2));
+      builder.AppendLine("{0} {1} -> {2}".Args("Attr", StartToken.Type, Value));
+    }
   }
 
   public sealed class LJSSectionNode : LJSNode
@@ -88,6 +97,14 @@ namespace NFX.CodeAnalysis.Laconfig
     public string GeneratorPragma { get; internal set; }
     /// <summary> All nodes in order of declaration: sections, content, script, attributes</summary>
     public LJSNode[] Children { get; internal set; }
+
+    public override void Print(StringBuilder builder, int indent)
+    {
+      builder.Append(new string(' ',indent *2));
+      builder.AppendLine("{0} {1} -> {2} = {3}".Args("Section", StartToken.Type,  Name, GeneratorPragma));
+      foreach(var c in Children)
+        c.Print(builder, indent+1);
+    }
   }
 
   /// <summary> Represents textual content block, such as:   div{ content block text }</summary>
@@ -95,6 +112,12 @@ namespace NFX.CodeAnalysis.Laconfig
   {
     /// <summary>Textual content</summary>
     public string Content { get; internal set; }
+
+    public override void Print(StringBuilder builder, int indent)
+    {
+      builder.Append(new string(' ',indent *2));
+      builder.AppendLine("{0} {1} -> {2}".Args("Content", StartToken.Type, Content));
+    }
   }
 
   /// <summary> Represents script textual content block, such as: # let x =1;</summary>
@@ -102,6 +125,12 @@ namespace NFX.CodeAnalysis.Laconfig
   {
     /// <summary>Textual script content</summary>
     public string Script { get; internal set; }
+
+    public override void Print(StringBuilder builder, int indent)
+    {
+      builder.Append(new string(' ',indent *2));
+      builder.AppendLine("{0} {1} -> {2}".Args("Script", StartToken.Type, Script));
+    }
   }
 
 

@@ -29,6 +29,12 @@ namespace NFX.CodeAnalysis.Laconfig
   public sealed partial class LJSParser : Parser<LaconfigLexer>
   {
 
+    public LJSParser(LaconfigLexer input,  MessageList messages = null, bool throwErrors = false) :
+        this(new LJSData(), input, messages, throwErrors)
+    {
+    }
+
+
     public LJSParser(LJSData context, LaconfigLexer input,  MessageList messages = null, bool throwErrors = false) :
         base(context, new LaconfigLexer[]{ input }, messages, throwErrors)
     {

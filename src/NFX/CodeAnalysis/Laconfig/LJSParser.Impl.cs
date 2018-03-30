@@ -52,13 +52,13 @@ namespace NFX.CodeAnalysis.Laconfig
       private void fetchPrimary()
       {
           do fetch();
-          while(!token.IsPrimary);
+          while(!token.IsPrimary && !token.IsDirective);
       }
 
       private void fetchPrimaryOrEOF()
       {
           do fetch();
-          while(!token.IsPrimary && token.Type!=LaconfigTokenType.tEOF);
+          while(!token.IsPrimary && !token.IsDirective && !token.IsEOF);
       }
 
 
@@ -94,13 +94,14 @@ namespace NFX.CodeAnalysis.Laconfig
       private void populateSection(LJSSectionNode section)
       {
           if (token.Type!=LaconfigTokenType.tBraceOpen)
-                errorAndAbort(LaconfigMsgCode.eSectionOpenBraceExpected);
+            errorAndAbort(LaconfigMsgCode.eSectionOpenBraceExpected);
 
           var children = new List<LJSNode>();
 
           fetchPrimary();//skip {  section started
 
           LJSContentNode content = null;
+          LJSScriptNode  script  = null;
 
           while(true)
           {
@@ -112,26 +113,42 @@ namespace NFX.CodeAnalysis.Laconfig
 
               if (token.Type==LaconfigTokenType.tDirective)
               {
-               //nakaplivaem java script
+               content = null;
+               if (script==null)
+                {
+                  script = new LJSScriptNode();//script
+                  script.Parent = section;
+                  script.Name = "SCRIPT";
+                  script.Script = token.Text;
+                  script.StartToken = token;
+                  children.Add(script);
+                }
+                else
+                  script.Script += ("\n"+ token.Text); //add to existing script
+
+                fetchPrimary();
+                continue;
               }
 
 
               if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
                 errorAndAbort(LaconfigMsgCode.eSectionOrAttributeNameExpected);
 
-              var name = token.Text;
               var startToken = token;
-              fetchPrimary();
+              fetchPrimary(); //fetch next
 
               if (token.Type==LaconfigTokenType.tBraceOpen)//section w/o value
               {
+                  content = null;
+                  script = null;
                   var subsection = new LJSSectionNode();
                   subsection.Parent = section;
-                  subsection.Name = name;
+                  subsection.Name = startToken.Text;
                   subsection.StartToken = startToken;
                   populateSection(subsection);
                   children.Add(subsection);
-              }else if (token.Type==LaconfigTokenType.tEQ)//section with value or attribute
+              }
+              else if (token.Type==LaconfigTokenType.tEQ)//section with value or attribute
               {
                   fetchPrimary();
                   if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
@@ -142,39 +159,45 @@ namespace NFX.CodeAnalysis.Laconfig
 
                   if (token.Type==LaconfigTokenType.tBraceOpen)//section with pragma
                   {
+                    content = null;
+                    script = null;
                     var subsection = new LJSSectionNode();
                     subsection.Parent = section;
-                    subsection.Name = name;
+                    subsection.Name = startToken.Text;
+                    subsection.GeneratorPragma = value;
                     subsection.StartToken = startToken;
                     populateSection(subsection);
                     children.Add(subsection);
                   }
                   else
                   {
+                    content = null;
+                    script = null;
                     var attr = new LJSAttributeNode();//attribute
                     attr.Parent = section;
-                    attr.Name = name;
+                    attr.Name = startToken.Text;
                     attr.Value = value;
                     attr.StartToken = startToken;
                     children.Add(attr);
                   }
 
-              }else if (token.Type==LaconfigTokenType.tIdentifier || token.Type==LaconfigTokenType.tStringLiteral)
+              }
+              else
               {
+                script = null;
                 if (content==null)
                 {
                   content = new LJSContentNode();//content
                   content.Parent = section;
                   content.Name = "CONTENT";
-                  content.Content = name;
+                  content.Content = startToken.Text;
                   content.StartToken = startToken;
                   children.Add(content);
                 }
-                content.Content += (' '+ token.Text); //add to existing content
-
+                else
+                 content.Content += (" "+ startToken.Text); //add to existing content
               }
-               else errorAndAbort(LaconfigMsgCode.eSyntaxError);
-          }
+          }//while
 
           section.Children = children.ToArray();
       }
