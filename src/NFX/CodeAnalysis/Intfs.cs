@@ -40,7 +40,7 @@ namespace NFX.CodeAnalysis
         Language Language { get; }
 
         /// <summary>
-        /// References message list that processor emitts messages into.
+        /// References message list that processor emits messages into.
         /// May be null, in which case errors are always thrown because they can not get logged into message list
         /// </summary>
         MessageList Messages { get; }
@@ -70,7 +70,7 @@ namespace NFX.CodeAnalysis
 
     /// <summary>
     /// Describes general lexer interface.
-    /// Lexers turn string source input which is obtained via ISourceText implementation (i.e. FileSource,WebSource...)
+    /// Lexer turn string source input which is obtained via ISourceText implementation (i.e. FileSource,WebSource...)
     ///  into tokenized stream. Some lexer implementations may support lazy analysis, that is - source text analysis which is done
     ///   in chunks when lexer is iterated over, others may lex the whole source text at once
     /// </summary>
@@ -94,7 +94,7 @@ namespace NFX.CodeAnalysis
 
 
         /// <summary>
-        /// Returns true when the shole input source has been analyzed. This property is always true for lexers that do not support lazy analysis
+        /// Returns true when the whole input source has been analyzed. This property is always true for lexers that do not support lazy analysis
         /// </summary>
         bool AllAnalyzed{ get; }
 

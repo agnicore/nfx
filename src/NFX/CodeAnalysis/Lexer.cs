@@ -38,6 +38,12 @@ namespace NFX.CodeAnalysis
 
         }
 
+        protected Lexer(IAnalysisContext context, ISourceText source, MessageList messages = null, bool throwErrors = false) :
+          this(context, new SourceCodeRef(source.Name ?? CoreConsts.UNNAMED_MEMORY_BUFFER), source, messages, throwErrors)
+        {
+
+        }
+
         protected Lexer(IAnalysisContext context, SourceCodeRef srcRef, ISourceText source, MessageList messages = null, bool throwErrors = false) :
           base(context, srcRef, messages, throwErrors)
 

@@ -46,7 +46,7 @@ namespace NFX.CodeAnalysis.Laconfig
     public LaconfigLexer Lexer         { get { return m_Lexer;} }
     public LJSData       ResultContext { get{ return Context as LJSData;} }
 
-    public override Language Language  { get { return LaconfigLanguage.Instance; } }
+    public override Language Language  { get { return LJSLanguage.Instance; } }
 
     public override string MessageCodeToString(int code)
     {

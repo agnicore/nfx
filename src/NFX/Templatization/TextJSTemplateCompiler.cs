@@ -43,6 +43,7 @@ namespace NFX.Templatization
   ///   }
   ///   </code>
   /// </example>
+  [Obsolete("This compiler is for legacy support only. Plan to convert to newer LJSCompiler syntax")]
   public class TextJSTemplateCompiler : TemplateCompiler
   {
     public const string CONFIG_DOM_GENERATOR_SECT = "dom-gen";

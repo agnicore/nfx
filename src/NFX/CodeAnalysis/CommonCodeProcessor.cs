@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using NFX.Environment;
 using NFX.CodeAnalysis.Source;
 
 namespace NFX.CodeAnalysis
@@ -28,7 +29,7 @@ namespace NFX.CodeAnalysis
     /// <summary>
     /// Provides base implementation for common code processors
     /// </summary>
-    public abstract class CommonCodeProcessor : ICodeProcessor
+    public abstract class CommonCodeProcessor : ICodeProcessor, IConfigurable
     {
 
         protected CommonCodeProcessor(IAnalysisContext context, MessageList messages = null, bool throwErrors = false)
@@ -53,7 +54,7 @@ namespace NFX.CodeAnalysis
 
 
         /// <summary>
-        /// References message list that lexer emitts messages into. May be null
+        /// References message list that lexer emits messages into. May be null
         /// </summary>
         public MessageList Messages{ get { return m_Messages; } }
 
@@ -93,7 +94,11 @@ namespace NFX.CodeAnalysis
             Messages.Add( msg );
         }
 
-    }
+        public virtual void Configure(IConfigSectionNode node)
+        {
+          ConfigAttribute.Apply(this, node);
+        }
+  }
 
 
     /// <summary>

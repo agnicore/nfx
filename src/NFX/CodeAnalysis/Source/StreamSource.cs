@@ -22,7 +22,6 @@ using System.IO;
 
 namespace NFX.CodeAnalysis.Source
 {
-
       /// <summary>
       /// Represents source code stored in a stream
       /// </summary>

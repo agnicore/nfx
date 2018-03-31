@@ -54,7 +54,7 @@ namespace NFX.CodeAnalysis.Source
             Language Language { get; }
 
             /// <summary>
-            /// Provides a meaningfull name to a source code
+            /// Provides a meaningful name to a source code
             /// </summary>
             string Name { get; }
       }

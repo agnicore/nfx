@@ -29,6 +29,12 @@ namespace NFX.CodeAnalysis.Laconfig
     /// </summary>
     public sealed class LaconfigLexer : Lexer<LaconfigToken>
     {
+       public LaconfigLexer(IAnalysisContext context, ISourceText source, MessageList messages = null, bool throwErrors = false) :
+            base( context, source, messages, throwErrors)
+        {
+             m_FSM = new FSM(this);
+        }
+
         public LaconfigLexer(ISourceText source, MessageList messages = null, bool throwErrors = false) :
             base( source, messages, throwErrors)
         {

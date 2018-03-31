@@ -34,11 +34,14 @@ namespace NFX.CodeAnalysis.Laconfig
         m_ResultObject = new LJSTree();
       }
 
-
-      public override Language Language
+       public LJSData(IAnalysisContext ctx) : base(ctx)
       {
-          get { return LaconfigLanguage.Instance; }
+        m_ResultObject = new LJSTree();
       }
+
+
+      public override Language Language => LJSLanguage.Instance;
+
 
       public override string MessageCodeToString(int code)
       {
@@ -56,6 +59,11 @@ namespace NFX.CodeAnalysis.Laconfig
 
     /// <summary> Attaches arbitrary data, such as the one used by the generator </summary>
     public object Data{ get; set;}
+
+    /// <summary>
+    /// Returns The tree transpiled by the transpiler
+    /// </summary>
+    public string TranspiledContent{ get; set;}
   }
 
   public abstract class LJSNode
