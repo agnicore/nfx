@@ -103,9 +103,9 @@ namespace NFX.Templatization
       var icname =  unit.TemplateSource.InferClassName();
       var rawSourceToProcess =  processUnitRelativeFileIncludePragmas(unit);
 
-      var ctxUnit = new LJSUnitTranspilationContext();//Kuda pokazivat vse oshibki? Est Compiler write errors?
-      ctxUnit.Configure(this.m_TranspilerConfig);
-
+      var ctxUnit =  FactoryUtils.MakeAndConfigure<LJSUnitTranspilationContext>(m_TranspilerConfig,
+                                                                                typeof(LJSUnitTranspilationContext),
+                                                                                new []{ unit.TemplateSource.GetName(64) });
 
       string transpiledUnitSource;
 
@@ -153,8 +153,8 @@ namespace NFX.Templatization
         {
           var rawFragmentSource = match.Value;//Zachem bylo ranshe tak:  m.Groups[1].Value;
 
-          var ss = new StringSource(rawFragmentSource);
-          return LJSFragmentTranspiler.TranspileFragmentToString(ss, ctxUnit);
+          var src = new StringSource(rawFragmentSource);
+          return ctxUnit.TranspileFragmentToString(src);
         });
         return result;
       }

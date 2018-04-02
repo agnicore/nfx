@@ -12,39 +12,10 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
   /// </summary>
   public class LJSFragmentTranspiler : Transpiler<LJSParser>
   {
-    /// <summary>
-    /// Helper facade that assembles processing pipeline and transpiles an LJS fragment into a string
-    /// within the specified unit context
-    /// </summary>
-    public static string TranspileFragmentToString(Source.ISourceText source, LJSUnitTranspilationContext ctxUnit)
-    {
-      //1 Assemble pipeline
-      var lexer = new LaconfigLexer(ctxUnit, source);
-      var ctxFragment = new LJSData(ctxUnit);
-      var parser = new LJSParser(ctxFragment, lexer);
-      //make and configure parser-fragment transpiler in the unit scope
-      var transpiler = ctxUnit.MakeAndConfigureTranspiler(parser);
-
-      //2 parse into fragment context
-      parser.Parse();
-
-      //3 transpile into fragment context under whole unit scope
-      transpiler.Transpile();
-
-      var result = ctxFragment.ResultObject.TranspiledContent;
-      return result;
-    }
-
-
-
-
     public LJSFragmentTranspiler(LJSUnitTranspilationContext context, LJSParser parser,  MessageList messages = null, bool throwErrors = false)
              : base(context, parser, messages, throwErrors)
     {
     }
-
-
-    //[Config] public string TranspilerPropertyExample{get; set;}
 
     public override Language Language => Parser.Language;
     public LJSUnitTranspilationContext UnitContext => (LJSUnitTranspilationContext)base.Context;
@@ -57,14 +28,88 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     protected override void DoTranspile()
     {
       var ljsTree = Parser.ResultContext.ResultObject;
-      ljsTree.TranspiledContent = transpile(ljsTree.Root);
+      ljsTree.TranspiledContent = DoTranspileTree(ljsTree);
     }
 
-    private string transpile(LJSSectionNode tree)
+    protected virtual string DoTranspileTree(LJSTree tree)
     {
-      var sb = new StringBuilder();
-      tree.Print(sb, 0);
-      return sb.ToString();
+      var output = new StringBuilder();
+      DoTranspileNode(output, 0, null, tree.Root);
+      return output.ToString();
     }
+
+    protected virtual void DoTranspileNode(StringBuilder output, int indentLevel, string idParent, LJSNode node)
+    {
+      if (node is LJSSectionNode nSection)
+      {
+        var id = DoEmitSectionNode(output, indentLevel, idParent, nSection);
+        foreach(var child in nSection.Children)
+          DoTranspileNode(output, indentLevel+1, id, child);
+      }
+      else if (node is LJSAttributeNode nAttr)
+      {
+        DoEmitAttributeNode(output, indentLevel, idParent, nAttr);
+      }
+      else if (node is LJSContentNode nContent)
+      {
+        DoEmitContentNode(output, indentLevel, idParent, nContent);
+      }
+      else if (node is LJSScriptNode nScript)
+      {
+        DoEmitScriptNode(output, indentLevel, idParent, nScript);
+      }
+      else
+       EmitMessage(MessageType.Error,
+                   -1,//todo Give proper error code
+                   new Source.SourceCodeRef(UnitContext.UnitName),
+                  token: node.StartToken,
+                  text: "LJSNode type is unsupported: {0}".Args(node.GetType().DisplayNameWithExpandedGenericArgs()));
+
+      output.AppendLine();
+    }
+
+    protected virtual void DoPad(StringBuilder output, int indentLevel)
+    {
+      for(var i=0; i<indentLevel*UnitContext.IndentWidth; i++) output.Append(' ');
+    }
+
+    protected virtual string DoEmitScriptNode(StringBuilder output, int indentLevel, string idParent, LJSScriptNode node)
+    {
+      DoPad(output, indentLevel);              // See  EscapeJSLiteral()
+      output.AppendLine(node.Script);//script gets output as-is always on a separate line
+      return null;
+    }
+
+    protected virtual string DoEmitAttributeNode(StringBuilder output, int indentLevel, string idParent, LJSAttributeNode node)
+    {
+      var aid = UnitContext.GenerateID();       // See  EscapeJSLiteral()
+      //proverit na ? js expression i escape js listeral
+      DoPad(output, indentLevel);
+      output.AppendFormat("let {0} = {0}.createAttribute('{1}', '{2}');\n", aid, idParent, node.Name, node.Value);
+      return aid;
+    }
+
+    protected virtual string DoEmitSectionNode(StringBuilder output, int indentLevel, string idParent, LJSSectionNode node)
+    {
+      var sid = UnitContext.GenerateID();         // See  EscapeJSLiteral()
+      //proverit na ? js expression
+      //proverit na nazvanie componenta
+      //proverit node.GeneratorPragma na alias
+      DoPad(output, indentLevel);
+      output.AppendFormat("let {0} = {0}.createElement('{1}', '{2}');\n", sid, idParent, node.Name);//Escape java string literal?
+      return sid;
+    }
+
+    protected virtual string DoEmitContentNode(StringBuilder output, int indentLevel, string idParent, LJSContentNode node)
+    {
+      var cid = UnitContext.GenerateID();         // See  EscapeJSLiteral()
+      //proverit na ? js expression
+      //proverit na nazvanie componenta
+      //proverit node.GeneratorPragma na alias
+      DoPad(output, indentLevel);
+      output.AppendFormat("let {0} = {0}.createTextElement('{1}', '{2}');\n", cid, idParent, node.Name);
+      return cid;
+    }
+
   }
 }
