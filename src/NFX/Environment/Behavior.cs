@@ -48,7 +48,7 @@ namespace NFX.Environment
           /// </summary>
           public static void ApplyConfiguredBehaviors(object target, IConfigSectionNode node)
           {
-              if (target==null) return;
+              if (target==null || node==null) return;
               if (typeof(Behavior).IsAssignableFrom(target.GetType())) return;
 
               string descr = string.Empty;

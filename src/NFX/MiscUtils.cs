@@ -357,12 +357,12 @@ namespace NFX
     /// </summary>
     public static string CapitalizeFirstChar(this string str)
     {
-	    if (string.IsNullOrEmpty(str)) return string.Empty;
+      if (string.IsNullOrEmpty(str)) return string.Empty;
 
-        char[] arr = str.ToCharArray();
-	    arr[0] = char.ToUpper(arr[0]);
+      char[] arr = str.ToCharArray();
+      arr[0] = char.ToUpper(arr[0]);
 
-        return new String(arr);
+      return new String(arr);
     }
 
     /// <summary>
@@ -1092,7 +1092,7 @@ namespace NFX
     }
 
     /// <summary>
-    /// Retruns an approximate time distance (timespan) between two dates
+    /// Returns an approximate time distance (timespan) between two dates
     /// </summary>
     public static string ApproximateTimeDistance(this DateTime fromDate, DateTime toDate)
     {
@@ -1113,6 +1113,21 @@ namespace NFX
 
       return fromDate < toDate ? ("in " + result) : (result + " ago");
     }
+
+
+    /// <summary>
+    /// Converts an index in a string into a line number, counting new line characters
+    /// </summary>
+    public static int IndexToLineNumber(this string str, int index)
+    {
+      if (str==null) return 0;
+      var result = 1;
+      for(var i=0; i<str.Length && i<index; i++)
+       if (str[i]=='\n') result++;
+
+      return result;
+    }
+
   }
 
 

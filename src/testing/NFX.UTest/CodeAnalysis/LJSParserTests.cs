@@ -48,7 +48,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(0, root.Children.Length);
       }
 
@@ -66,18 +66,18 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(2, root.Children.Length);
 
 
         Aver.AreEqual("span1", root.Children[0].Name);
         Aver.IsTrue(root.Children[0] is LJSSectionNode);
-        Aver.AreEqual("s1", ((LJSSectionNode)root.Children[0]).GeneratorPragma);
+        Aver.AreEqual("s1", ((LJSSectionNode)root.Children[0]).TranspilerPragma);
         Aver.AreEqual(0, ((LJSSectionNode)root.Children[0]).Children.Length);
 
         Aver.AreEqual("span2", root.Children[1].Name);
         Aver.IsTrue(root.Children[1] is LJSSectionNode);
-        Aver.IsNull( ((LJSSectionNode)root.Children[1]).GeneratorPragma);
+        Aver.IsNull( ((LJSSectionNode)root.Children[1]).TranspilerPragma);
         Aver.AreEqual(0, ((LJSSectionNode)root.Children[1]).Children.Length);
       }
 
@@ -96,18 +96,18 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(2, root.Children.Length);
 
 
         Aver.AreEqual("span1", root.Children[0].Name);
         Aver.IsTrue(root.Children[0] is LJSSectionNode);
-        Aver.AreEqual("s1", ((LJSSectionNode)root.Children[0]).GeneratorPragma);
+        Aver.AreEqual("s1", ((LJSSectionNode)root.Children[0]).TranspilerPragma);
         Aver.AreEqual(0, ((LJSSectionNode)root.Children[0]).Children.Length);
 
         Aver.AreEqual("span2", root.Children[1].Name);
         Aver.IsTrue(root.Children[1] is LJSSectionNode);
-        Aver.IsNull( ((LJSSectionNode)root.Children[1]).GeneratorPragma);
+        Aver.IsNull( ((LJSSectionNode)root.Children[1]).TranspilerPragma);
         Aver.AreEqual(3, ((LJSSectionNode)root.Children[1]).Children.Length);
 
         Aver.AreEqual("a", ((LJSSectionNode)root.Children[1]).Children[0].Name);
@@ -133,7 +133,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(0, root.Children.Length);
       }
 
@@ -151,7 +151,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(0, root.Children.Length);
       }
 
@@ -169,7 +169,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(1, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSAttributeNode );
@@ -191,7 +191,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(2, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSAttributeNode );
@@ -218,7 +218,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(1, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -239,7 +239,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(1, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -260,7 +260,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(1, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -281,7 +281,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -311,7 +311,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -345,7 +345,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -382,7 +382,7 @@ namespace NFX.UTest.CodeAnalysis
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -422,7 +422,7 @@ line 3""
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -468,7 +468,7 @@ line 3 ending //more comments
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -511,7 +511,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSScriptNode );
@@ -544,7 +544,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(2, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -574,7 +574,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(2, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -605,7 +605,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -640,7 +640,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -676,7 +676,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(3, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -712,7 +712,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(4, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -753,7 +753,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("id", root.GeneratorPragma);
+        Aver.AreEqual("id", root.TranspilerPragma);
         Aver.AreEqual(4, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -825,7 +825,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.IsNull(root.GeneratorPragma);
+        Aver.IsNull(root.TranspilerPragma);
         Aver.AreEqual(5, root.Children.Length);
 
         Aver.IsTrue( root.Children[0] is LJSContentNode );
@@ -875,7 +875,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(7, root.Children.Length);
 
         Aver.AreEqual("For all of these items you can hit delete:", ((LJSContentNode)root.Children[0]).Content);
@@ -931,7 +931,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(7, root.Children.Length);
 
         Aver.AreEqual("For all of these items you can hit delete:", ((LJSContentNode)root.Children[0]).Content);
@@ -987,7 +987,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         dump(root);
 
         Aver.AreEqual("div", root.Name);
-        Aver.AreEqual("divRoot", root.GeneratorPragma);
+        Aver.AreEqual("divRoot", root.TranspilerPragma);
         Aver.AreEqual(5, root.Children.Length);
 
         Aver.AreEqual("a", ((LJSAttributeNode)root.Children[0]).Name);
@@ -1002,7 +1002,7 @@ line 3 line 3 ending", ((LJSContentNode)((LJSSectionNode)root.Children[1]).Child
         Aver.AreEqual(" js() //hs comment", ((LJSScriptNode)root.Children[3]).Script);
 
         Aver.AreEqual("div", ((LJSSectionNode)root.Children[4]).Name);
-        Aver.AreEqual("ggg", ((LJSSectionNode)root.Children[4]).GeneratorPragma);
+        Aver.AreEqual("ggg", ((LJSSectionNode)root.Children[4]).TranspilerPragma);
 
                     var div =  (LJSSectionNode)((LJSSectionNode)root.Children[4]).Children[0];
                     Aver.AreEqual("div", div.Name);

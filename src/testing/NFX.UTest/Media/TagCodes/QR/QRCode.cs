@@ -32,9 +32,9 @@ namespace NFX.UTest.Media.TagCodes.QR
     {
       QREncoderMatrix matrix = QREncoderMatrix.Encode("www.dxwizard.com/KUKU-BASHA", QRCorrectionLevel.H);
 
-      const string expected = 
+      const string expected =
 @"Mode: BYTE
-CorrectionLevel: H
+CorrectionLevel: QRECL(H)
 Version: 4
 Mask: 3
 Matrix:
@@ -80,9 +80,9 @@ Matrix:
     {
       QREncoderMatrix matrix = QREncoderMatrix.Encode("www.sl.com/MILA-ALEX", QRCorrectionLevel.Q);
 
-      const string expected = 
+      const string expected =
 @"Mode: BYTE
-CorrectionLevel: Q
+CorrectionLevel: QRECL(Q)
 Version: 2
 Mask: 4
 Matrix:
@@ -120,9 +120,9 @@ Matrix:
     {
       QREncoderMatrix matrix = QREncoderMatrix.Encode("www.itadapter.com/GE-NI-AL-NO", QRCorrectionLevel.M);
 
-      const string expected = 
+      const string expected =
 @"Mode: BYTE
-CorrectionLevel: M
+CorrectionLevel: QRECL(M)
 Version: 3
 Mask: 6
 Matrix:
@@ -164,9 +164,9 @@ Matrix:
     {
       QREncoderMatrix matrix = QREncoderMatrix.Encode("https://www.nfx.com/articleId=100&b=m", QRCorrectionLevel.L);
 
-      const string expected = 
+      const string expected =
 @"Mode: BYTE
-CorrectionLevel: L
+CorrectionLevel: QRECL(L)
 Version: 3
 Mask: 3
 Matrix:
@@ -208,9 +208,9 @@ Matrix:
     {
       const int TOTAL = 1000;
 
-      const string expected = 
+      const string expected =
 @"Mode: BYTE
-CorrectionLevel: L
+CorrectionLevel: QRECL(L)
 Version: 3
 Mask: 3
 Matrix:

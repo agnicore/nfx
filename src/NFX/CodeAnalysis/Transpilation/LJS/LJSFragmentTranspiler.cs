@@ -34,7 +34,15 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     protected virtual string DoTranspileTree(LJSTree tree)
     {
       var output = new StringBuilder();
-      DoTranspileNode(output, 0, null, tree.Root);
+
+      var idParent = UnitContext.GenerateID();
+      output.AppendLine($"const {idParent} = arguments[0];");
+      output.AppendLine($"if ({UnitContext.TypePrefix}.isString({idParent})) {idParent} = {UnitContext.DomPrefix}.id({idParent});");
+      output.AppendLine();
+
+      DoTranspileNode(output, 0, idParent, tree.Root);
+
+      output.AppendLine($"return {idParent};");
       return output.ToString();
     }
 
@@ -43,8 +51,9 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
       if (node is LJSSectionNode nSection)
       {
         var id = DoEmitSectionNode(output, indentLevel, idParent, nSection);
+        //indentLevel++;
         foreach(var child in nSection.Children)
-          DoTranspileNode(output, indentLevel+1, id, child);
+          DoTranspileNode(output, indentLevel, id, child);
       }
       else if (node is LJSAttributeNode nAttr)
       {
@@ -62,8 +71,8 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
        EmitMessage(MessageType.Error,
                    -1,//todo Give proper error code
                    new Source.SourceCodeRef(UnitContext.UnitName),
-                  token: node.StartToken,
-                  text: "LJSNode type is unsupported: {0}".Args(node.GetType().DisplayNameWithExpandedGenericArgs()));
+                   token: node.StartToken,
+                   text: "LJSNode type is unsupported: {0}".Args(node.GetType().DisplayNameWithExpandedGenericArgs()));
 
       output.AppendLine();
     }
@@ -72,6 +81,20 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     {
       for(var i=0; i<indentLevel*UnitContext.IndentWidth; i++) output.Append(' ');
     }
+
+    protected virtual string DoEvaluateExpression(string source)
+    {
+      //todo 20180403 DKh Add Localizer support - if the value starts with @ then treat is a localizer key
+      //tbd: where do we take schema and field names for localizer? Schema probably from Class name
+      if (source.IsNullOrWhiteSpace()) return string.Empty;
+
+      if (source.StartsWith("??")) return source.Substring(1).EscapeJSLiteral();//escape ?? -> ?
+
+      if (source[0]=='?')return source.Substring(1);
+
+      return "'{0}'".Args(source.EscapeJSLiteral());
+    }
+
 
     protected virtual string DoEmitScriptNode(StringBuilder output, int indentLevel, string idParent, LJSScriptNode node)
     {
@@ -82,11 +105,11 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
 
     protected virtual string DoEmitAttributeNode(StringBuilder output, int indentLevel, string idParent, LJSAttributeNode node)
     {
-      var aid = UnitContext.GenerateID();       // See  EscapeJSLiteral()
       //proverit na ? js expression i escape js listeral
       DoPad(output, indentLevel);
-      output.AppendFormat("let {0} = {0}.createAttribute('{1}', '{2}');\n", aid, idParent, node.Name, node.Value);
-      return aid;
+      //     WVDOM.sa(divA, 'name-atr', value);
+      output.AppendFormat("{0}.sa({1},{2},{3});\n", UnitContext.DomPrefix, idParent, DoEvaluateExpression(node.Name), DoEvaluateExpression(node.Value));
+      return null;
     }
 
     protected virtual string DoEmitSectionNode(StringBuilder output, int indentLevel, string idParent, LJSSectionNode node)
@@ -94,22 +117,37 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
       var sid = UnitContext.GenerateID();         // See  EscapeJSLiteral()
       //proverit na ? js expression
       //proverit na nazvanie componenta
-      //proverit node.GeneratorPragma na alias
+      //proverit node.TranspilerPragma na alias
       DoPad(output, indentLevel);
-      output.AppendFormat("let {0} = {0}.createElement('{1}', '{2}');\n", sid, idParent, node.Name);//Escape java string literal?
+      if (char.IsUpper(node.Name[0]))
+      {
+        //чтобы создать класс мне нужно получить все атрибуты
+      }
+      else
+      {
+        output.AppendLine($"const {sid} = {UnitContext.DomPrefix}.ce({DoEvaluateExpression(node.Name)});");
+        if (idParent.IsNotNullOrWhiteSpace())
+        {
+          DoPad(output, indentLevel);
+          output.AppendLine($"{UnitContext.DomPrefix}.ac({idParent}, {sid});");
+        }
+      }
+
       return sid;
     }
 
     protected virtual string DoEmitContentNode(StringBuilder output, int indentLevel, string idParent, LJSContentNode node)
     {
-      var cid = UnitContext.GenerateID();         // See  EscapeJSLiteral()
-      //proverit na ? js expression
-      //proverit na nazvanie componenta
-      //proverit node.GeneratorPragma na alias
+      var sid = UnitContext.GenerateID();
       DoPad(output, indentLevel);
-      output.AppendFormat("let {0} = {0}.createTextElement('{1}', '{2}');\n", cid, idParent, node.Name);
-      return cid;
-    }
 
+      output.AppendLine($"const {sid} = {UnitContext.DomPrefix}.ctn({DoEvaluateExpression(node.Content)});");
+      if (idParent.IsNotNullOrWhiteSpace())
+      {
+        DoPad(output, indentLevel);
+        output.AppendLine($"{UnitContext.DomPrefix}.ac({idParent}, {sid});");
+      }
+      return sid;
+    }
   }
 }

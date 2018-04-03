@@ -32,4 +32,34 @@
     <ProjectReference Include="..\..\NFX\NFX.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UTEZT_DATA\SubDir1\" />
+    <Folder Include="UTEZT_DATA\SubDir2\a\" />
+    <Folder Include="UTEZT_DATA\SubDir2\b\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="UTEZT-1.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\Gagarin.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\SubDir1\Bitmap1.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\SubDir1\Some Text File With Spaces.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\SubDir2\a\Icon1.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\SubDir2\b\About.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UTEZT_DATA\TextFile1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

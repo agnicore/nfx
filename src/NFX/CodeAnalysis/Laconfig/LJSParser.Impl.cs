@@ -80,7 +80,7 @@ namespace NFX.CodeAnalysis.Laconfig
               fetchPrimary();
               if (token.Type!=LaconfigTokenType.tIdentifier && token.Type!=LaconfigTokenType.tStringLiteral)
                     errorAndAbort(LaconfigMsgCode.eSectionOrAttributeValueExpected);
-              node.GeneratorPragma = token.Text;
+              node.TranspilerPragma = token.Text;
               fetchPrimary();
           }
 
@@ -164,7 +164,7 @@ namespace NFX.CodeAnalysis.Laconfig
                     var subsection = new LJSSectionNode();
                     subsection.Parent = section;
                     subsection.Name = startToken.Text;
-                    subsection.GeneratorPragma = value;
+                    subsection.TranspilerPragma = value;
                     subsection.StartToken = startToken;
                     populateSection(subsection);
                     children.Add(subsection);

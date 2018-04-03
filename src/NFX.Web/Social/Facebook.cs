@@ -74,6 +74,10 @@ namespace NFX.Web.Social
 
         private const string MESSAGE_PARAMNAME = "message";
 
+        private static readonly string FILL_USER_INFO_FIELDS = string.Join(",", USER_ID_PARAMNAME, USER_EMAIL_PARAMNAME, USER_NAME_PARAMNAME, USER_FIRSTNAME_PARAMNAME,
+            USER_LASTNAME_PARAMNAME, USER_MIDDLENAME_PARAMNAME, USER_GENDER_PARAMNAME, USER_BIRTHDAY_PARAMNAME,
+            USER_LOCALE_PARAMNAME, USER_TIMEZONE_PARAMNAME, USER_PICTURE_PARAMNAME);
+
       #endregion
 
       #region Static
@@ -260,44 +264,48 @@ namespace NFX.Web.Social
 
         private void fillUserInfo(FacebookSocialUserInfo userInfo)
         {
-          var fields = string.Join(",", USER_ID_PARAMNAME, USER_EMAIL_PARAMNAME, USER_NAME_PARAMNAME, USER_FIRSTNAME_PARAMNAME,
-            USER_LASTNAME_PARAMNAME, USER_MIDDLENAME_PARAMNAME, USER_GENDER_PARAMNAME, USER_BIRTHDAY_PARAMNAME,
-            USER_LOCALE_PARAMNAME, USER_TIMEZONE_PARAMNAME, USER_PICTURE_PARAMNAME);
-
-          dynamic responseObj = WebClient.GetJsonAsDynamic(GETUSERINFO_BASEURL.Args(APIGraphVersion), new WebClient.RequestParams(this)
+          var responseObj = WebClient.GetJson(GETUSERINFO_BASEURL.Args(APIGraphVersion), new WebClient.RequestParams(this)
           {
             Method = HTTPRequestMethod.GET,
             QueryParameters = new Dictionary<string, string>() {
               {ACCESSTOKEN_PARAMNAME, userInfo.AccessToken},
-              {GETUSERINFO_FIELDS_PARAMNAME, fields}
+              {GETUSERINFO_FIELDS_PARAMNAME, FILL_USER_INFO_FIELDS}
             }
           });
 
           userInfo.LoginState = SocialLoginState.LoggedIn;
-          userInfo.ID = responseObj[USER_ID_PARAMNAME];
-          userInfo.UserName = responseObj[USER_NAME_PARAMNAME];
-          userInfo.Email = responseObj[USER_EMAIL_PARAMNAME];
-          userInfo.FirstName = responseObj[USER_FIRSTNAME_PARAMNAME];
-          userInfo.LastName = responseObj[USER_LASTNAME_PARAMNAME];
-          userInfo.MiddleName = responseObj[USER_MIDDLENAME_PARAMNAME];
+          userInfo.ID = responseObj[USER_ID_PARAMNAME].AsString();
+          userInfo.UserName = responseObj[USER_NAME_PARAMNAME].AsString();
+          userInfo.Email = responseObj[USER_EMAIL_PARAMNAME].AsString();
+          userInfo.FirstName = responseObj[USER_FIRSTNAME_PARAMNAME].AsString();
+          userInfo.LastName = responseObj[USER_LASTNAME_PARAMNAME].AsString();
+          userInfo.MiddleName = responseObj[USER_MIDDLENAME_PARAMNAME].AsString();
 
-          var genderStr = responseObj[USER_GENDER_PARAMNAME];
+          var genderStr = responseObj[USER_GENDER_PARAMNAME].AsString();
           if (genderStr == USER_GENDER_MALE)
             userInfo.Gender = Gender.MALE;
           else if (genderStr == USER_GENDER_FEMALE)
             userInfo.Gender = Gender.FEMALE;
 
-          var birthDateStr = responseObj[USER_BIRTHDAY_PARAMNAME];
+          var birthDateStr = responseObj[USER_BIRTHDAY_PARAMNAME].AsString();
           DateTime birthDate;
           if (DateTime.TryParseExact(birthDateStr, "MM/DD/YYYY",
             System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out birthDate))
               userInfo.BirthDate = birthDate;
 
-          userInfo.Locale = responseObj[USER_LOCALE_PARAMNAME];
+          userInfo.Locale = responseObj[USER_LOCALE_PARAMNAME].AsString();
           userInfo.TimezoneOffset = ((int)responseObj[USER_TIMEZONE_PARAMNAME]) * 60 * 60;
 
-          dynamic picObj = WebClient.GetJsonAsDynamic(GET_USER_PICTURE_URL_PATTERN.Args(APIGraphVersion, userInfo.ID), new WebClient.RequestParams(this));
-          userInfo.PictureLink = picObj[USER_PICTURE_DATA_PARAMNAME][USER_PICTURE_URL_PARAMNAME];
+          var picObj = WebClient.GetJson(GET_USER_PICTURE_URL_PATTERN.Args(APIGraphVersion, userInfo.ID), new WebClient.RequestParams(this)
+          {
+            Method = HTTPRequestMethod.GET,
+            QueryParameters = new Dictionary<string, string>() {
+              {ACCESSTOKEN_PARAMNAME, userInfo.AccessToken}
+            }
+          });
+          var imgInfo = picObj[USER_PICTURE_DATA_PARAMNAME] as JSONDataMap;
+          if (imgInfo != null)
+            userInfo.PictureLink = imgInfo[USER_PICTURE_URL_PARAMNAME].AsString();
         }
 
         private string getLongTermAccessToken(string accessToken)

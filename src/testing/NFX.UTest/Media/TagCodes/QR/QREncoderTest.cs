@@ -33,7 +33,7 @@ namespace NFX.UTest.Media.TagCodes.QR
       QREncoderMatrix qrCode = QREncoderMatrix.CreateMatrix("ABCDEF", QRCorrectionLevel.H);
       string expected =
         "Mode: ALPHANUMERIC\r\n" +
-        "CorrectionLevel: H\r\n" +
+        "CorrectionLevel: QRECL(H)\r\n" +
         "Version: 1\r\n" +
         "Mask: 4\r\n" +
         "Matrix:\r\n" +
@@ -245,7 +245,7 @@ namespace NFX.UTest.Media.TagCodes.QR
     }
 
     [Run]
-    public void AppendNumericBytes() 
+    public void AppendNumericBytes()
     {
       // 1 = 01 = 0001 in 4 bits.
       BitList bits = new BitList();
@@ -311,7 +311,7 @@ namespace NFX.UTest.Media.TagCodes.QR
     }
 
     [Run]
-    public void GenerateECBytes() 
+    public void GenerateECBytes()
     {
       byte[] dataBytes = {32, 65, (byte)205, 69, 41, (byte)220, 46, (byte)128, (byte)236};
       byte[] ecBytes = QREncoderMatrix.GetCorrectionBytes(dataBytes, 17);

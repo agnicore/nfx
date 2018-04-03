@@ -372,9 +372,136 @@ namespace NFX.UTest.AppModel.Pile
       }
 
 
+      [Run]
+      [Aver.Throws(typeof(NFXException))]
+      public void TwoGDIDLongWithISOKey_BadCtor_1()
+      {
+        var k = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10,30), 123, "ertewrtewrte");
+      }
+
+      [Run]
+      public void TwoGDIDLongWithISOKey_CreateEquate_1()
+      {
+        var k1 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), 123, "eng");
+        var k2 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), 123, "eNG");
+        Aver.AreEqual("ENG", k1.ISOCode);
+        Aver.AreEqual("ENG", k2.ISOCode);
+
+        Aver.AreEqual(123, k1.PAYLOAD);
+        Aver.AreEqual(123, k2.PAYLOAD);
+
+        Aver.AreEqual(k1, k2);
+
+        Aver.IsTrue(k1.Equals(k2));
+        var o = k2;
+        Aver.IsTrue(k1.Equals(o));
+
+        Aver.AreEqual(k1.GetHashCode(), k2.GetHashCode());
+        Aver.AreEqual(k1.GetDistributedStableHash(), k2.GetDistributedStableHash());
+        Console.WriteLine(k1.ToString());
+      }
+
+      [Run]
+      public void TwoGDIDLongWithISOKey_CreateNotEquate_1()
+      {
+        var k1 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), 123, "eng");
+        var k2 = new TwoGDIDLongWithISOKey(new GDID(10, 21), new GDID(10, 30), 123, "eNG");
+        Aver.AreNotEqual(k1, k2);
+
+        Aver.IsFalse(k1.Equals(k2));
+        var o = k2;
+        Aver.IsFalse(k1.Equals(o));
+
+        Aver.AreNotEqual(k1.GetHashCode(), k2.GetHashCode());
+        Aver.AreNotEqual(k1.GetDistributedStableHash(), k2.GetDistributedStableHash());
+        Console.WriteLine(k1.ToString());
+      }
+
+      [Run]
+      public void TwoGDIDLongWithISOKey_CreateNotEquate_2()
+      {
+        var k1 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), 123, "eng");
+        var k2 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(11, 30), 123, "eNG");
+        Aver.AreNotEqual(k1, k2);
+
+        Aver.IsFalse(k1.Equals(k2));
+        var o = k2;
+        Aver.IsFalse(k1.Equals(o));
+
+        Aver.AreNotEqual(k1.GetHashCode(), k2.GetHashCode());
+        Aver.AreNotEqual(k1.GetDistributedStableHash(), k2.GetDistributedStableHash());
+        Console.WriteLine(k1.ToString());
+      }
+
+      [Run]
+      public void TwoGDIDLongWithISOKey_CreateNotEquate_3()
+      {
+        var k1 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), 123, "eng");
+        var k2 = new TwoGDIDLongWithISOKey(new GDID(10, 20), new GDID(10, 30), -123, "eNG");
+        Aver.AreNotEqual(k1, k2);
+
+        Aver.IsFalse(k1.Equals(k2));
+        var o = k2;
+        Aver.IsFalse(k1.Equals(o));
+
+        Aver.AreNotEqual(k1.GetHashCode(), k2.GetHashCode());
+        Aver.AreNotEqual(k1.GetDistributedStableHash(), k2.GetDistributedStableHash());
+        Console.WriteLine(k1.ToString());
+      }
+
+      [Run]
+      public void TwoGDIDLongWithISOKey_Dictionary()
+      {
+        var dict = new Dictionary<TwoGDIDLongWithISOKey, string>();
+
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 1, "eng"), "123eng");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 2, "deu"), "123deu");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 3, "eN"), "123en");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 4, "dE"), "123de");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 5, "ua"), "123ua");
+
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -1, "eng"), "345eng");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -2, "deu"), "345deu");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -3, "eN"), "345en");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -4, "dE"), "345de");
+        dict.Add(new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -5, "ua"), "345ua");
+
+        Aver.AreEqual("123eng", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 1, "eng")]);
+        Aver.AreEqual("123deu", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 2, "deu")]);
+        Aver.AreEqual("123eng", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 1, "ENG")]);
+        Aver.AreEqual("123deu", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 2, "DEU")]);
+
+        Aver.AreEqual("123en", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 3, "en")]);
+        Aver.AreEqual("123de", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 4, "de")]);
+        Aver.AreEqual("123ua", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 5, "ua")]);
+
+        Aver.AreEqual("123en", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 3, "EN")]);
+        Aver.AreEqual("123de", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 4, "DE")]);
+        Aver.AreEqual("123ua", dict[new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 5, "UA")]);
 
 
+        Aver.AreEqual("345eng", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -1, "eng")]);
+        Aver.AreEqual("345deu", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -2, "deu")]);
+        Aver.AreEqual("345eng", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -1, "ENG")]);
+        Aver.AreEqual("345deu", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -2, "DEU")]);
 
+        Aver.AreEqual("345en", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -3, "en")]);
+        Aver.AreEqual("345de", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -4, "de")]);
+        Aver.AreEqual("345ua", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -5, "ua")]);
+
+        Aver.AreEqual("345en", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -3, "EN")]);
+        Aver.AreEqual("345de", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -4, "DE")]);
+        Aver.AreEqual("345ua", dict[new TwoGDIDLongWithISOKey(new GDID(1, 345), new GDID(10, 30), -5, "UA")]);
+
+
+        Aver.IsTrue ( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30), 5, "UA")));
+        Aver.IsFalse( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(20, 40), 5, "UA")));
+        Aver.IsFalse( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(1, 321), new GDID(10, 30), 5, "UA")));
+
+        Aver.IsFalse( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 31),  5, "UA")));
+        Aver.IsFalse( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(1, 123), new GDID(10, 30),  6, "UA")));
+        Aver.IsFalse( dict.ContainsKey(new TwoGDIDLongWithISOKey(new GDID(21, 123), new GDID(10, 30), 5, "UA")));
+      }
 
 
       [Run]

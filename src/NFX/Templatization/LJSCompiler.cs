@@ -54,11 +54,6 @@ namespace NFX.Templatization
       public static readonly Regex RX_FILE_INCLUDE = new Regex(@"\/\*{3}\@(.*?)\*{3}\/", RegexOptions.Singleline);
 
       /// <summary>
-      /// Inline content fragment:   "***  content ***"
-      /// </summary>
-      public static readonly Regex RX_INLINE_FRAGMENT = new Regex("\"\\*{3}(.*?)\\*{3}\"", RegexOptions.Singleline);
-
-      /// <summary>
       /// Block content fragment:   /***  content ***/
       /// </summary>
       public static readonly Regex RX_BLOCK_FRAGMENT = new Regex(@"\/\*{3}(.*?)\*{3}\/", RegexOptions.Singleline);
@@ -109,8 +104,7 @@ namespace NFX.Templatization
 
       string transpiledUnitSource;
 
-      transpiledUnitSource = transpileFragment(ctxUnit, rawSourceToProcess, RX_INLINE_FRAGMENT, true);//   "***  content ***"
-      transpiledUnitSource = transpileFragment(ctxUnit, transpiledUnitSource,RX_BLOCK_FRAGMENT, false); //  /***  content ***/
+      transpiledUnitSource = transpileFragment(ctxUnit, rawSourceToProcess,RX_BLOCK_FRAGMENT); //  /***  content ***/
 
       unit.CompiledSource = transpiledUnitSource;
     }
@@ -144,14 +138,20 @@ namespace NFX.Templatization
 
     private string transpileFragment(LJSUnitTranspilationContext ctxUnit,
                                      string rawUnitSource,
-                                     Regex pattern,
-                                     bool wrapWithFunction)
+                                     Regex pattern)
     {
+      string location = "";
       try
       {
         var result = pattern.Replace(rawUnitSource, match =>
         {
-          var rawFragmentSource = match.Value;//Zachem bylo ranshe tak:  m.Groups[1].Value;
+          var idx = match.Index;
+          if (idx>20) idx-=20;
+          var snippet = rawUnitSource.Substring(idx).TakeFirstChars(20);
+          snippet = snippet.Replace("\r\n", "\\n").Replace("\n","\\n");
+          location = "'... {0} ...'  on line: {1}".Args(snippet, rawUnitSource.IndexToLineNumber(match.Index) );
+
+          var rawFragmentSource = match.Groups[1].Value;
 
           var src = new StringSource(rawFragmentSource);
           return ctxUnit.TranspileFragmentToString(src);
@@ -160,7 +160,7 @@ namespace NFX.Templatization
       }
       catch (Exception error)
       {
-        throw new TemplateParseException(StringConsts.TEMPLATE_JS_COMPILER_CONFIG_ERROR + error.Message, error);
+        throw new TemplateParseException(StringConsts.TEMPLATE_LJS_FRAGMENT_TRANSPILER_ERROR.Args(location, error.ToMessageWithType()), error);
       }
     }
 

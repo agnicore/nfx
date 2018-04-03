@@ -370,4 +370,64 @@ namespace NFX.ApplicationModel.Pile
     }
   }
 
+
+  /// <summary>
+  /// Represents a value-type 2 GDIDs+3 char ISO code tuple supplied with some Int64 payload, suitable for serving as a cache table key.
+  /// The point of this structure is to avoid creation of references for Pile cache so keys alone do not stall the GC.
+  /// The ISO code is case-insensitive
+  /// </summary>
+  public struct TwoGDIDLongWithISOKey : IDistributedStableHashProvider, IEquatable<TwoGDIDLongWithISOKey>
+  {
+
+    public TwoGDIDLongWithISOKey(GDID gdid1, GDID gdid2, long payload, string iso)
+    {
+      GDID1 = gdid1;
+      GDID2 = gdid2;
+      ISO = IOMiscUtils.PackISO3CodeToInt(iso);
+      PAYLOAD = payload;
+    }
+
+    public readonly long PAYLOAD;
+    public readonly GDID GDID1;
+    public readonly GDID GDID2;
+    public readonly int  ISO;
+
+
+    public string ISOCode { get{ return IOMiscUtils.UnpackISO3CodeFromInt(ISO);} }
+
+
+    public ulong GetDistributedStableHash()
+    {
+      return GDID1.GetDistributedStableHash() ^
+             GDID2.GetDistributedStableHash() ^
+             (((ulong)ISO)<<32) ^
+             (ulong)PAYLOAD;
+    }
+
+    public override int GetHashCode()
+    {
+      return GDID1.GetHashCode() ^ GDID2.GetHashCode() ^ ISO ^ PAYLOAD.GetHashCode();
+    }
+
+    public bool Equals(TwoGDIDLongWithISOKey other)
+    {
+      return this.PAYLOAD  == other.PAYLOAD &&
+             this.ISO  == other.ISO &&
+             this.GDID1 == other.GDID1 &&
+             this.GDID2 == other.GDID2 ;
+    }
+
+    public override bool Equals(object obj)
+    {
+      if (!(obj is TwoGDIDLongWithISOKey)) return false;
+      return this.Equals((TwoGDIDLongWithISOKey)obj);
+    }
+
+    public override string ToString()
+    {
+      return "Key[GDID1: '{0}' GDID2: '{1}' ISO: '{2}' Payload: '{3}']".Args(GDID1, GDID2, ISOCode, PAYLOAD);
+    }
+  }
+
+
 }

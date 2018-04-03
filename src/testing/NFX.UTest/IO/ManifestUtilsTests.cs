@@ -89,11 +89,11 @@ package
   }
 }
         ";
-        
-        
+
+
         public static string Get_TEZT_PATH()
         {
-          return Path.Combine(System.Environment.GetEnvironmentVariable("AGNICORE_HOME"), "NFX", "Output","Debug","UTEZT_DATA");
+          return Path.Combine(System.Environment.GetEnvironmentVariable("AGNICORE_HOME"), "NFX", "out","Debug","UTEZT_DATA");
         }
 
         [Run]
@@ -102,7 +102,7 @@ package
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory; 
+              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory;
               var manifest = ManifestUtils.GeneratePackagingManifest(dir);
 
               Console.WriteLine(manifest.Configuration.ContentView);
@@ -117,7 +117,7 @@ package
 
                Aver.AreEqual(105, manifest[0].Children.First(c=>c.IsSameNameAttr("Some Text File With Spaces.txt")).AttrByName(ManifestUtils.CONFIG_SIZE_ATTR).ValueAsInt());
                Aver.AreEqual(1399856254, manifest[0].Children.First(c=>c.IsSameNameAttr("Some Text File With Spaces.txt")).AttrByName(ManifestUtils.CONFIG_CSUM_ATTR).ValueAsInt());
-            }   
+            }
         }
 
         [Run]
@@ -126,12 +126,12 @@ package
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory; 
+              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory;
               var manifest1 = ManifestUtils.GeneratePackagingManifest(dir);
               var manifest2 = ManifestUtils.GeneratePackagingManifest(dir);
 
               Aver.IsTrue( manifest1.HasTheSameContent(manifest2) );
-            }   
+            }
         }
 
         [Run]
@@ -140,12 +140,12 @@ package
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory; 
+              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory;
               var manifest1 = ManifestUtils.GeneratePackagingManifest(dir);
               var manifest2 = NFX.Environment.LaconicConfiguration.CreateFromString(EXPECTED).Root;
 
               Aver.IsTrue( manifest1.HasTheSameContent(manifest2) );
-            }   
+            }
         }
 
 
@@ -156,14 +156,14 @@ package
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory; 
+              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory;
               var manifest1 = ManifestUtils.GeneratePackagingManifest(dir);
               var manifest2 = ManifestUtils.GeneratePackagingManifest(dir);
 
               manifest2[0].Children.First(c=>c.IsSameNameAttr("Some Text File With Spaces.txt")).AttrByName(ManifestUtils.CONFIG_SIZE_ATTR).Value = "123";
 
               Aver.IsFalse( manifest1.HasTheSameContent(manifest2) );
-            }   
+            }
         }
 
         [Run]
@@ -172,14 +172,14 @@ package
             using(var fs = new LocalFileSystem("L1"))
             {
               var session = fs.StartSession();
-              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory; 
+              var dir = session[Get_TEZT_PATH()] as FileSystemDirectory;
               var manifest1 = ManifestUtils.GeneratePackagingManifest(dir);
               var manifest2 = ManifestUtils.GeneratePackagingManifest(dir);
 
               manifest2[2].Delete();
 
               Aver.IsFalse( manifest1.HasTheSameContent(manifest2) );
-            }   
+            }
         }
 
 

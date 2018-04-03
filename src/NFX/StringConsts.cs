@@ -414,6 +414,9 @@ namespace NFX
     public const string TEMPLATE_CS_COMPILER_CONFIG_ERROR =
         "Configuration segment error: ";
 
+    public const string TEMPLATE_LJS_FRAGMENT_TRANSPILER_ERROR =
+        "LJS fragment around {0} transpiler error: {1}";
+
     public const string TEMPLATE_JS_COMPILER_CONFIG_ERROR =
         "Configuration error: ";
 

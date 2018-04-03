@@ -102,14 +102,14 @@ namespace NFX.CodeAnalysis.Laconfig
     /// The name assigned to this section node like div='pragma1'{} to be used by the script/generator,
     /// most likely used for assigning a deterministic variable name in java script to the element
     /// </summary>
-    public string GeneratorPragma { get; internal set; }
+    public string TranspilerPragma { get; internal set; }
     /// <summary> All nodes in order of declaration: sections, content, script, attributes</summary>
     public LJSNode[] Children { get; internal set; }
 
     public override void Print(StringBuilder builder, int indent)
     {
       builder.Append(new string(' ',indent *2));
-      builder.AppendLine("{0} {1} -> {2} = {3}".Args("Section", StartToken.Type,  Name, GeneratorPragma));
+      builder.AppendLine("{0} {1} -> {2} = {3}".Args("Section", StartToken.Type,  Name, TranspilerPragma));
       foreach(var c in Children)
         c.Print(builder, indent+1);
     }

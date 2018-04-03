@@ -16,6 +16,9 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     public const string DEFAULT_ID_PREFIX = "æ";
     public const int DEFAULT_INDENT = 2;
 
+    public const string WV_DOM_PREFIX = "$d";
+    public const string WV_TYPE_PREFIX = "$t";
+
 
     public LJSUnitTranspilationContext(string unitName) : this(unitName, null, null, true)//be default throws errors
     {
@@ -28,6 +31,9 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     }
 
     private string m_IdPrefix = DEFAULT_ID_PREFIX;
+    private string m_DomPrefix = WV_DOM_PREFIX;
+    private string m_TypePrefix = WV_TYPE_PREFIX;
+
     private int m_IndentWidth = DEFAULT_INDENT;
     private int m_IDSeed;
     private string m_UnitName;
@@ -43,6 +49,26 @@ namespace NFX.CodeAnalysis.Transpilation.LJS
     {
       get => m_IdPrefix;
       set => m_IdPrefix =  value.IsNullOrWhiteSpace() ? DEFAULT_ID_PREFIX : value;
+    }
+
+    /// <summary>
+    /// Defines prefix for Waev.DOM module which provides shortcuts for createElement(), getElement byid etc...
+    /// </summary>
+    [Config]
+    public string DomPrefix
+    {
+      get => m_DomPrefix;
+      set => m_DomPrefix =  value.IsNullOrWhiteSpace() ? WV_DOM_PREFIX : value;
+    }
+
+    /// <summary>
+    /// Defines prefix for Waev.TYPE module
+    /// </summary>
+    [Config]
+    public string TypePrefix
+    {
+      get => m_TypePrefix;
+      set => m_TypePrefix = value.IsNullOrWhiteSpace() ? WV_TYPE_PREFIX : value;
     }
 
     [Config(Default=DEFAULT_INDENT)]
