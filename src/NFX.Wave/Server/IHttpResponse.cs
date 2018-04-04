@@ -4,7 +4,10 @@ using System.Text;
 
 namespace NFX.Wave.Server
 {
-    public interface IHttpResponse
-    {
-    }
+  /// <summary>
+  /// Abstracts the underlying listener http rsponse
+  /// </summary>
+  public interface IHttpResponse
+  {
+  }
 }

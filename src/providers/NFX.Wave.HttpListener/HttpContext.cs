@@ -54,7 +54,7 @@ namespace NFX.Wave.HttpListener
 
       X509Certificate2 IHttpConnection.GetClientCertificate() => Target.Request.GetClientCertificate();
 
-      Task<X509Certificate2> IHttpConnection.GetClientCertificateAsync(CancellationToken cancellationToken = default(CancellationToken))
+      Task<X509Certificate2> IHttpConnection.GetClientCertificateAsync(CancellationToken cancellationToken)
          => Target.Request.GetClientCertificateAsync();
     #endregion
 

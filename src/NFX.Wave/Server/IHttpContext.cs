@@ -5,6 +5,9 @@ using System.Text;
 
 namespace NFX.Wave.Server
 {
+  /// <summary>
+  /// Abstracts server context which provides Connection,Request,Response objects
+  /// </summary>
   public interface IHttpContext : IDisposable
   {
     IHttpConnection   Connection { get; }
@@ -15,7 +18,7 @@ namespace NFX.Wave.Server
     bool IsAborted{ get;}
 
     /// <summary>
-    /// Aborts the connection
+    /// Aborts the processing
     /// </summary>
     void Abort();
   }

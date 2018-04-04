@@ -7,7 +7,7 @@ using NFX.ServiceModel;
 namespace NFX.Wave.Server
 {
   /// <summary>
-  /// Provides base abstraction for web servers
+  /// Provides base abstraction for web server listeners
   /// </summary>
   public abstract class WaveListener : Service<WaveServer>
   {
