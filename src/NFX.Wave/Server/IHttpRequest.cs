@@ -32,11 +32,11 @@ namespace NFX.Wave.Server
     /// <summary>
     /// Returns requested form or null
     /// </summary>
-    IHttpForm  Form{ get;}
+ //   IHttpForm  Form{ get;}
 
     /// <summary>
     /// Gets request body as a form or null
     /// </summary>
-    Task<IHttpForm>  GetFormAsync(CancellationToken cancellationToken = default(CancellationToken));
+ //   Task<IHttpForm>  GetFormAsync(CancellationToken cancellationToken = default(CancellationToken));
   }
 }

@@ -11,7 +11,8 @@ namespace NFX.Wave.Server
   public interface IHttpKeyValueMap : IEnumerable<KeyValuePair<string, string>>
   {
     /// <summary>
-    /// True if key case is respected, for example in query parameters, whereas headers are NOT case sensitive by the spec
+    /// True if key case is respected, for example in query parameters,
+    /// whereas headers are NOT case sensitive by the spec
     /// </summary>
     bool IsCaseSensitive { get; }
 

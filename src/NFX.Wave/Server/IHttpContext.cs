@@ -10,10 +10,10 @@ namespace NFX.Wave.Server
   /// </summary>
   public interface IHttpContext : IDisposable
   {
-    IHttpConnection   Connection { get; }
-    IHttpRequest  Request    { get; }
-    IHttpResponse Response   { get; }
-    IPrincipal    Principal  { get; }
+    IHttpConnection Connection { get; }
+    IHttpRequest    Request    { get; }
+    IHttpResponse   Response   { get; }
+    IPrincipal      Principal  { get; }
 
     bool IsAborted{ get;}
 
