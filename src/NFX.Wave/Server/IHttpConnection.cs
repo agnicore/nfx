@@ -13,11 +13,15 @@ namespace NFX.Wave.Server
   /// </summary>
   public interface IHttpConnection
   {
-    string ID { get;}
+    string ID          { get; }
     IPAddress RemoteIP { get; }
     int RemotePort     { get; }
     IPAddress LocalIP  { get; }
     int LocalPort      { get; }
+    bool IsKeepAlive   { get; }
+    bool IsHttps       { get; }
+    bool IsLocal       { get; }
+
 
     X509Certificate2 GetClientCertificate();
     Task<X509Certificate2> GetClientCertificateAsync(CancellationToken cancellationToken = default(CancellationToken));
