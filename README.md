@@ -1,6 +1,12 @@
-#  NFX - .NET Standard Unistack Framework
 
-### NFXv5 ANNOUNCEMENT
+
+# The NFX project has been [superseded by Azos Project https://github.com/azist/azos](https://github.com/azist/azos)
+
+##  ~~NFX - .NET Standard Unistack Framework~~
+
+<br><br><br><br><br><br><br>
+
+### ~~NFXv5 ANNOUNCEMENT~~
 The current development of NFX **HAS MOVED HERE** ~~is moving~~. This repository contains the current NFX (v5) project which targets .NET 4.7.1 and Net Stadard 2/ Core 2. We have moved from [legacy NFX v3 repository](https://github.com/aumcode/nfx)
 
 **NFX**(v5 and beyond) **is based on .Net Standard 2**,
